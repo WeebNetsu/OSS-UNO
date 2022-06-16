@@ -73,9 +73,8 @@ function Player(deck, playedDeck)
                                 card.playable = true
                             end
                         end
-    
+
                         if (not card.playable) and (playedDeck.lastColor == card.color) then
-                            print("lastColor: " .. playedDeck.lastColor)
                             card.playable = true
                         end
                     else

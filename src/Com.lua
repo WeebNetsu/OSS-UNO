@@ -100,7 +100,7 @@ function Com(deck, playedDeck)
                     end
                 end
     
-                playedDeck:addCard(card.card)
+                playedDeck:addCard(card.card, true)
                 self:removeCard(card.index)
                 player.playerTurn = true
             else

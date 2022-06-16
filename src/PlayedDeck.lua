@@ -91,11 +91,20 @@ function PlayedDeck()
             return false
         end,
 
-        addCard = function (self, card)
+        --[[ 
+            This will add a card to the played deck.
+            
+            @param card: Card - the card to add to the played deck
+            @param skipColorSet: boolean - if true, will not set the color of the card (used by com)
+        ]]
+        addCard = function (self, card, skipColorSet)
             card.rotation = math.random(-3, 10) / 10
             card.x = self.x
             card.y = self.y
-            self.lastColor = card.color
+
+            if not skipColorSet then
+                self.lastColor = card.color
+            end
 
             table.insert(self.cards, card)
         end,
