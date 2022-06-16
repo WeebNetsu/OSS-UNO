@@ -37,8 +37,10 @@ function love.load()
 
     player = Player(deck, playedDeck)
     player:setCards(startCardCount)
+    -- if player goes first
+    player.playerTurn = math.random(1, 10) > 5
 
-    com = Com(deck)
+    com = Com(deck, playedDeck)
     com:setCards(startCardCount)
 end
 
@@ -51,80 +53,88 @@ end
 function love.update(dt)
     mouseX, mouseY = love.mouse.getPosition()
     
-    if clickedMouse then
-        -- if currently picking a color
-        if playedDeck.colorPicking and selectedCardIndex ~= nil then
-            if playedDeck:checkColorPickerHover() then
-                if playedDeck:pickColor() then
-                    local lastCardColor = playedDeck.lastColor
-                    playedDeck:addCard(player:getCard(selectedCardIndex))
-                    -- since removeCard will remove the last selected color as well
-                    player:removeCard(selectedCardIndex)
-                    selectedCardIndex = nil
-                    playedDeck:setColorPicking(false)
-                    playedDeck.lastColor = lastCardColor
-                end
-            end
-        else
-            if deck:checkHover() then
-                local card = deck:drawCard(#player.cards+1)
-    
-                if card == nil then
-                    local blockedCards = {}
-    
-                    -- todo: once we include Computer, we need to check if they have blocked cards
-                    for _, card in pairs(player.cards) do
-                        table.insert(blockedCards, card)
+    if player.playerTurn then
+        if clickedMouse then
+            -- if currently picking a color
+            if playedDeck.colorPicking and selectedCardIndex ~= nil then
+                if playedDeck:checkColorPickerHover() then
+                    if playedDeck:pickColor() then
+                        local lastCardColor = playedDeck.lastColor
+                        playedDeck:addCard(player:getCard(selectedCardIndex))
+                        -- since removeCard will remove the last selected color as well
+                        player:removeCard(selectedCardIndex)
+                        selectedCardIndex = nil
+                        playedDeck:setColorPicking(false)
+                        playedDeck.lastColor = lastCardColor
+                        player.playerTurn = false
                     end
-    
-                    deck:generateDeck(blockedCards)
-    
-                    card = deck:drawCard(#player.cards+1)
-    
-                    -- todo: we need to instead show an error message instead of just quiting!
-                    -- if card is nil stop program
+                end
+            else
+                if deck:checkHover() then
+                    local card = player:drawCard()
+        
                     if card == nil then
-                        print("ERROR: Could not generate a new deck and draw a card")
-                        love.event.quit()
+                        local blockedCards = {}
+        
+                        -- todo: once we include Computer, we need to check if they have blocked cards
+                        for _, card in pairs(player.cards) do
+                            table.insert(blockedCards, card)
+                        end
+        
+                        deck:generateDeck(blockedCards)
+        
+                        card = player:drawCard()
+        
+                        -- todo: we need to instead show an error message instead of just quiting!
+                        -- if card is nil stop program
+                        if card == nil then
+                            error("Could not generate a new deck and draw a card")
+                            love.event.quit()
+                        end
                     end
-                end
-    
-                player:addCard(card)
-            elseif player:checkHover() then
-                for ind, val in pairs(player:checkHovering()) do
-                    if val then
-                        local selectedCard = player:getCard(ind)
-    
-                        if selectedCard.playable then
-                            for _, powerCard in pairs(utils.powerCards)do
-                                if selectedCard.specialName == powerCard then
-                                    playedDeck:setColorPicking(true)
-                                    selectedCardIndex = ind
+        
+                    player:addCard(card)
+                    player.playerTurn = false
+                elseif player:checkHover() then
+                    for ind, val in pairs(player:checkHovering()) do
+                        if val then
+                            local selectedCard = player:getCard(ind)
+        
+                            if selectedCard.playable then
+                                for _, powerCard in pairs(utils.powerCards)do
+                                    if selectedCard.specialName == powerCard then
+                                        playedDeck:setColorPicking(true)
+                                        selectedCardIndex = ind
+                                    end
+                                end
+                            
+                                if not playedDeck.colorPicking then
+                                    playedDeck:addCard(selectedCard)
+                                    player:removeCard(ind)
+                                    player.playerTurn = false
                                 end
                             end
-                        
-                            if not playedDeck.colorPicking then
-                                playedDeck:addCard(selectedCard)
-                                player:removeCard(ind)
-                            end
+
                         end
                     end
                 end
             end
         end
-    end
-
-
-    if #player.cards == 0 then
-        print("You Won!")
-        love.event.quit()
-    elseif #com.cards == 0 then
-        print("You Lost!")
-        love.event.quit()
-    end
-
-    player:showPlayableCards(playedDeck.cards[#playedDeck.cards])
     
+        if #player.cards == 0 then
+            print("You Won!")
+            love.event.quit()
+        elseif #com.cards == 0 then
+            print("You Lost!")
+            love.event.quit()
+        end
+    
+        player:showPlayableCards()
+    else
+        -- if computer's turn
+        com:play(player)
+    end
+
     if clickedMouse then
         clickedMouse = false
     end
@@ -137,7 +147,6 @@ function love.draw()
     playedDeck:draw()
 
     love.graphics.print(love.timer.getFPS(), 10, 10)
-
 
     -- 15x15 square around cursor
     love.graphics.setColor(utils.colors.blue.r, utils.colors.blue.g, utils.colors.blue.b)

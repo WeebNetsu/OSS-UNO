@@ -48,8 +48,21 @@ function PlayedDeck()
             return false
         end,
 
-        pickColor = function (self)
+        pickColor = function (self, isCom)
             local mouseX, mouseY = love.mouse.getPosition()
+
+            if isCom then
+                -- choose a random color blue, red, green, yellow
+                local colors = {
+                    "blue",
+                    "red",
+                    "green",
+                    "yellow"
+                }
+                local color = colors[math.random(1, #colors)]
+                self.lastColor = color
+                return true
+            end
 
             -- blue
             if (mouseX >= cpXPos) and (mouseX <= cpXPos + cpWidth) and (mouseY >= cpYPos) and (mouseY <= (cpYPos + cpWidth)) then

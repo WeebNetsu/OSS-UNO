@@ -98,14 +98,17 @@ function Deck()
             index = index or 1
 
             local card = self.deck[1]
-            local x = cardX or (utils.cardWidth / 1.5) * index
-            local y = cardY or love.graphics.getHeight() - 200
+
+            if cardX == nil or cardY == nil then
+                -- throw lua error
+                error("Card x and/or y position not specified for drawCard() in Deck.lua")
+            end
 
             if card ~= nil then
                 table.remove(self.deck, 1)
 
-                card.x = x
-                card.y = y
+                card.x = cardX
+                card.y = cardY
             end
 
             return card

@@ -7,6 +7,7 @@ function Player(deck, playedDeck)
     
     return {
         cards = {},
+        playerTurn = false,
 
         -- will set the initial 8 cards
         setCards = function (self, num)
@@ -20,6 +21,10 @@ function Player(deck, playedDeck)
                     table.insert(self.cards, card)
                 end
             end
+        end,
+
+        drawCard = function (self)
+            return deck:drawCard(#self.cards+1, defaultXPos * #self.cards, defaultYPos)
         end,
 
         updateCardPositions = function (self)
@@ -49,31 +54,35 @@ function Player(deck, playedDeck)
             end
         end,
 
-        showPlayableCards = function (self, lastPlayedCard)
+        showPlayableCards = function (self)
+            local lastPlayedCard = playedDeck.cards[#playedDeck.cards]
+
             for _, card in pairs(self.cards) do
                 card.playable = false
-
-                if card.number ~= nil and card.number == lastPlayedCard.number then
-                    card.playable = true
-                elseif card.color ~= nil then
-                    if card.color == lastPlayedCard.color then
+                
+                if self.playerTurn then
+                    if card.number ~= nil and card.number == lastPlayedCard.number then
                         card.playable = true
-                    end
-
-                    if (not card.playable) and lastPlayedCard.specialName ~= nil then
-                        if card.specialName == lastPlayedCard.specialName then
+                    elseif card.color ~= nil then
+                        if card.color == lastPlayedCard.color then
                             card.playable = true
                         end
-                    end
-
-                    if (not card.playable) and (playedDeck.lastColor == card.color) then
-                        card.playable = true
-                    end
-                else
-                    for _, cardName in pairs(utils.powerCards) do
-                        if cardName == card.specialName then
+    
+                        if (not card.playable) and lastPlayedCard.specialName ~= nil then
+                            if card.specialName == lastPlayedCard.specialName then
+                                card.playable = true
+                            end
+                        end
+    
+                        if (not card.playable) and (playedDeck.lastColor == card.color) then
                             card.playable = true
-                            break
+                        end
+                    else
+                        for _, cardName in pairs(utils.powerCards) do
+                            if cardName == card.specialName then
+                                card.playable = true
+                                break
+                            end
                         end
                     end
                 end
