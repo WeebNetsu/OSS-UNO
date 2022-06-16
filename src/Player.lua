@@ -24,7 +24,7 @@ function Player(deck, playedDeck)
         end,
 
         drawCard = function (self)
-            return deck:drawCard(#self.cards+1, defaultXPos * #self.cards, defaultYPos)
+            return deck:drawCard(#self.cards+1, defaultXPos * #self.cards + utils.cardWidth / 1.5, defaultYPos)
         end,
 
         updateCardPositions = function (self)
@@ -75,6 +75,7 @@ function Player(deck, playedDeck)
                         end
     
                         if (not card.playable) and (playedDeck.lastColor == card.color) then
+                            print("lastColor: " .. playedDeck.lastColor)
                             card.playable = true
                         end
                     else

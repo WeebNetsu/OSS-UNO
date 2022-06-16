@@ -1,4 +1,5 @@
-local utils= require("utils")
+local love = require("love")
+local utils = require("utils")
 
 function Com(deck, playedDeck)
     local defaultXPos = utils.cardWidth / 1.5
@@ -41,9 +42,15 @@ function Com(deck, playedDeck)
             return self.cards[index]
         end,
 
+        drawCard = function (self)
+            return deck:drawCard(#self.cards+1, defaultXPos * #self.cards + utils.cardWidth / 1.5, defaultYPos)
+        end,
+
         draw = function (self)
             for index, card in pairs(self.cards) do
-                card:draw(nil, true)
+                -- true -> card back is shown
+                -- false -> actual card is shown
+                card:draw(nil, false)
             end
         end,
 
@@ -97,7 +104,8 @@ function Com(deck, playedDeck)
                 self:removeCard(card.index)
                 player.playerTurn = true
             else
-                self:draw()
+                self:addCard(utils:drawCardOrGenerateDeck(player, self, deck, true))
+                player.playerTurn = false
                 player.playerTurn = true
             end
         end,

@@ -71,29 +71,7 @@ function love.update(dt)
                 end
             else
                 if deck:checkHover() then
-                    local card = player:drawCard()
-        
-                    if card == nil then
-                        local blockedCards = {}
-        
-                        -- todo: once we include Computer, we need to check if they have blocked cards
-                        for _, card in pairs(player.cards) do
-                            table.insert(blockedCards, card)
-                        end
-        
-                        deck:generateDeck(blockedCards)
-        
-                        card = player:drawCard()
-        
-                        -- todo: we need to instead show an error message instead of just quiting!
-                        -- if card is nil stop program
-                        if card == nil then
-                            error("Could not generate a new deck and draw a card")
-                            love.event.quit()
-                        end
-                    end
-        
-                    player:addCard(card)
+                    player:addCard(utils:drawCardOrGenerateDeck(player, com, deck, false))
                     player.playerTurn = false
                 elseif player:checkHover() then
                     for ind, val in pairs(player:checkHovering()) do
