@@ -99,7 +99,7 @@ function Deck()
 
             local card = self.deck[1]
             local x = cardX or (utils.cardWidth / 1.5) * index
-            local y = cardY or love.graphics.getHeight() - 210
+            local y = cardY or love.graphics.getHeight() - 200
 
             if card ~= nil then
                 table.remove(self.deck, 1)

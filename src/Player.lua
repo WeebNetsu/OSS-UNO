@@ -1,13 +1,12 @@
 local love = require("love")
 local utils= require("utils")
 
-function Player(deck)
+function Player(deck, playedDeck)
     local defaultXPos = utils.cardWidth / 1.5
-    local defaultYPos = love.graphics.getHeight() - 210
+    local defaultYPos = love.graphics.getHeight() - 200
     
     return {
         cards = {},
-        colorPicking = false,
 
         -- will set the initial 8 cards
         setCards = function (self, num)
@@ -37,61 +36,17 @@ function Player(deck)
         removeCard = function (self, index)
             table.remove(self.cards, index)
             self:updateCardPositions()
+            playedDeck.lastColor = nil
         end,
 
         getCard = function (self, index)
             return self.cards[index]
         end,
 
-        setColorPicking = function (self, colorPicking)
-            if colorPicking then
-                love.graphics.setColor(0,0,0,0.5)
-            else
-                love.graphics.setColor(1,1,1,1)
-            end
-
-            self.colorPicking = colorPicking
-        end,
-
         draw = function (self)
-            local width = 300
-            local xPos, yPos = love.graphics.getWidth() / 2 - width, 50
-            local borderSpace, borderRadius = 15, 5
-            local mouseX, mouseY = love.mouse.getPosition()
-
             for index, card in pairs(self.cards) do
                 card:draw()
             end
-
-            if self.colorPicking then
-                love.graphics.rectangle("fill", 0, 0, love.graphics.getWidth(), love.graphics.getHeight())
-
-                -- blue
-                love.graphics.setColor(utils.colors.blue.r, utils.colors.blue.g, utils.colors.blue.b)
-                love.graphics.rectangle("fill", xPos, yPos, width, width, borderRadius)
-
-                -- red
-                love.graphics.setColor(utils.colors.red.r, utils.colors.red.g, utils.colors.red.b)
-                love.graphics.rectangle("fill", width + xPos + borderSpace, yPos, width, width, borderRadius)
-
-                -- green
-                love.graphics.setColor(utils.colors.green.r, utils.colors.green.g, utils.colors.green.b)
-                love.graphics.rectangle("fill", xPos, width + yPos + borderSpace, width, width, borderRadius)
-
-                -- yellow
-                love.graphics.setColor(utils.colors.yellow.r, utils.colors.yellow.g, utils.colors.yellow.b)
-                love.graphics.rectangle("fill", width + xPos + borderSpace, width + yPos + borderSpace, width, width, borderRadius)
-            end
-
-            -- 15x15 square around cursor
-            love.graphics.setColor(utils.colors.blue.r, utils.colors.blue.g, utils.colors.blue.b)
-            love.graphics.rectangle("line", mouseX - 7, mouseY - 7, 15, 15, borderRadius)
-            love.graphics.setColor(utils.colors.red.r, utils.colors.red.g, utils.colors.red.b)
-            love.graphics.rectangle("line", mouseX, mouseY - 7, 15, 15, borderRadius)
-            love.graphics.setColor(utils.colors.green.r, utils.colors.green.g, utils.colors.green.b)
-            love.graphics.rectangle("line", mouseX - 7, mouseY, 15, 15, borderRadius)
-            love.graphics.setColor(utils.colors.yellow.r, utils.colors.yellow.g, utils.colors.yellow.b)
-            love.graphics.rectangle("line", mouseX, mouseY, 15, 15, borderRadius)
         end,
 
         showPlayableCards = function (self, lastPlayedCard)
@@ -100,8 +55,20 @@ function Player(deck)
 
                 if card.number ~= nil and card.number == lastPlayedCard.number then
                     card.playable = true
-                elseif card.color ~= nil and card.color == lastPlayedCard.color then
-                    card.playable = true
+                elseif card.color ~= nil then
+                    if card.color == lastPlayedCard.color then
+                        card.playable = true
+                    end
+
+                    if (not card.playable) and lastPlayedCard.specialName ~= nil then
+                        if card.specialName == lastPlayedCard.specialName then
+                            card.playable = true
+                        end
+                    end
+
+                    if (not card.playable) and (playedDeck.lastColor == card.color) then
+                        card.playable = true
+                    end
                 else
                     for _, cardName in pairs(utils.powerCards) do
                         if cardName == card.specialName then
@@ -118,7 +85,7 @@ function Player(deck)
             local mouseX, mouseY = love.mouse.getPosition()
 
             for _, card in pairs(self.cards) do
-                if  mouseX >= card.x and (mouseX <= card.x + utils.cardWidth) and (mouseY >= card.y) and (mouseY <= (card.y + utils.cardHeight)) then
+                if  mouseX >= card.x and (mouseX <= card.x + utils.cardWidth) and (mouseY >= card.y - 20) and (mouseY <= (card.y + utils.cardHeight)) then
                     return true
                 end
             end
@@ -133,9 +100,9 @@ function Player(deck)
 
             for ind, card in pairs(self.cards) do
                 if self.cards[ind+1] then
-                    table.insert(hovering, mouseX >= card.x and (mouseX <= card.x + (utils.cardWidth / 1.5)) and (mouseY >= card.y) and (mouseY <= (card.y + utils.cardHeight)))
+                    table.insert(hovering, mouseX >= card.x and (mouseX <= card.x + (utils.cardWidth / 1.5)) and (mouseY >= card.y - 20) and (mouseY <= (card.y + utils.cardHeight)))
                 else
-                    table.insert(hovering, mouseX >= card.x and (mouseX <= card.x + utils.cardWidth) and (mouseY >= card.y) and (mouseY <= (card.y + utils.cardHeight)))
+                    table.insert(hovering, mouseX >= card.x and (mouseX <= card.x + utils.cardWidth) and (mouseY >= card.y - 20) and (mouseY <= (card.y + utils.cardHeight)))
                 end
             end
 
