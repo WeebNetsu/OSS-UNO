@@ -4,10 +4,11 @@ local Player = require "src.Player"
 local PlayedDeck = require "src.PlayedDeck"
 local Com = require "src.Com"
 local utils = require "utils"
+local Uno = require "src.Uno"
 
 math.randomseed(os.time())
 
-local deck, player, playedDeck, com
+local deck, player, playedDeck, com, uno
 local clickedMouse = false
 local cursorBorderRadius = 5
 local mouseX, mouseY
@@ -21,6 +22,7 @@ function love.load()
 
     local startCardCount = 8
 
+    uno = Uno()
     deck = Deck()
     deck:generateDeck()
 
@@ -123,6 +125,7 @@ function love.draw()
     com:draw()
     player:draw()
     playedDeck:draw()
+    uno:draw(playedDeck)
 
     love.graphics.print(love.timer.getFPS(), 10, 10)
 

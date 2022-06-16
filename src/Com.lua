@@ -50,7 +50,7 @@ function Com(deck, playedDeck)
             for index, card in pairs(self.cards) do
                 -- true -> card back is shown
                 -- false -> actual card is shown
-                card:draw(nil, false)
+                card:draw(nil, true)
             end
         end,
 

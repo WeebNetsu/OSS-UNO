@@ -93,7 +93,7 @@ function PlayedDeck()
 
         --[[ 
             This will add a card to the played deck.
-            
+
             @param card: Card - the card to add to the played deck
             @param skipColorSet: boolean - if true, will not set the color of the card (used by com)
         ]]
