@@ -18,40 +18,42 @@ function Card(x, y, color, number, specialName)
     local image = love.graphics.newImage(setImage ..".png")
     local comImage = love.graphics.newImage("assets/cards/card_back_alt.png")
 
-    return {
-        color = color,
-        number = number,
-        specialName = specialName,
-        imagePath = setImage ..".png",
-        rotation = 0,
-        playable = false,
-        x = x,
-        y = y,
+    local card = {}
 
-        draw = function (self, rotation, isCom)
-            local r = rotation or self.rotation
-            local yPos = self.y
+    card.color = color
+    card.number = number
+    card.specialName = specialName
+    card.imagePath = setImage ..".png"
+    card.rotation = 0
+    card.playable = false
+    card.x = x
+    card.y = y
 
-            if self.playable then
-                yPos = self.y - 20
-            end
+    card.draw = function (self, rotation, isCom)
+        local r = rotation or self.rotation
+        local yPos = self.y
 
-            if isCom then
-                love.graphics.draw(comImage, self.x, yPos, r)
-            else
-                love.graphics.draw(image, self.x, yPos, r)
-            end
-        end,
+        if self.playable then
+            yPos = self.y - 20
+        end
 
-        setPosition = function (self, x, y)
-            self.x = x
-            self.y = y
-        end,
+        if isCom then
+            love.graphics.draw(comImage, self.x, yPos, r)
+        else
+            love.graphics.draw(image, self.x, yPos, r)
+        end
+    end
 
-        -- __eq = function (self, other)
-        --     return self.color == other.color and self.number == other.number and self.specialName == other.specialName
-        -- end
-    }
+    card.setPosition = function (self, x, y)
+        self.x = x
+        self.y = y
+    end
+
+    -- card.__eq = function (self, other)
+    --     return self.color == other.color and self.number == other.number and self.specialName == other.specialName
+    -- end
+
+    return card
 end
 
 return Card
