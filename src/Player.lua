@@ -8,6 +8,7 @@ function Player(deck, playedDeck)
     return {
         cards = {},
         playerTurn = false,
+        skipTurn = false,
 
         -- will set the initial 8 cards
         setCards = function (self, num)
@@ -20,6 +21,14 @@ function Player(deck, playedDeck)
                 else
                     table.insert(self.cards, card)
                 end
+            end
+        end,
+
+        setPlayerTurn = function (self, playerTurn)
+            if self.skipTurn and playerTurn then
+                self.skipTurn = false
+            else
+                self.playerTurn = playerTurn
             end
         end,
 

@@ -149,14 +149,27 @@ function PlayedDeck(deck)
                 self.lastColor = card.color
             end
 
-            -- if +4 card
-            if card.specialName == "wild pick four" then
-                for _ = 1, 4 do
+            -- if +4 or +2 card
+            -- picker = +2 card
+            if card.specialName == "wild pick four" or card.specialName == "picker" then
+                local drawCount = 4
+                if card.specialName == "picker" then
+                    drawCount = 2
+                end
+
+                for _ = 1, drawCount do
                     if not player.playerTurn then
                         player:addCard(utils:drawCardOrGenerateDeck(player, com, deck, false))
                     else
                         com:addCard(utils:drawCardOrGenerateDeck(player, com, deck, true))
                     end
+                end
+                -- since it's a 2 player game, skip and reverse does the same thing
+            elseif card.specialName == "reverse" or card.specialName == "skip" then
+                if not player.playerTurn then
+                    player.skipTurn = true
+                else
+                    com.skipTurn = true
                 end
             end
 

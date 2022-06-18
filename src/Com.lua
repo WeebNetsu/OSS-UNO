@@ -7,6 +7,7 @@ function Com(deck, playedDeck)
     
     return {
         cards = {},
+        skipTurn = false,
 
         -- will set the initial 8 cards
         setCards = function (self, num)
@@ -55,13 +56,19 @@ function Com(deck, playedDeck)
         end,
 
         play = function (self, player)
+            if self.skipTurn then
+                player:setPlayerTurn(true)
+                self.skipTurn = false
+                return
+            end
+
             local lastPlayedCard = playedDeck.cards[#playedDeck.cards]
             local playableCards = {}
 
             for ind, card in pairs(self.cards) do
                 card.playable = false
                 
-                if not self.playerTurn then
+                if not player.playerTurn then
                     if card.number ~= nil and card.number == lastPlayedCard.number then
                         table.insert(playableCards, {index = ind, card = card})
                     elseif card.color ~= nil then
@@ -102,12 +109,11 @@ function Com(deck, playedDeck)
     
                 playedDeck:addCard(card.card, true, player, self)
                 self:removeCard(card.index)
-                player.playerTurn = true
             else
                 self:addCard(utils:drawCardOrGenerateDeck(player, self, deck, true))
-                player.playerTurn = false
-                player.playerTurn = true
             end
+
+            player:setPlayerTurn(true)
         end,
     }
 end

@@ -35,7 +35,7 @@ function love.load()
     player = Player(deck, playedDeck)
     player:setCards(startCardCount)
     -- if player goes first
-    player.playerTurn = math.random(1, 10) > 5
+    player:setPlayerTurn(math.random(1, 10) > 5)
 
     com = Com(deck, playedDeck)
     com:setCards(startCardCount)
@@ -73,14 +73,14 @@ function love.update(dt)
                         selectedCardIndex = nil
                         playedDeck:setColorPicking(false)
                         playedDeck.lastColor = lastCardColor
-                        player.playerTurn = false
+                        player:setPlayerTurn(false)
                     end
                 end
             else
                 if deck:checkHover() then
                     player:addCard(utils:drawCardOrGenerateDeck(player, com, deck, false))
-                    player.playerTurn = false
-                elseif player:checkHover() then
+                    player:setPlayerTurn(false)
+                    elseif player:checkHover() then
                     for ind, val in pairs(player:checkHovering()) do
                         if val then
                             local selectedCard = player:getCard(ind)
@@ -96,7 +96,7 @@ function love.update(dt)
                                 if not playedDeck.colorPicking then
                                     playedDeck:addCard(selectedCard, false, player, com)
                                     player:removeCard(ind)
-                                    player.playerTurn = false
+                                    player:setPlayerTurn(false)
                                 end
                             end
 
