@@ -1,3 +1,4 @@
+local love = require "love"
 local utils = require("utils")
 
 function Com(deck, playedDeck)
@@ -8,6 +9,7 @@ function Com(deck, playedDeck)
 
     com.cards = {}
     com.skipTurn = false
+    com.saidUno = false
 
     -- will set the initial 8 cards
     com.setCards = function (self, num)
@@ -44,6 +46,10 @@ function Com(deck, playedDeck)
     end
 
     com.drawCard = function (self)
+        if self.saidUno then
+            self.saidUno = false
+        end
+
         return deck:drawCard(#self.cards+1, self.defaultXPos * #self.cards + self.defaultXPos, self.defaultYPos)
     end
 
@@ -52,6 +58,10 @@ function Com(deck, playedDeck)
             -- true -> card back is shown
             -- false -> actual card is shown
             card:draw(nil, true)
+        end
+
+        if self.saidUno then
+            love.graphics.print("COM HAS UNO'D!", 50, 10)
         end
     end
 
@@ -110,6 +120,16 @@ function Com(deck, playedDeck)
             playedDeck:addCard(card.card, true, player, self)
             self:removeCard(card.index)
         else
+            self:addCard(utils:drawCardOrGenerateDeck(player, self, deck, true))
+        end
+
+        if #self.cards == 2 then
+            -- random 70% chance that saidUno is true
+            self.saidUno = math.random(1, 10) < 8
+        end
+
+        if #self.cards == 1 and not self.saidUno then
+            self:addCard(utils:drawCardOrGenerateDeck(player, self, deck, true))
             self:addCard(utils:drawCardOrGenerateDeck(player, self, deck, true))
         end
 

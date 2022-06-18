@@ -25,7 +25,7 @@ function love.load()
     love.mouse.setVisible(false)
     love.graphics.setBackgroundColor(utils.colors.background.r, utils.colors.background.g, utils.colors.background.b)
 
-    local startCardCount = 8
+    local startCardCount = 2
 
     uno = Uno()
     deck = Deck()
@@ -70,7 +70,7 @@ function love.update(dt)
                         local lastCardColor = playedDeck.lastColor
                         playedDeck:addCard(player:getCard(selectedCardIndex), false, player, com)
                         -- since removeCard will remove the last selected color as well
-                        player:removeCard(selectedCardIndex)
+                        player:removeCard(selectedCardIndex, com)
                         selectedCardIndex = nil
                         playedDeck:setColorPicking(false)
                         playedDeck.lastColor = lastCardColor
@@ -96,12 +96,18 @@ function love.update(dt)
                             
                                 if not playedDeck.colorPicking then
                                     playedDeck:addCard(selectedCard, false, player, com)
-                                    player:removeCard(ind)
+                                    player:removeCard(ind, com)
                                     player:setPlayerTurn(false)
                                 end
                             end
 
                         end
+                    end
+                end
+
+                if uno:checkHover() then
+                    if #player.cards == 2 then
+                        player.saidUno = true
                     end
                 end
             end

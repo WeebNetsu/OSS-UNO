@@ -5,6 +5,7 @@ function Uno()
     -- width and height are swapped, since it's horizontal and not vertical
     local width, height = utils.cardHeight, utils.cardWidth
     local image = love.graphics.newImage("assets/uno.png")
+    local scale = 0.7
 
     local uno = {}
     
@@ -13,7 +14,7 @@ function Uno()
 
     uno.draw = function (self, playedDeck)
         love.graphics.push()
-        love.graphics.scale(0.7) -- the sprite was a bit large, so I scaled it to a resonable size
+        love.graphics.scale(scale) -- the sprite was a bit large, so I scaled it to a resonable size
 
         if playedDeck.lastColor == "blue" then
             love.graphics.setColor(utils.colors.blue.r, utils.colors.blue.g, utils.colors.blue.b)
@@ -34,13 +35,20 @@ function Uno()
                 love.graphics.setColor(utils.colors.yellow.r, utils.colors.yellow.g, utils.colors.yellow.b)
             end
         end
-        
+
         love.graphics.rectangle("fill", self.x, self.y, width, height, 5)
 
         love.graphics.setColor(1, 1, 1)
         love.graphics.draw(image, self.x, self.y)
-        
+
         love.graphics.pop()
+    end
+
+    uno.checkHover = function (self)
+        local mouse_x, mouse_y = love.mouse.getPosition()
+
+        -- we * by scale, since the drawing was scaled
+        return mouse_x >= self.x * scale and (mouse_x <= (self.x + width) * scale) and (mouse_y >= self.y * scale) and (mouse_y <= (self.y + height) * scale)
     end
 
     return uno

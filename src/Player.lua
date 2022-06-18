@@ -24,15 +24,26 @@ function Player(deck, playedDeck)
         end
     end
 
-    player.removeCard = function (self, index)
+    player.removeCard = function (self, index, com)
         table.remove(self.cards, index)
         self:updateCardPositions()
         playedDeck.lastColor = nil
+
+
+        if #self.cards == 1 and not self.saidUno then
+            -- if the player did not say uno before reaching their last card
+            self:addCard(utils:drawCardOrGenerateDeck(self, com, deck, false))
+            self:addCard(utils:drawCardOrGenerateDeck(self, com, deck, false))
+        end
     end
 
     player.draw = function (self)
         for index, card in pairs(self.cards) do
             card:draw()
+        end
+
+        if self.saidUno then
+            love.graphics.print("PLAYER HAS UNO'D!", 10, love.graphics.getHeight() - 20)
         end
     end
 
