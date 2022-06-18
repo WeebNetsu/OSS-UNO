@@ -34,6 +34,9 @@ function Player(deck, playedDeck)
             -- if the player did not say uno before reaching their last card
             self:addCard(utils:drawCardOrGenerateDeck(self, com, deck, false))
             self:addCard(utils:drawCardOrGenerateDeck(self, com, deck, false))
+            if playedDeck.chainCount > 0 then
+                playedDeck.chainCount = 0
+            end
         end
     end
 
@@ -54,27 +57,30 @@ function Player(deck, playedDeck)
             card.playable = false
             
             if self.playerTurn then
-                if card.number ~= nil and card.number == lastPlayedCard.number then
-                    card.playable = true
-                elseif card.color ~= nil then
-                    if card.color == lastPlayedCard.color then
+                -- if we're chaining +2/+4s
+                if playedDeck.chainCount > 0 then
+                    card.playable = card.specialName == lastPlayedCard.specialName
+                else
+                    if card.number ~= nil and card.number == lastPlayedCard.number then
                         card.playable = true
-                    end
-
-                    if (not card.playable) and lastPlayedCard.specialName ~= nil then
-                        if card.specialName == lastPlayedCard.specialName then
+                    elseif card.color ~= nil then
+                        if card.color == lastPlayedCard.color then
                             card.playable = true
                         end
-                    end
-
-                    if (not card.playable) and (playedDeck.lastColor == card.color) then
-                        card.playable = true
-                    end
-                else
-                    for _, cardName in pairs(utils.powerCards) do
-                        if cardName == card.specialName then
+    
+                        if (not card.playable) and lastPlayedCard.specialName ~= nil then
+                            card.playable = card.specialName == lastPlayedCard.specialName
+                        end
+    
+                        if (not card.playable) and (playedDeck.lastColor == card.color) then
                             card.playable = true
-                            break
+                        end
+                    else
+                        for _, cardName in pairs(utils.powerCards) do
+                            if cardName == card.specialName then
+                                card.playable = true
+                                break
+                            end
                         end
                     end
                 end

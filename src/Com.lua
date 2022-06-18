@@ -57,7 +57,7 @@ function Com(deck, playedDeck)
         for index, card in pairs(self.cards) do
             -- true -> card back is shown
             -- false -> actual card is shown
-            card:draw(nil, true)
+            card:draw(nil, false)
         end
 
         if self.saidUno then
@@ -107,20 +107,64 @@ function Com(deck, playedDeck)
         end
 
         if #playableCards > 0 then
-            -- choose random item in playableCards table
-            local randomIndex = math.random(1, #playableCards)
-            local card = playableCards[randomIndex]
-
-            for _, powerCard in pairs(utils.powerCards)do
-                if card.card.specialName == powerCard then
-                    playedDeck:pickColor(true, self)
+            if playedDeck.chainCount > 0 then
+                local successfulChain = false
+                -- if +4 or +2 card
+                -- picker = +2 card
+                if lastPlayedCard.specialName == "wild pick four" or lastPlayedCard.specialName == "picker" then
+                    for _, card in pairs(playableCards) do
+                        if card.card.specialName == lastPlayedCard.specialName then
+                            playedDeck:addCard(card.card, true, player, self)
+                            self:removeCard(card.index)
+                            successfulChain = true
+                        end
+                    end
                 end
+
+                if not successfulChain then
+                    local drawCount = 4
+                    if lastPlayedCard.specialName == "picker" then
+                        drawCount = 2
+                    end
+
+                    drawCount = drawCount * playedDeck.chainCount
+
+                    for _ = 1, drawCount do
+                        self:addCard(utils:drawCardOrGenerateDeck(player, com, deck, true))
+                    end
+
+                    playedDeck.chainCount = 0
+                end
+            else
+                -- choose random item in playableCards table
+                local randomIndex = math.random(1, #playableCards)
+                local card = playableCards[randomIndex]
+    
+                for _, powerCard in pairs(utils.powerCards)do
+                    if card.card.specialName == powerCard then
+                        playedDeck:pickColor(true, self)
+                    end
+                end
+    
+                playedDeck:addCard(card.card, true, player, self)
+                self:removeCard(card.index)
+            end
+        else
+            local drawCount = 1
+
+            if playedDeck.chainCount > 0 then
+                if lastPlayedCard.specialName == "wild pick four" then
+                    drawCount = drawCount * 4 * playedDeck.chainCount
+                elseif lastPlayedCard.specialName == "picker" then
+                    drawCount = drawCount * 2 * playedDeck.chainCount
+                end
+
+                playedDeck.chainCount = 0
             end
 
-            playedDeck:addCard(card.card, true, player, self)
-            self:removeCard(card.index)
-        else
-            self:addCard(utils:drawCardOrGenerateDeck(player, self, deck, true))
+            for _ = 1, drawCount do
+                self:addCard(utils:drawCardOrGenerateDeck(player, self, deck, true))
+            end
         end
 
         if #self.cards == 2 then
@@ -131,6 +175,10 @@ function Com(deck, playedDeck)
         if #self.cards == 1 and not self.saidUno then
             self:addCard(utils:drawCardOrGenerateDeck(player, self, deck, true))
             self:addCard(utils:drawCardOrGenerateDeck(player, self, deck, true))
+
+            if playedDeck.chainCount > 0 then
+                playedDeck.chainCount = 0
+            end
         end
 
         player:setPlayerTurn(true)

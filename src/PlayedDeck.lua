@@ -12,6 +12,8 @@ function PlayedDeck(deck)
     local playedDeck = {}
 
     playedDeck.cards = {}
+    -- chaining is when a +2/+4 is thrown onto another +2/+4
+    playedDeck.chainCount = 0
     playedDeck.x = love.graphics.getWidth() / 2.5
     playedDeck.y = utils.cardHeight + 80
     playedDeck.lastColor = nil
@@ -153,18 +155,7 @@ function PlayedDeck(deck)
         -- if +4 or +2 card
         -- picker = +2 card
         if card.specialName == "wild pick four" or card.specialName == "picker" then
-            local drawCount = 4
-            if card.specialName == "picker" then
-                drawCount = 2
-            end
-
-            for _ = 1, drawCount do
-                if not player.playerTurn then
-                    player:addCard(utils:drawCardOrGenerateDeck(player, com, deck, false))
-                else
-                    com:addCard(utils:drawCardOrGenerateDeck(player, com, deck, true))
-                end
-            end
+            self.chainCount = self.chainCount + 1
             -- since it's a 2 player game, skip and reverse does the same thing
         elseif card.specialName == "reverse" or card.specialName == "skip" then
             if not player.playerTurn then

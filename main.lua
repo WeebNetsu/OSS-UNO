@@ -25,7 +25,7 @@ function love.load()
     love.mouse.setVisible(false)
     love.graphics.setBackgroundColor(utils.colors.background.r, utils.colors.background.g, utils.colors.background.b)
 
-    local startCardCount = 2
+    local startCardCount = 8
 
     uno = Uno()
     deck = Deck()
@@ -79,13 +79,30 @@ function love.update(dt)
                 end
             else
                 if deck:checkHover() then
-                    player:addCard(utils:drawCardOrGenerateDeck(player, com, deck, false))
+                    local drawCount = 1
+                    
+                    if playedDeck.chainCount > 0 then
+                        local specialCard = playedDeck.cards[#playedDeck.cards].specialName
+
+                        if specialCard == "wild pick four" then
+                            drawCount = drawCount * 4 * playedDeck.chainCount
+                        elseif specialCard == "picker" then
+                            drawCount = drawCount * 2 * playedDeck.chainCount
+                        end
+
+                        playedDeck.chainCount = 0
+                    end
+
+                    for _ = 1, drawCount do
+                        player:addCard(utils:drawCardOrGenerateDeck(player, com, deck, false))
+                    end
+
                     player:setPlayerTurn(false)
-                    elseif player:checkHover() then
+                elseif player:checkHover() then
                     for ind, val in pairs(player:checkHovering()) do
                         if val then
                             local selectedCard = player:getCard(ind)
-        
+
                             if selectedCard.playable then
                                 for _, powerCard in pairs(utils.powerCards)do
                                     if selectedCard.specialName == powerCard then
@@ -93,14 +110,13 @@ function love.update(dt)
                                         selectedCardIndex = ind
                                     end
                                 end
-                            
+
                                 if not playedDeck.colorPicking then
                                     playedDeck:addCard(selectedCard, false, player, com)
                                     player:removeCard(ind, com)
                                     player:setPlayerTurn(false)
                                 end
                             end
-
                         end
                     end
                 end
