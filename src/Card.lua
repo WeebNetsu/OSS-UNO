@@ -48,9 +48,9 @@ function Card(x, y, color, number, specialName)
             self.y = y
         end,
 
-        __eq = function (self, other)
-            return self.color == other.color and self.number == other.number and self.specialName == other.specialName
-        end
+        -- __eq = function (self, other)
+        --     return self.color == other.color and self.number == other.number and self.specialName == other.specialName
+        -- end
     }
 end
 

@@ -96,11 +96,11 @@ function Com(deck, playedDeck)
 
                 for _, powerCard in pairs(utils.powerCards)do
                     if card.card.specialName == powerCard then
-                        playedDeck:pickColor(true)
+                        playedDeck:pickColor(true, self)
                     end
                 end
     
-                playedDeck:addCard(card.card, true)
+                playedDeck:addCard(card.card, true, player, self)
                 self:removeCard(card.index)
                 player.playerTurn = true
             else

@@ -36,9 +36,9 @@ return {
         local card
 
         if isCom then
-            card =com:drawCard()
+            card = com:drawCard()
         else
-            card =player:drawCard()
+            card = player:drawCard()
         end
         
         if card == nil then

@@ -1,7 +1,7 @@
 local love = require "love"
 local utils= require "utils"
 
-function PlayedDeck()
+function PlayedDeck(deck)
     -- cp = color picker
     local cpWidth = 300
     local cpXPos, cpYPos = love.graphics.getWidth() / 2 - cpWidth, 50
@@ -48,19 +48,62 @@ function PlayedDeck()
             return false
         end,
 
-        pickColor = function (self, isCom)
+        pickColor = function (self, isCom, com)
             local mouseX, mouseY = love.mouse.getPosition()
 
             if isCom then
-                -- choose a random color blue, red, green, yellow
-                local colors = {
-                    "blue",
-                    "red",
-                    "green",
-                    "yellow"
-                }
-                local color = colors[math.random(1, #colors)]
-                self.lastColor = color
+                if com == nil then
+                    error("Com was not provided for pickColor")
+                end
+
+                -- store all colors com has in hand
+                local containingColors = {}
+                for _, card in pairs(com.cards) do
+                    if card.color ~= nil then
+                        table.insert(containingColors, card.color)
+                    end
+                end
+
+                if #containingColors < 1 then
+                    -- if com does not have any color cards in hand, pick a random color
+                    local colors = {
+                        "blue",
+                        "red",
+                        "green",
+                        "yellow"
+                    }
+                    local color = colors[math.random(1, #colors)]
+                    self.lastColor = color
+                    return true
+                end
+
+                -- make the bot choose the color that is most common in the hand
+                local blue, red, green, yellow = 0, 0, 0, 0
+
+                for _, color in pairs(containingColors) do
+                    if color == "blue" then
+                        blue = blue + 1
+                    elseif color == "red" then
+                        red = red + 1
+                    elseif color == "green" then
+                        green = green + 1
+                    else
+                        yellow = yellow + 1
+                    end
+                end
+
+                local max = math.max(blue, red, green, yellow)
+
+                if max == blue then
+                    self.lastColor = "blue"
+                elseif max == red then
+                    self.lastColor = "red"
+                elseif max == green then
+                    self.lastColor = "green"
+                else
+                    self.lastColor = "yellow"
+                end
+
                 return true
             end
 
@@ -97,13 +140,24 @@ function PlayedDeck()
             @param card: Card - the card to add to the played deck
             @param skipColorSet: boolean - if true, will not set the color of the card (used by com)
         ]]
-        addCard = function (self, card, skipColorSet)
+        addCard = function (self, card, skipColorSet, player, com)
             card.rotation = math.random(-3, 10) / 10
             card.x = self.x
             card.y = self.y
 
             if not skipColorSet then
                 self.lastColor = card.color
+            end
+
+            -- if +4 card
+            if card.specialName == "wild pick four" then
+                for _ = 1, 4 do
+                    if not player.playerTurn then
+                        player:addCard(utils:drawCardOrGenerateDeck(player, com, deck, false))
+                    else
+                        com:addCard(utils:drawCardOrGenerateDeck(player, com, deck, true))
+                    end
+                end
             end
 
             table.insert(self.cards, card)

@@ -1,3 +1,7 @@
+if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
+    require("lldebugger").start()
+end
+
 local love = require "love"
 local Deck = require "src.Deck"
 local Player = require "src.Player"
@@ -26,16 +30,7 @@ function love.load()
     deck = Deck()
     deck:generateDeck()
 
-    playedDeck = PlayedDeck()
-    local allowedCard = false
-    repeat
-        -- make sure the first card on the field is not a power card
-        local drawnCard = deck:drawCard(1, love.graphics.getWidth() / 2.5, utils.cardHeight + 50)
-        if drawnCard.number ~= nil then
-            allowedCard = true
-            playedDeck:addCard(drawnCard)
-        end
-    until allowedCard
+    playedDeck = PlayedDeck(deck)
 
     player = Player(deck, playedDeck)
     player:setCards(startCardCount)
@@ -44,6 +39,16 @@ function love.load()
 
     com = Com(deck, playedDeck)
     com:setCards(startCardCount)
+
+    local allowedCard = false
+    repeat
+        -- make sure the first card on the field is not a power card
+        local drawnCard = deck:drawCard(1, love.graphics.getWidth() / 2.5, utils.cardHeight + 50)
+        if drawnCard.number ~= nil then
+            allowedCard = true
+            playedDeck:addCard(drawnCard, false, player, com)
+        end
+    until allowedCard
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
@@ -62,7 +67,7 @@ function love.update(dt)
                 if playedDeck:checkColorPickerHover() then
                     if playedDeck:pickColor() then
                         local lastCardColor = playedDeck.lastColor
-                        playedDeck:addCard(player:getCard(selectedCardIndex))
+                        playedDeck:addCard(player:getCard(selectedCardIndex), false, player, com)
                         -- since removeCard will remove the last selected color as well
                         player:removeCard(selectedCardIndex)
                         selectedCardIndex = nil
@@ -89,7 +94,7 @@ function love.update(dt)
                                 end
                             
                                 if not playedDeck.colorPicking then
-                                    playedDeck:addCard(selectedCard)
+                                    playedDeck:addCard(selectedCard, false, player, com)
                                     player:removeCard(ind)
                                     player.playerTurn = false
                                 end
