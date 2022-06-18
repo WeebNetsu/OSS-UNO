@@ -1,3 +1,4 @@
+-- for debugging purposes
 if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
     require("lldebugger").start()
 end
@@ -59,7 +60,7 @@ end
 
 function love.update(dt)
     mouseX, mouseY = love.mouse.getPosition()
-    
+
     if player.playerTurn then
         if clickedMouse then
             -- if currently picking a color
