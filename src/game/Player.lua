@@ -1,6 +1,6 @@
 local love = require("love")
 local utils = require("utils")
-local Com = require("src.Com")
+local Com = require("src.game.Com")
 
 function Player(deck, playedDeck)
     -- inheriting from Com

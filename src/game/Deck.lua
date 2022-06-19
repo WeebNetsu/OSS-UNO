@@ -1,5 +1,5 @@
 local love = require "love"
-local Card = require "src.Card"
+local Card = require "src.game.Card"
 local utils = require "utils"
 
 function Deck()
