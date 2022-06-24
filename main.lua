@@ -39,7 +39,7 @@ function love.update(dt)
     mouseX, mouseY = love.mouse.getPosition()
 
     if utils.state.menu then
-        menu:update(mouseX, mouseY)
+        menu:update(clickedMouse)
     elseif utils.state.game then
         game:update(dt, clickedMouse)
     end
@@ -50,13 +50,13 @@ function love.update(dt)
 end
 
 function love.draw()
-    love.graphics.print(love.timer.getFPS(), 10, 10)
-
     if utils.state.menu then
         menu:draw()
     elseif utils.state.game then
         game:draw()
     end
+
+    love.graphics.print(love.timer.getFPS(), 10, 10)
 
     -- 15x15 square around cursor
     love.graphics.setColor(utils.colors.blue.r, utils.colors.blue.g, utils.colors.blue.b)

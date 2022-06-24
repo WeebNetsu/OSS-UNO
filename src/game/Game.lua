@@ -42,7 +42,7 @@ function Game()
 
     game.update = function (self, dt, clickedMouse)
         clickedMouse = clickedMouse or false
-        print(clickedMouse)
+
         if player.playerTurn then
             if clickedMouse then
                 -- if currently picking a color

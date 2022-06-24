@@ -44,7 +44,6 @@ return {
     end,
 
     chooseButtonImage = function(self, name, iconButton, red)
-        local type = type or "text"
         local textButtonPath = "assets/buttons/text/"
         local iconButtonPath = "assets/buttons/icon/"
 
