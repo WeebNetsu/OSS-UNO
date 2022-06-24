@@ -3,6 +3,11 @@ local love = require "love"
 return {
     cardHeight = 180,
     cardWidth = 130,
+    textButtonWidth = 600,
+    textButtonHeight = 200,
+    iconButtonWidth = 200,
+    iconButtonHeight = 200,
+
     powerCards = {"wild color changer", "wild pick four"},
     colors = {
         red = {
@@ -31,6 +36,28 @@ return {
             b = 51 / 255
         }
     },
+
+    getMouseBetween = function (self, x, y, width, height)
+        local mouse_x, mouse_y = love.mouse.getPosition()
+
+        return mouse_x >= x and (mouse_x <= x + width) and (mouse_y >= y) and (mouse_y <= (y + height))
+    end,
+
+    chooseButtonImage = function(self, name, iconButton, red)
+        local type = type or "text"
+        local textButtonPath = "assets/buttons/text/"
+        local iconButtonPath = "assets/buttons/icon/"
+
+        if red then
+            name = "red_" .. name
+        end
+
+        if iconButton then
+           return love.graphics.newImage(iconButtonPath .. name .. ".png")
+        end
+
+        return love.graphics.newImage(textButtonPath .. name .. ".png")
+    end,
 
     drawCardOrGenerateDeck = function (self, player, com, deck, isCom)
         local card
@@ -68,5 +95,15 @@ return {
         end
 
         return card
+    end,
+
+    state = {
+        menu = true,
+        game = false,
+    },
+
+    changeGameState = function (self, state)
+        self.state.menu = state == "menu"
+        self.state.game = state == "game"
     end
 }

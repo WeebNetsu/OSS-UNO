@@ -6,10 +6,11 @@ end
 local love = require "love"
 local utils = require "utils"
 local Game = require "src.game.Game"
+local Menu = require "src.menu.Menu"
 
 math.randomseed(os.time())
 
-local game
+local game, menu
 local clickedMouse = false
 local cursorBorderRadius = 5
 local mouseX, mouseY
@@ -18,7 +19,11 @@ function love.load()
     love.mouse.setVisible(false)
     love.graphics.setBackgroundColor(utils.colors.background.r, utils.colors.background.g, utils.colors.background.b)
 
+    -- set initial game state to menu
+    utils:changeGameState("menu")
+
     game = Game()
+    menu = Menu()
 
     game:load()
 end
@@ -30,9 +35,14 @@ function love.mousepressed(x, y, button, istouch, presses)
 end
 
 function love.update(dt)
+    -- mouseX and y is used in draw
     mouseX, mouseY = love.mouse.getPosition()
 
-    game:update(dt, clickedMouse)
+    if utils.state.menu then
+        menu:update(mouseX, mouseY)
+    elseif utils.state.game then
+        game:update(dt, clickedMouse)
+    end
 
     if clickedMouse then
         clickedMouse = false
@@ -40,8 +50,13 @@ function love.update(dt)
 end
 
 function love.draw()
-    game:draw()
     love.graphics.print(love.timer.getFPS(), 10, 10)
+
+    if utils.state.menu then
+        menu:draw()
+    elseif utils.state.game then
+        game:draw()
+    end
 
     -- 15x15 square around cursor
     love.graphics.setColor(utils.colors.blue.r, utils.colors.blue.g, utils.colors.blue.b)
