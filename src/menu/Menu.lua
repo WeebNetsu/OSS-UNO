@@ -1,9 +1,16 @@
 local love = require "love"
 local utils = require "utils"
+local Settings = require "src.menu.Settings"
 
 function Menu()
     local menu = {}
     local textButtonScale, iconButtonScale = 0.7, 0.5
+    local settings
+
+    local states = {
+        menu = true,
+        settings = false,
+    }
 
     local scale = {
         textButton = {
@@ -24,6 +31,12 @@ function Menu()
     
     local backgroundImage = love.graphics.newImage("assets/backgrounds/bg2.png")
 
+    local switchState = function (state)
+        state = state or "menu"
+        states.menu = state == "menu"
+        states.settings = state == "settings"
+    end
+    
     local textButtons = {
         play = {
             src = utils:chooseButtonImage("play"),
@@ -48,7 +61,7 @@ function Menu()
             y = scale.iconButton.windowHeight - utils.iconButtonHeight - 100,
 
             onClick = function (self)
-                print("Settings are to be implemented")
+                switchState("settings")
             end
         },
         quit = {
@@ -65,57 +78,72 @@ function Menu()
         },
     }
 
+    menu.load = function (self)
+        switchState()
+
+        settings = Settings(switchState)
+    end
+
     menu.update = function (self, clickedMouse)
-        for _, button in pairs(textButtons) do
-            button.hovering = utils:getMouseBetween(button.x * textButtonScale, button.y * textButtonScale, scale.textButton.width, scale.textButton.height)
-
-            if clickedMouse then
-                if button.hovering then
-                    button:onClick()
+        if states.menu then
+            for _, button in pairs(textButtons) do
+                button.hovering = utils:getMouseBetween(button.x * textButtonScale, button.y * textButtonScale, scale.textButton.width, scale.textButton.height)
+    
+                if clickedMouse then
+                    if button.hovering then
+                        button:onClick()
+                    end
                 end
             end
-        end
-
-        for _, button in pairs(iconButtons) do
-            button.hovering = utils:getMouseBetween(button.x * iconButtonScale, button.y * iconButtonScale, scale.iconButton.width, scale.iconButton.height)
-
-            if clickedMouse then
-                if button.hovering then
-                    button:onClick()
+    
+            for _, button in pairs(iconButtons) do
+                button.hovering = utils:getMouseBetween(button.x * iconButtonScale, button.y * iconButtonScale, scale.iconButton.width, scale.iconButton.height)
+    
+                if clickedMouse then
+                    if button.hovering then
+                        button:onClick()
+                    end
                 end
             end
+        elseif states.settings then
+            settings:update(clickedMouse)
         end
     end
 
     menu.draw = function (self)
-        love.graphics.draw(backgroundImage, 0, 0)
-
-        -- draw text buttons
-        love.graphics.push()
-        love.graphics.scale(textButtonScale) -- the sprite was a bit large, so I scaled it to a resonable size
-
-        for _, button in pairs(textButtons) do
-            if button.hovering then
-                love.graphics.draw(button.hoverSrc, button.x, button.y)
-            else
-                love.graphics.draw(button.src, button.x, button.y)
+        if states.menu then
+            love.graphics.draw(backgroundImage, 0, 0)
+    
+            -- draw text buttons
+            love.graphics.push()
+            love.graphics.scale(textButtonScale) -- the sprite was a bit large, so I scaled it to a resonable size
+    
+            for _, button in pairs(textButtons) do
+                if button.hovering then
+                    love.graphics.draw(button.hoverSrc, button.x, button.y)
+                else
+                    love.graphics.draw(button.src, button.x, button.y)
+                end
             end
-        end
-
-        love.graphics.pop()
-
-        -- draw icon buttons
-        love.graphics.push()
-        love.graphics.scale(iconButtonScale)
-
-        for _, button in pairs(iconButtons) do
-            if button.hovering then
-                love.graphics.draw(button.hoverSrc, button.x, button.y)
-            else
-                love.graphics.draw(button.src, button.x, button.y)
+    
+            love.graphics.pop()
+    
+            -- draw icon buttons
+            love.graphics.push()
+            love.graphics.scale(iconButtonScale)
+    
+            for _, button in pairs(iconButtons) do
+                if button.hovering then
+                    love.graphics.draw(button.hoverSrc, button.x, button.y)
+                else
+                    love.graphics.draw(button.src, button.x, button.y)
+                end
             end
+
+            love.graphics.pop()
+        elseif states.settings then
+            settings:draw()
         end
-        love.graphics.pop()
     end
 
     return menu

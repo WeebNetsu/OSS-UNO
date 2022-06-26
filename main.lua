@@ -26,6 +26,7 @@ function love.load()
     menu = Menu()
 
     game:load()
+    menu:load()
 end
 
 function love.mousepressed(x, y, button, istouch, presses)
@@ -56,7 +57,9 @@ function love.draw()
         game:draw()
     end
 
-    love.graphics.print(love.timer.getFPS(), 10, 10)
+    if utils.debugging then
+        love.graphics.print(love.timer.getFPS(), 10, 10)
+    end
 
     -- 15x15 square around cursor
     love.graphics.setColor(utils.colors.blue.r, utils.colors.blue.g, utils.colors.blue.b)

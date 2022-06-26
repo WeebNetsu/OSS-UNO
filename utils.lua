@@ -7,6 +7,19 @@ return {
     textButtonHeight = 200,
     iconButtonWidth = 200,
     iconButtonHeight = 200,
+    -- debugging will display boxes and fps etc.
+    debugging = false,
+
+    fonts = {
+        h1 = 60,
+        h2 = 50,
+        h3 = 40,
+        h4 = 30,
+        h5 = 20,
+        h6 = 10,
+        -- default font size for Love2D
+        p = 14,
+    },
 
     powerCards = {"wild color changer", "wild pick four"},
     colors = {
