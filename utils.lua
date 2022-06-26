@@ -1,4 +1,5 @@
 local love = require "love"
+local lunajson = require 'lunajson' -- luarocks install lunajson
 
 return {
     cardHeight = 180,
@@ -117,5 +118,59 @@ return {
     changeGameState = function (self, state)
         self.state.menu = state == "menu"
         self.state.game = state == "game"
+    end,
+
+    --[[ 
+        DESCRIPTION
+        Read a json file and return the contents as a lua table. This function will automatically search inside the data/ folder and add a '.json' to the file name.
+
+        PARAMETERS
+        -> file_name: string - name of file to read (required)
+            example: "save"
+        -> path: string - path to save file (from project root)
+            example: "src/data/"
+    ]]
+    readJSON = function(self, file_name, path)
+        -- todo: if path is provided, make sure it ends with "/", add it if it doesn't
+        path = path or "data/"
+        local file = io.open(path .. file_name .. ".json", "r")
+
+        if not file then
+            -- todo instead of erroring, show an error
+            error("Could not open save file")
+        end
+
+        local data = file:read("*all")
+        file:close()
+
+        return lunajson.decode(data)
+    end,
+
+    --[[ 
+        DESCRIPTION
+        Convert a table to JSON and save it in a file. This will overwrite the file if it already exists. This function will automatically search inside the data/ folder and add a '.json' to the file name.
+
+        PARAMETERS
+        -> file_name: string - name of file to write to (required)
+            example: "save"
+            NB: Will search for 'data/save.json'
+        -> data: table - table to be converted to JSON and saved. (required)
+            example: { name = "max" }
+        -> path: string - path to save file (from project root)
+            example: "src/data/"
+    ]]
+    writeJSON = function(self, file_name, data, path)  -- added a method to write json
+        path = path or "data/"
+
+        print(lunajson.encode(data))
+        local file = io.open(path .. file_name .. ".json", "w")
+
+        if not file then
+            -- todo instead of erroring, show an error
+            error("Could not open save file")
+        end
+
+        file:write(lunajson.encode(data))
+        file:close()
     end
 }

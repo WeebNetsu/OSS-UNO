@@ -14,10 +14,18 @@ local game, menu
 local clickedMouse = false
 local cursorBorderRadius = 5
 local mouseX, mouseY
+local gameSettings = {}
 
 function love.load()
     love.mouse.setVisible(false)
     love.graphics.setBackgroundColor(utils.colors.background.r, utils.colors.background.g, utils.colors.background.b)
+
+    gameSettings = utils:readJSON("settings")
+
+    -- the settings set here are the ones that will overwrite the defaults in conf.lua on startup
+    if gameSettings.windowSize and not (gameSettings.windowSize.width == nil or gameSettings.windowSize.height == nil) then
+        love.window.setMode(gameSettings.windowSize.width, gameSettings.windowSize.height)
+    end
 
     -- set initial game state to menu
     utils:changeGameState("menu")

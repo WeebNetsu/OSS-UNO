@@ -1,39 +1,57 @@
 local love = require "love"
 local utils= require "utils"
 
-function Settings(switchState)
-    local settings = {}
+-- settings counter that will generate an index for us automatically
+local function SettingsCounter()
+    local i = 0
 
-    -- create a mini object to generate tables for us
-    local function SettingsOptions(title, valueIndex, availableValues, index)
-        valueIndex = valueIndex or 1
+    return function(title, valueIndex, availableValues) -- anonimous function
+        i = i + 1
 
         return {
             title = title,
-            value = availableValues[valueIndex],
+            value = valueIndex or 1,
             availableValues = availableValues,
-            displayIndex = index,
+            displayIndex = i,
             hovering = false,
 
             onClick = function (self)
-                local selectedIndex
-
-                for index, value in pairs(self.availableValues) do
-                    if value == self.value then
-                        selectedIndex = index
-                    end
-                end
-
-                if not selectedIndex or selectedIndex == #self.availableValues then
-                    self.value = self.availableValues[1]
+                if not self.value or self.value == #self.availableValues then
+                    self.value = 1
                     return
                 end
 
-                self.value = self.availableValues[selectedIndex + 1]
+                self.value = self.value + 1
             end,
         }
     end
-    
+end
+
+function Settings(switchState)
+    local settings = {}
+    local newSettings = utils:readJSON("settings")
+
+    -- create a mini object to generate tables for us
+    local SettingsOptions = SettingsCounter()
+    local winSize = 1
+
+    if (newSettings.windowSize) then
+        local winSizes = {"1280x720", "1920x1080"}
+        local winWH = tostring(newSettings.windowSize.width) .. "x" .. tostring(newSettings.windowSize.height)
+
+        for i = 0, #winSizes do
+            if winSizes[i] == winWH then
+                winSize = i
+                break
+            end
+        end
+    end
+
+    local settingOptions = {
+        difficulty = SettingsOptions("Difficulty", newSettings.difficulty, {"Easy", "Normal", "Hard"}),
+        windowSize = SettingsOptions("Window", winSize, {"1280x720", "1920x1080"}),
+    }
+
     local textButtonScale, iconButtonScale = 0.7, 0.4
     local settingsXPos, settingsYPos = love.graphics.getWidth() / 4, 50
     local settingsValueXPos, settingsValueYPos = settingsXPos * 2 + 100, settingsYPos + utils.fonts.h4 + 50
@@ -77,7 +95,18 @@ function Settings(switchState)
             y = 330,
 
             onClick = function (self)
-                print("Save not implemented")
+                local width, height = string.match(settingOptions.windowSize.availableValues[settingOptions.windowSize.value], "(.*)x(.*)")
+                local saveSettings = {
+                    difficulty = settingOptions.difficulty.value,
+                    windowSize = {
+                        width = tonumber(width),
+                        height = tonumber(height)
+                    }
+                }
+
+                utils:writeJSON("settings", saveSettings)
+
+                love.window.setMode(tonumber(width), tonumber(height))
             end
         },
         undo = {
@@ -92,11 +121,6 @@ function Settings(switchState)
                 print("Reset not implemented")
             end
         },
-    }
-
-    local settingOptions = {
-        difficulty = SettingsOptions("Difficulty", 2, {"Easy", "Normal", "Hard"}, 1),
-        windowSize = SettingsOptions("Window", 1, {"1280x720", "1920x1080"}, 2),
     }
 
     settings.update = function (self, clickedMouse)
@@ -139,7 +163,7 @@ function Settings(switchState)
                 love.graphics.setColor(utils.colors.red.r, utils.colors.red.g, utils.colors.red.b)
             end
 
-            love.graphics.printf(setting.value, settingsValueXPos, settingsValueYPos * setting.displayIndex, settingsXPos, "left" )
+            love.graphics.printf(setting.availableValues[setting.value], settingsValueXPos, settingsValueYPos * setting.displayIndex, settingsXPos, "left" )
 
             love.graphics.setColor(1,1,1)
         end
