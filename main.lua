@@ -31,7 +31,7 @@ function love.load()
     utils:changeGameState("menu")
 
     game = Game()
-    menu = Menu()
+    menu = Menu(game)
 
     game:load()
     menu:load()

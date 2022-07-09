@@ -32,8 +32,8 @@ function Game()
         local allowedCard = false
         repeat
             -- make sure the first card on the field is not a power card
-            local drawnCard = deck:drawCard(1, love.graphics.getWidth() / 2.5, utils.cardHeight + 50)
-            if drawnCard.number ~= nil then
+            local drawnCard = deck:drawCard(love.graphics.getWidth() / 2.5, utils.cardHeight + 50)
+            if drawnCard ~= nil and drawnCard.number ~= nil then
                 allowedCard = true
                 playedDeck:addCard(drawnCard, false, player, com)
             end
@@ -62,7 +62,7 @@ function Game()
                 else
                     if deck:checkHover() then
                         local drawCount = 1
-                        
+
                         if playedDeck.chainCount > 0 then
                             local specialCard = playedDeck.cards[#playedDeck.cards].specialName
 
@@ -110,15 +110,15 @@ function Game()
                     end
                 end
             end
-        
+
             if #player.cards == 0 then
                 print("You Won!")
-                love.event.quit()
+                utils:changeGameState("menu")
             elseif #com.cards == 0 then
                 print("You Lost!")
-                love.event.quit()
+                utils:changeGameState("menu")
             end
-        
+
             player:showPlayableCards()
         else
             -- if computer's turn
@@ -133,7 +133,7 @@ function Game()
         playedDeck:draw()
         uno:draw(playedDeck)
     end
-    
+
     return game
 end
 

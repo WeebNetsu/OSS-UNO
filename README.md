@@ -29,6 +29,27 @@ Why is this better than any other UNO game?
 3. `love .`
 4. Enjoy UNO
 
+## Game Info
+
+### Levels
+
+There are 3 levels to choose from, these are currently their limitations:
+
+#### Easy (1)
+
+- Bot cannot chain +2 cards (cannot add a +2 to negate your +2)
+- Bot cannot play a +2 directly after playing a +2
+- Bot cannot play a +4
+- Bot only has 50% chance to say uno before playing 2nd last card
+
+#### Normal (2)
+
+- Only 70% chance that bot says uno before playing 2nd last card
+
+#### Hard (3)
+
+No limitations
+
 ## VSCode Debugging
 
 ### Requirements:

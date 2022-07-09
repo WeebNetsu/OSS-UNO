@@ -172,5 +172,5 @@ return {
 
         file:write(lunajson.encode(data))
         file:close()
-    end
+    end,
 }

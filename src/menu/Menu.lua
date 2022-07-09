@@ -2,7 +2,7 @@ local love = require "love"
 local utils = require "utils"
 local Settings = require "src.menu.Settings"
 
-function Menu()
+function Menu(game)
     local menu = {}
     local textButtonScale, iconButtonScale = 0.7, 0.5
     local settings
@@ -46,6 +46,7 @@ function Menu()
             y = scale.textButton.windowHeight / 2 - scale.textButton.height,
 
             onClick = function (self)
+                game:load()
                 utils:changeGameState("game")
             end
         }

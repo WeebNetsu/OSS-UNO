@@ -5,6 +5,7 @@ local utils = require "utils"
 function Deck()
     local xPos, yPos = 50, utils.cardHeight + 70
     local image = Card(xPos, yPos, nil, nil, "card_back_alt")
+    local settings = utils:readJSON("settings")
 
     local deck = {}
 
@@ -95,9 +96,7 @@ function Deck()
         end
     end
 
-    deck.drawCard = function (self, index, cardX, cardY)
-        index = index or 1
-
+    deck.drawCard = function (self, cardX, cardY, bot)
         local card = self.deck[1]
 
         if cardX == nil or cardY == nil then
@@ -106,6 +105,24 @@ function Deck()
         end
 
         if card ~= nil then
+            -- if the bot is the one drawing a card
+            if bot then
+                local level = 2
+
+                if settings.difficulty ~= nil then
+                    level = settings.difficulty
+                end
+
+                -- if player is on easy mode
+                if level == 1 then
+                    -- bot is not allowed to use +4 cards on easy mode
+                    while card.specialName == utils.powerCards[2] do
+                        table.remove(self.deck, 1)
+                        card = self.deck[1]
+                    end
+                end
+            end
+
             table.remove(self.deck, 1)
 
             card.x = cardX

@@ -3,6 +3,13 @@ local utils = require("utils")
 
 function Com(deck, playedDeck)
     local com = {}
+    -- level 1 = easy, 2 = normal, 3 = hard
+    local settings = utils:readJSON("settings")
+    local level = 2
+
+    if settings.difficulty ~= nil then
+        level = settings.difficulty
+    end
 
     com.defaultXPos = utils.cardWidth / 1.5
     com.defaultYPos = 20
@@ -14,7 +21,7 @@ function Com(deck, playedDeck)
     -- will set the initial 8 cards
     com.setCards = function (self, num)
         for i = 1, num do
-            local card = deck:drawCard(nil, self.defaultXPos * i, self.defaultYPos)
+            local card = deck:drawCard(self.defaultXPos * i, self.defaultYPos, true)
 
             if card == nil then
                 deck:generateDeck(self.cards)
@@ -50,7 +57,7 @@ function Com(deck, playedDeck)
             self.saidUno = false
         end
 
-        return deck:drawCard(#self.cards+1, self.defaultXPos * #self.cards + self.defaultXPos, self.defaultYPos)
+        return deck:drawCard(self.defaultXPos * #self.cards + self.defaultXPos, self.defaultYPos, true)
     end
 
     com.draw = function (self)
@@ -77,7 +84,7 @@ function Com(deck, playedDeck)
 
         for ind, card in pairs(self.cards) do
             card.playable = false
-            
+
             if not player.playerTurn then
                 if card.number ~= nil and card.number == lastPlayedCard.number then
                     table.insert(playableCards, {index = ind, card = card})
@@ -97,9 +104,14 @@ function Com(deck, playedDeck)
                     end
                 else
                     for _, cardName in pairs(utils.powerCards) do
-                        if cardName == card.specialName then
-                            table.insert(playableCards, {index = ind, card = card})
-                            break
+                        -- the bot is not allowed to play another +2 if they already played a +2
+                        -- if the bot is on easy mode
+                        -- if bot is not on easy and the last played card was not a +2/+4
+                        if not (level == 1 and (lastPlayedCard.specialName == cardName)) then
+                            if cardName == card.specialName then
+                                table.insert(playableCards, {index = ind, card = card})
+                                break
+                            end
                         end
                     end
                 end
@@ -107,7 +119,9 @@ function Com(deck, playedDeck)
         end
 
         if #playableCards > 0 then
-            if playedDeck.chainCount > 0 then
+            -- if bot can throw a +2 or +4 as a chain, and is not on 'easy' mode
+            if playedDeck.chainCount > 0 and level ~= 1 then
+                print(level)
                 local successfulChain = false
                 -- if +4 or +2 card
                 -- picker = +2 card
@@ -168,8 +182,18 @@ function Com(deck, playedDeck)
         end
 
         if #self.cards == 2 then
-            -- random 70% chance that saidUno is true
-            self.saidUno = math.random(1, 10) < 8
+            if settings.difficulty == 1 then
+                -- if on easy mode
+                -- random 50% chance that saidUno is true
+                self.saidUno = math.random(1, 10) < 6
+            elseif settings.difficulty == 2 then
+                -- if on normal mode
+                -- random 70% chance that saidUno is true
+                self.saidUno = math.random(1, 10) < 8
+            else
+                -- if on hard mode
+                self.saidUno = true
+            end
         end
 
         if #self.cards == 1 and not self.saidUno then
