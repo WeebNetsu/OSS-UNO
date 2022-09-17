@@ -7,6 +7,7 @@ local love = require "love"
 local utils = require "utils"
 local Game = require "src.game.Game"
 local Menu = require "src.menu.Menu"
+local SFX = require "src.utils.SFX"
 
 math.randomseed(os.time())
 
@@ -30,9 +31,14 @@ function love.load()
     -- set initial game state to menu
     utils:changeGameState("menu")
 
-    game = Game()
-    menu = Menu(game)
+    -- create the soundeffects
+    sfx = SFX()
 
+    -- initialise game states
+    game = Game()
+    menu = Menu(game, sfx)
+
+    -- load game states
     game:load()
     menu:load()
 end

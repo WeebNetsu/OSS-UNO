@@ -1,3 +1,7 @@
 Uno cards: https://opengameart.org/content/uno-playing-cards-2d
 Menu Buttons: https://nectanebo.itch.io/menu-buttons
 Sound Pack: https://ellr.itch.io/universal-ui-soundpack
+SFX:
+    Card SFX: 
+        https://pixabay.com/sound-effects/search/card/
+        https://opengameart.org/content/54-casino-sound-effects-cards-dice-chips

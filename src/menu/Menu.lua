@@ -2,7 +2,7 @@ local love = require "love"
 local utils = require "utils"
 local Settings = require "src.menu.Settings"
 
-function Menu(game)
+function Menu(game, sfx)
     local menu = {}
     local textButtonScale, iconButtonScale = 0.7, 0.5
     local settings
@@ -89,9 +89,11 @@ function Menu(game)
         if states.menu then
             for _, button in pairs(textButtons) do
                 button.hovering = utils:getMouseBetween(button.x * textButtonScale, button.y * textButtonScale, scale.textButton.width, scale.textButton.height)
-    
-                if clickedMouse then
-                    if button.hovering then
+
+                if button.hovering then
+                    
+                    
+                    if clickedMouse then
                         button:onClick()
                     end
                 end
