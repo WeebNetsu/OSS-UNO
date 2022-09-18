@@ -1,5 +1,5 @@
 local love = require "love"
-local utils= require "utils"
+local utils = require "src.utils.utils"
 
 -- settings counter that will generate an index for us automatically
 local function SettingsCounter()
@@ -27,7 +27,7 @@ local function SettingsCounter()
     end
 end
 
-function Settings(switchState)
+function Settings(switchState, sfx)
     local settings = {}
     local newSettings = utils:readJSON("settings")
 
@@ -127,10 +127,13 @@ function Settings(switchState)
         for _, button in pairs(iconButtons) do
             button.hovering = utils:getMouseBetween(button.x * iconButtonScale, button.y * iconButtonScale, scale.iconButton.width, scale.iconButton.height)
 
-            if clickedMouse then
-                if button.hovering then
+            if button.hovering then
+                sfx:playFX("button_hover", "single")
+                if clickedMouse then
                     button:onClick()
                 end
+            else
+                sfx:setFXPlayed(false)
             end
         end
 

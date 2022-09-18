@@ -173,4 +173,26 @@ return {
         file:write(lunajson.encode(data))
         file:close()
     end,
+
+
+    --[[
+        Will check if the user is hovering over one of the buttons
+
+        @param buttons: table[button] -- table with all of the buttons to check, the buttons should have a hovering property
+
+        @returns boolean -- true if one of the buttons are being hovered over
+    ]]
+    checkButtonsHovering = function (self, buttons)
+        -- we need do this check, since there can be multiple
+        -- buttons, and without this if statement it will always
+        -- return the answer for the LAST button, we just need
+        -- to see if one of the buttons are being hovered over
+        for _, button in pairs(buttons) do
+            if button.hovering then
+                return true
+            end
+        end
+
+        return false
+    end,
 }

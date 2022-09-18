@@ -3,7 +3,7 @@ local Deck = require "src.game.Deck"
 local Player = require "src.game.Player"
 local PlayedDeck = require "src.game.PlayedDeck"
 local Com = require "src.game.Com"
-local utils = require "utils"
+local utils = require "src.utils.utils"
 local Uno = require "src.game.Uno"
 
 function Game()

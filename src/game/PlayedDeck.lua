@@ -1,5 +1,5 @@
 local love = require "love"
-local utils= require "utils"
+local utils= require "src.utils.utils"
 
 function PlayedDeck(deck)
     -- cp = color picker

@@ -1,6 +1,6 @@
 local love = require "love"
 local Card = require "src.game.Card"
-local utils = require "utils"
+local utils = require "src.utils.utils"
 
 function Deck()
     local xPos, yPos = 50, utils.cardHeight + 70

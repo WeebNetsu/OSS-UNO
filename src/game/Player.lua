@@ -1,5 +1,5 @@
 local love = require("love")
-local utils = require("utils")
+local utils = require("src.utils.utils")
 local Com = require("src.game.Com")
 
 function Player(deck, playedDeck)

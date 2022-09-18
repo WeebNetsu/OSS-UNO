@@ -22,6 +22,10 @@ Why is this better than any other UNO game?
 - [Lua](https://www.lua.org) (v5.4+)
 - [Love2D](https://love2d.org) (v11.4)
 
+#### Modules
+
+- [lunajson](https://luarocks.org/modules/grafi/lunajson)
+
 ### Setup & Running
 
 1. Get the code on your PC (git clone or download)

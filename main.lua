@@ -4,7 +4,7 @@ if os.getenv("LOCAL_LUA_DEBUGGER_VSCODE") == "1" then
 end
 
 local love = require "love"
-local utils = require "utils"
+local utils = require "src.utils.utils"
 local Game = require "src.game.Game"
 local Menu = require "src.menu.Menu"
 local SFX = require "src.utils.SFX"
