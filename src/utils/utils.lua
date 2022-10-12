@@ -195,4 +195,45 @@ return {
 
         return false
     end,
+
+    --[[
+        This function will run button checks that needs to be ran on each
+        game update loop
+
+        @param clickedMouse: boolean -- if mouse has been clicked
+        @param textButtons: {Button} -- table of text buttons
+        @param iconBtns: boolean -- if loop is for icon buttons
+     ]]
+    --[[ runButtonChecks = function (self, clickedMouse, textButtons, iconButtons, checkIconBtns, btnScale, scale)
+        -- if the cursor is hovering over the text or image buttons
+        local hoveringText = self:checkButtonsHovering(textButtons)
+        local hoveringIcon = self:checkButtonsHovering(iconButtons)
+
+        local buttons = textButtons
+        local currentScale = btnScale
+        local selectedScale = scale.textButton
+
+        if checkIconBtns then
+            buttons = iconButtons
+            -- currentScale = iconButtonScale
+            selectedScale = scale.iconButton
+        end
+
+        for _, button in pairs(buttons) do
+            button.hovering = self:getMouseBetween(button.x * currentScale, button.y * currentScale, selectedScale.width, selectedScale.height)
+
+            if button.hovering then
+                sfx:playFX("button_hover", "single")
+
+                if clickedMouse then
+                    button:onClick()
+                end
+            else
+                -- if not hovering over icon buttons
+                if not (hoveringText or hoveringIcon) then
+                    sfx:setFXPlayed(false)
+                end
+            end
+        end
+    end ]]
 }

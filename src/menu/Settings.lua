@@ -129,6 +129,7 @@ function Settings(switchState, sfx)
 
             if button.hovering then
                 sfx:playFX("button_hover", "single")
+                
                 if clickedMouse then
                     button:onClick()
                 end
