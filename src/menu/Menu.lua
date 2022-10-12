@@ -127,8 +127,8 @@ function Menu(game, sfx)
 
     menu.update = function (self, clickedMouse)
         if states.menu then
-            runButtonChecks(clickedMouse, false, hoveringText, hoveringIcon)
-            runButtonChecks(clickedMouse, true, hoveringText, hoveringIcon)
+            runButtonChecks(clickedMouse, false)
+            runButtonChecks(clickedMouse, true)
         elseif states.settings then
             settings:update(clickedMouse)
         end
