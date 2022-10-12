@@ -1,7 +1,8 @@
 local love = require "love"
+require "src.utils.sfx"
 
-local function SFX()
-    local effects = {
+local function SFX(): SFXType
+    local effects: EffectsType = {
         button_hover = love.audio.newSource("assets/ui-sounds/button_hover.wav", "static"),
         card_draw = love.audio.newSource("assets/ui-sounds/card_draw.mp3", "static"),
         card_shuffle = love.audio.newSource("assets/ui-sounds/card_shuffle.wav", "static"),
@@ -10,17 +11,17 @@ local function SFX()
     return {
         fx_played = false,
 
-        setFXPlayed = function (self, has_played)
+        setFXPlayed = function (self: SFXType, has_played: boolean)
             self.fx_played = has_played
         end,
 
-        stopFX = function (self, effect)
+        stopFX = function (_self: SFXType, effect: EffectsType.AvailableEffects)
             if effects[effect]:isPlaying() then
                 effects[effect]:stop()
             end
         end,
 
-        playFX = function (self, effect, mode)
+        playFX = function (self: SFXType, effect: EffectsType.AvailableEffects, mode: SFXType.AvailableModes)
             if mode == "single" then
                 if not self.fx_played then
                     self:setFXPlayed(true)

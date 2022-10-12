@@ -1,11 +1,15 @@
 local love = require "love"
 local utils = require("src.utils.utils")
 
-function Com(deck, playedDeck)
-    local com = {}
+global record ComType
+    difficulty: integer
+end
+
+local function Com(deck: any, playedDeck: any): ComType
+    local com: ComType = {}
     -- level 1 = easy, 2 = normal, 3 = hard
-    local settings = utils:readJSON("settings")
-    local level = 2
+    local settings = utils.readJSON("settings")
+    local level: integer = 2
 
     if settings.difficulty ~= nil then
         level = settings.difficulty

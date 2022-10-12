@@ -1,11 +1,14 @@
+require "src.utils.sfx"
+require "src.menu.settings"
+
 local love = require "love"
 local utils = require "src.utils.utils"
 
 -- settings counter that will generate an index for us automatically
-local function SettingsCounter()
+local function SettingsCounter(): function(title: string, valueIndex: integer, availableValues: {string}): SettingsType.CounterType
     local i = 0
 
-    return function(title, valueIndex, availableValues) -- anonimous function
+    return function(title: string, valueIndex: integer, availableValues: {string}): SettingsType.CounterType -- Anonymous function
         i = i + 1
 
         return {
@@ -15,7 +18,7 @@ local function SettingsCounter()
             displayIndex = i,
             hovering = false,
 
-            onClick = function (self)
+            onClick = function (self: SettingsType.CounterType)
                 if not self.value or self.value == #self.availableValues then
                     self.value = 1
                     return
@@ -27,17 +30,18 @@ local function SettingsCounter()
     end
 end
 
-function Settings(switchState, sfx)
-    local settings = {}
-    local newSettings = utils:readJSON("settings")
+local function Settings(sfx: SFXType): SettingsType
+    local settings: SettingsType = {}
+    local newSettings: SavedSettingsType = utils.readJSON("settings")
 
     -- create a mini object to generate tables for us
     local SettingsOptions = SettingsCounter()
     local winSize = 1
 
     if (newSettings.windowSize) then
+        local wSize: SavedSettingsType.WindowSizeType = newSettings.windowSize
         local winSizes = {"1280x720", "1920x1080"}
-        local winWH = tostring(newSettings.windowSize.width) .. "x" .. tostring(newSettings.windowSize.height)
+        local winWH = tostring(wSize.width) .. "x" .. tostring(wSize.height)
 
         for i = 0, #winSizes do
             if winSizes[i] == winWH then
@@ -73,30 +77,30 @@ function Settings(switchState, sfx)
         }
     }
 
-    local iconButtons = {
+    local iconButtons: {string: SettingButtonType} = {
         back = {
-            src = utils:chooseButtonImage("back", true),
-            hoverSrc = utils:chooseButtonImage("back", true, true),
+            src = utils.chooseButtonImage("back", true),
+            hoverSrc = utils.chooseButtonImage("back", true, true),
             hovering = false,
             -- don't know why we don't need a scaled button width/height, but it works lol
             x = 80,
             y = 80,
 
-            onClick = function (self)
-                switchState("menu")
+            onClick = function (_self: SettingButtonType)
+                utils:changeGameState("menu")
             end
         },
         save = {
-            src = utils:chooseButtonImage("v", true),
-            hoverSrc = utils:chooseButtonImage("v", true, true),
+            src = utils.chooseButtonImage("v", true),
+            hoverSrc = utils.chooseButtonImage("v", true, true),
             hovering = false,
             -- don't know why we don't need a scaled button width/height, but it works lol
             x = 80,
             y = 330,
 
-            onClick = function (self)
+            onClick = function (_self: SettingButtonType)
                 local width, height = string.match(settingOptions.windowSize.availableValues[settingOptions.windowSize.value], "(.*)x(.*)")
-                local saveSettings = {
+                local saveSettings: SavedSettingsType = {
                     difficulty = settingOptions.difficulty.value,
                     windowSize = {
                         width = tonumber(width),
@@ -104,28 +108,28 @@ function Settings(switchState, sfx)
                     }
                 }
 
-                utils:writeJSON("settings", saveSettings)
+                utils.writeJSON("settings", saveSettings)
 
                 love.window.setMode(tonumber(width), tonumber(height))
             end
         },
         undo = {
-            src = utils:chooseButtonImage("return", true),
-            hoverSrc = utils:chooseButtonImage("return", true, true),
+            src = utils.chooseButtonImage("return", true),
+            hoverSrc = utils.chooseButtonImage("return", true, true),
             hovering = false,
             -- don't know why we don't need a scaled button width/height, but it works lol
             x = 80,
             y = 580,
 
-            onClick = function (self)
+            onClick = function (_self: SettingButtonType)
                 print("Reset not implemented")
             end
         },
     }
 
-    settings.update = function (self, clickedMouse)
+    settings.update = function (_self: SettingsType, clickedMouse: boolean)
         for _, button in pairs(iconButtons) do
-            button.hovering = utils:getMouseBetween(button.x * iconButtonScale, button.y * iconButtonScale, scale.iconButton.width, scale.iconButton.height)
+            button.hovering = utils.getMouseBetween(button.x * iconButtonScale, button.y * iconButtonScale, scale.iconButton.width, scale.iconButton.height)
 
             if button.hovering then
                 sfx:playFX("button_hover", "single")
@@ -138,8 +142,8 @@ function Settings(switchState, sfx)
             end
         end
 
-        for _, setting in pairs(settingOptions) do
-            setting.hovering = utils:getMouseBetween(settingsValueXPos, settingsValueYPos * setting.displayIndex, settingsXPos, utils.fonts.h4)
+        for _, setting in pairs(settingOptions as {string: SettingsType.CounterType}) do
+            setting.hovering = utils.getMouseBetween(settingsValueXPos, settingsValueYPos * setting.displayIndex, settingsXPos, utils.fonts.h4)
 
             if clickedMouse then
                 if setting.hovering then
@@ -149,19 +153,19 @@ function Settings(switchState, sfx)
         end
     end
 
-    settings.draw = function (self)
+    settings.draw = function (_self: SettingsType)
         love.graphics.setFont(love.graphics.newFont(utils.fonts.h1))
         love.graphics.printf("Settings", 0, 20, love.graphics.getWidth(), "center" )
 
         love.graphics.setFont(love.graphics.newFont(utils.fonts.h4))
 
-        for _, setting in pairs(settingOptions) do
+        for _, setting in pairs(settingOptions as {string: SettingsType.CounterType}) do
             if utils.debugging then
                 love.graphics.rectangle("line", settingsXPos, settingsValueYPos * setting.displayIndex, settingsXPos, utils.fonts.h4)
                 love.graphics.rectangle("line", settingsValueXPos, settingsValueYPos * setting.displayIndex, settingsXPos, utils.fonts.h4)
             end
 
-            love.graphics.printf(setting.title, settingsXPos, settingsValueYPos * setting.displayIndex, settingsXPos, "left" )
+            love.graphics.printf(setting.title, settingsXPos, settingsValueYPos * setting.displayIndex, settingsXPos, "left")
 
             if setting.hovering then
                 love.graphics.setColor(utils.colors.red.r, utils.colors.red.g, utils.colors.red.b)

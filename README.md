@@ -25,6 +25,7 @@ Why is this better than any other UNO game?
 #### Modules
 
 - [lunajson](https://luarocks.org/modules/grafi/lunajson)
+- [tl](https://github.com/teal-language/tl)
 
 ### Setup & Running
 

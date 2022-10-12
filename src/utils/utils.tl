@@ -1,14 +1,17 @@
+require "src.game.Card"
+require "src.menu.Settings"
+require "src.utils.utils"
+
 local love = require "love"
 local lunajson = require 'lunajson' -- luarocks install lunajson
 
-return {
+local utils: UtilsType = {
     cardHeight = 180,
     cardWidth = 130,
     textButtonWidth = 600,
     textButtonHeight = 200,
     iconButtonWidth = 200,
     iconButtonHeight = 200,
-    -- debugging will display boxes and fps etc.
     debugging = false,
 
     fonts = {
@@ -23,6 +26,12 @@ return {
     },
 
     powerCards = {"wild color changer", "wild pick four"},
+
+    state = {
+        menu = true,
+        game = false,
+    },
+
     colors = {
         red = {
             r = 245 / 255,
@@ -51,13 +60,19 @@ return {
         }
     },
 
-    getMouseBetween = function (self, x, y, width, height)
-        local mouse_x, mouse_y = love.mouse.getPosition()
-
-        return mouse_x >= x and (mouse_x <= x + width) and (mouse_y >= y) and (mouse_y <= (y + height))
+    changeGameState = function (self: UtilsType, state: UtilsType.AllowedGameStates | nil)
+        local newState: UtilsType.AllowedGameStates = state or "menu"
+        self.state.menu = newState == "menu"
+        self.state.game = newState == "game"
     end,
 
-    chooseButtonImage = function(self, name, iconButton, red)
+    getMouseBetween = function (x: number, y: number, width: number, height: number): boolean
+        local mouseX, mouseY = love.mouse.getPosition()
+
+        return mouseX >= x and (mouseX <= x + width) and (mouseY >= y) and (mouseY <= (y + height))
+    end,
+
+    chooseButtonImage = function(name: string, iconButton: boolean, red: boolean): love.graphics.Image
         local textButtonPath = "assets/buttons/text/"
         local iconButtonPath = "assets/buttons/icon/"
 
@@ -72,8 +87,8 @@ return {
         return love.graphics.newImage(textButtonPath .. name .. ".png")
     end,
 
-    drawCardOrGenerateDeck = function (self, player, com, deck, isCom)
-        local card
+    drawCardOrGenerateDeck = function (player: any, com: any, deck: any, isCom: boolean): CardType
+        local card: CardType | nil
 
         if isCom then
             card = com:drawCard()
@@ -110,60 +125,27 @@ return {
         return card
     end,
 
-    state = {
-        menu = true,
-        game = false,
-    },
-
-    changeGameState = function (self, state)
-        self.state.menu = state == "menu"
-        self.state.game = state == "game"
-    end,
-
-    --[[ 
-        DESCRIPTION
-        Read a json file and return the contents as a lua table. This function will automatically search inside the data/ folder and add a '.json' to the file name.
-
-        PARAMETERS
-        -> file_name: string - name of file to read (required)
-            example: "save"
-        -> path: string - path to save file (from project root)
-            example: "src/data/"
-    ]]
-    readJSON = function(self, file_name, path)
+    readJSON = function(fileName: string, path: string | nil): SavedSettingsType
         -- todo: if path is provided, make sure it ends with "/", add it if it doesn't
         path = path or "data/"
-        local file = io.open(path .. file_name .. ".json", "r")
+        local file = io.open(path .. fileName .. ".json", "r")
 
         if not file then
             -- todo instead of erroring, show an error
             error("Could not open save file")
         end
 
-        local data = file:read("*all")
+        local data: string = file:read("*all")
         file:close()
 
-        return lunajson.decode(data)
+        return lunajson.decode(data) as SavedSettingsType
     end,
 
-    --[[ 
-        DESCRIPTION
-        Convert a table to JSON and save it in a file. This will overwrite the file if it already exists. This function will automatically search inside the data/ folder and add a '.json' to the file name.
-
-        PARAMETERS
-        -> file_name: string - name of file to write to (required)
-            example: "save"
-            NB: Will search for 'data/save.json'
-        -> data: table - table to be converted to JSON and saved. (required)
-            example: { name = "max" }
-        -> path: string - path to save file (from project root)
-            example: "src/data/"
-    ]]
-    writeJSON = function(self, file_name, data, path)  -- added a method to write json
+    writeJSON = function(fileName: string, data: SavedSettingsType, path: string)
         path = path or "data/"
 
-        print(lunajson.encode(data))
-        local file = io.open(path .. file_name .. ".json", "w")
+        -- print(lunajson.encode(data))
+        local file = io.open(path .. fileName .. ".json", "w")
 
         if not file then
             -- todo instead of erroring, show an error
@@ -174,15 +156,7 @@ return {
         file:close()
     end,
 
-
-    --[[
-        Will check if the user is hovering over one of the buttons
-
-        @param buttons: table[button] -- table with all of the buttons to check, the buttons should have a hovering property
-
-        @returns boolean -- true if one of the buttons are being hovered over
-    ]]
-    checkButtonsHovering = function (self, buttons)
+    checkButtonsHovering = function (buttons: {string: SettingButtonType}): boolean
         -- we need do this check, since there can be multiple
         -- buttons, and without this if statement it will always
         -- return the answer for the LAST button, we just need
@@ -195,7 +169,11 @@ return {
 
         return false
     end,
+}
 
+return utils
+
+-- return {
     --[[
         This function will run button checks that needs to be ran on each
         game update loop
@@ -236,4 +214,4 @@ return {
             end
         end
     end ]]
-}
+-- }

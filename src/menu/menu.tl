@@ -1,16 +1,14 @@
+require "src.utils.sfx"
+require "src.menu.menu"
+
 local love = require "love"
 local utils = require "src.utils.utils"
-local Settings = require "src.menu.Settings"
+local Settings = require "src.menu.settings"
 
-function Menu(game, sfx)
+function Menu(game: any, sfx: SFXType): MenuType
     local menu = {}
     local textButtonScale, iconButtonScale = 0.7, 0.5
-    local settings
-
-    local states = {
-        menu = true,
-        settings = false,
-    }
+    local settings: SettingsType
 
     local scale = {
         textButton = {
@@ -31,49 +29,43 @@ function Menu(game, sfx)
 
     local backgroundImage = love.graphics.newImage("assets/backgrounds/bg2.png")
 
-    local switchState = function (state)
-        state = state or "menu"
-        states.menu = state == "menu"
-        states.settings = state == "settings"
-    end
-
-    local textButtons = {
+    local textButtons: {string: SettingButtonType} = {
         play = {
-            src = utils:chooseButtonImage("play"),
-            hoverSrc = utils:chooseButtonImage("play", false, true),
+            src = utils.chooseButtonImage("play"),
+            hoverSrc = utils.chooseButtonImage("play", false, true),
             hovering = false,
             x = scale.textButton.windowWidth / 2 - utils.textButtonWidth / 2,
             y = scale.textButton.windowHeight / 2 - scale.textButton.height,
 
-            onClick = function (self)
+            onClick = function (_self: SettingButtonType)
                 game:load()
                 utils:changeGameState("game")
             end
         }
     }
 
-    local iconButtons = {
+    local iconButtons: {string: SettingButtonType} = {
         settings = {
-            src = utils:chooseButtonImage("settings", true),
-            hoverSrc = utils:chooseButtonImage("settings", true, true),
+            src = utils.chooseButtonImage("settings", true),
+            hoverSrc = utils.chooseButtonImage("settings", true, true),
             hovering = false,
             -- don't know why we don't need a scaled button width/height, but it works lol
             x = scale.iconButton.windowWidth - utils.iconButtonWidth - 100,
             y = scale.iconButton.windowHeight - utils.iconButtonHeight - 100,
 
-            onClick = function (self)
-                switchState("settings")
+            onClick = function (_self: SettingButtonType)
+                utils.changeGameState("settings")
             end
         },
         quit = {
-            src = utils:chooseButtonImage("quit", true),
-            hoverSrc = utils:chooseButtonImage("quit", true, true),
+            src = utils.chooseButtonImage("quit", true),
+            hoverSrc = utils.chooseButtonImage("quit", true, true),
             hovering = false,
             -- don't know why we don't need a scaled button width/height, but it works lol
             x = 100,
             y = scale.iconButton.windowHeight - utils.iconButtonHeight - 100,
 
-            onClick = function (self)
+            onClick = function (_self: SettingButtonType)
                 love.event.quit()
             end
         },
@@ -88,8 +80,8 @@ function Menu(game, sfx)
      ]]
     local function runButtonChecks(clickedMouse, iconBtns)
         -- if the cursor is hovering over the text or image buttons
-        local hoveringText = utils:checkButtonsHovering(textButtons)
-        local hoveringIcon = utils:checkButtonsHovering(iconButtons)
+        local hoveringText = utils.checkButtonsHovering(textButtons)
+        local hoveringIcon = utils.checkButtonsHovering(iconButtons)
 
         local buttons = textButtons
         local currentScale = textButtonScale
@@ -102,7 +94,7 @@ function Menu(game, sfx)
         end
 
         for _, button in pairs(buttons) do
-            button.hovering = utils:getMouseBetween(button.x * currentScale, button.y * currentScale, selectedScale.width, selectedScale.height)
+            button.hovering = utils.getMouseBetween(button.x * currentScale, button.y * currentScale, selectedScale.width, selectedScale.height)
 
             if button.hovering then
                 sfx:playFX("button_hover", "single")
@@ -119,23 +111,23 @@ function Menu(game, sfx)
         end
     end
 
-    menu.load = function (self)
-        switchState()
+    menu.load = function (_self: MenuType)
+        utils.changeGameState()
 
-        settings = Settings(switchState, sfx)
+        settings = Settings(sfx)
     end
 
     menu.update = function (self, clickedMouse)
-        if states.menu then
+        if utils.states.menu then
             runButtonChecks(clickedMouse, false)
             runButtonChecks(clickedMouse, true)
-        elseif states.settings then
+        elseif utils.states.settings then
             settings:update(clickedMouse)
         end
     end
 
     menu.draw = function (self)
-        if states.menu then
+        if utils.states.menu then
             love.graphics.draw(backgroundImage, 0, 0)
 
             -- draw text buttons
@@ -165,7 +157,7 @@ function Menu(game, sfx)
             end
 
             love.graphics.pop()
-        elseif states.settings then
+        elseif utils.states.settings then
             settings:draw()
         end
     end
