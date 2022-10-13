@@ -32,11 +32,13 @@ global record UtilsType
     enum AllowedGameStates
         "menu"
         "game"
+        "settings"
     end
 
     record GameState 
         menu: boolean
         game: boolean
+        settings: boolean
     end
     
 	cardHeight: integer

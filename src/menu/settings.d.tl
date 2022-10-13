@@ -38,6 +38,6 @@ global record SettingButtonType
     onClick: function(SettingButtonType)
 end
 
-global Settings: function(sfx: SFXType) : SettingsType
+global SettingsFunc: function(sfx: SFXType) : SettingsType
 
-return Settings
+return SettingsFunc

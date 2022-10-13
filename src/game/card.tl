@@ -1,24 +1,6 @@
+require "src.game.card"
+
 local love = require("love")
-
-global record CardType
-    enum AvailableCardColors
-        "blue"
-        "red"
-        "green"
-        "yellow"
-    end
-
-    color: CardType.AvailableCardColors | nil
-    number: integer
-    specialName: string
-    imagePath: string
-    rotation: number
-    playable: boolean
-    x: number
-    y: number
-    draw: function (CardType, rotation: number, isCom: boolean)
-    setPosition: function (CardType, x: number, y: number)
-end
 
 local function Card(x: number, y: number, color: CardType.AvailableCardColors | nil, number: integer, specialName: string): CardType
     local setImage = "assets/cards/"
@@ -64,9 +46,9 @@ local function Card(x: number, y: number, color: CardType.AvailableCardColors | 
         end
     end
 
-    card.setPosition = function (self: CardType, x: number, y: number)
-        self.x = x
-        self.y = y
+    card.setPosition = function (self: CardType, posX: number, posY: number)
+        self.x = posX
+        self.y = posY
     end
 
     -- card.__eq = function (self, other)

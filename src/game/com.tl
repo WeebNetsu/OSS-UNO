@@ -1,9 +1,8 @@
+require "src.game.com"
+require "src.game.card"
+
 local love = require "love"
 local utils = require("src.utils.utils")
-
-global record ComType
-    difficulty: integer
-end
 
 local function Com(deck: any, playedDeck: any): ComType
     local com: ComType = {}
@@ -23,7 +22,7 @@ local function Com(deck: any, playedDeck: any): ComType
     com.saidUno = false
 
     -- will set the initial 8 cards
-    com.setCards = function (self, num)
+    com.setCards = function (self: ComType, num: number)
         for i = 1, num do
             local card = deck:drawCard(self.defaultXPos * i, self.defaultYPos, true)
 
@@ -36,27 +35,27 @@ local function Com(deck: any, playedDeck: any): ComType
         end
     end
 
-    com.updateCardPositions = function (self)
+    com.updateCardPositions = function (self: ComType)
         for i = 1, #self.cards do
-            local card = self.cards[i]
+            local card: CardType = self.cards[i]
             card:setPosition(self.defaultXPos * i, self.defaultYPos)
         end
     end
 
-    com.addCard = function (self, card)
+    com.addCard = function (self: ComType, card: CardType)
         table.insert(self.cards, card)
     end
 
-    com.removeCard = function (self, index)
+    com.removeCard = function (self: ComType, index: number)
         table.remove(self.cards, index)
         self:updateCardPositions()
     end
 
-    com.getCard = function (self, index)
+    com.getCard = function (self: ComType, index: integer): CardType
         return self.cards[index]
     end
 
-    com.drawCard = function (self)
+    com.drawCard = function (self: ComType): any
         if self.saidUno then
             self.saidUno = false
         end
@@ -64,8 +63,9 @@ local function Com(deck: any, playedDeck: any): ComType
         return deck:drawCard(self.defaultXPos * #self.cards + self.defaultXPos, self.defaultYPos, true)
     end
 
-    com.draw = function (self)
-        for index, card in pairs(self.cards) do
+    com.draw = function (self: ComType)
+        -- todo just check below, it used to be "pairs" and not "ipairs"
+        for _index, card in ipairs(self.cards) do
             -- true -> card back is shown
             -- false -> actual card is shown
             card:draw(nil, true)
@@ -76,7 +76,7 @@ local function Com(deck: any, playedDeck: any): ComType
         end
     end
 
-    com.play = function (self, player)
+    com.play = function (self: ComType, player: any)
         if self.skipTurn then
             player:setPlayerTurn(true)
             self.skipTurn = false

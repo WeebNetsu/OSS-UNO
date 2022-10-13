@@ -5,8 +5,8 @@ local love = require "love"
 local utils = require "src.utils.utils"
 local Settings = require "src.menu.settings"
 
-function Menu(game: any, sfx: SFXType): MenuType
-    local menu = {}
+local function Menu(game: any, sfx: SFXType): MenuType
+    local menu: MenuType = {}
     local textButtonScale, iconButtonScale = 0.7, 0.5
     local settings: SettingsType
 
@@ -54,7 +54,7 @@ function Menu(game: any, sfx: SFXType): MenuType
             y = scale.iconButton.windowHeight - utils.iconButtonHeight - 100,
 
             onClick = function (_self: SettingButtonType)
-                utils.changeGameState("settings")
+                utils:changeGameState("settings")
             end
         },
         quit = {
@@ -78,7 +78,7 @@ function Menu(game: any, sfx: SFXType): MenuType
         @param clickedMouse: boolean -- if mouse has been clicked
         @param iconBtns: boolean -- if loop is for icon buttons
      ]]
-    local function runButtonChecks(clickedMouse, iconBtns)
+    local function runButtonChecks(clickedMouse: boolean, iconBtns: boolean)
         -- if the cursor is hovering over the text or image buttons
         local hoveringText = utils.checkButtonsHovering(textButtons)
         local hoveringIcon = utils.checkButtonsHovering(iconButtons)
@@ -117,17 +117,17 @@ function Menu(game: any, sfx: SFXType): MenuType
         settings = Settings(sfx)
     end
 
-    menu.update = function (self, clickedMouse)
-        if utils.states.menu then
+    menu.update = function (_self: MenuType, clickedMouse: boolean)
+        if utils.state.menu then
             runButtonChecks(clickedMouse, false)
             runButtonChecks(clickedMouse, true)
-        elseif utils.states.settings then
+        elseif utils.state.settings then
             settings:update(clickedMouse)
         end
     end
 
-    menu.draw = function (self)
-        if utils.states.menu then
+    menu.draw = function (_self: MenuType)
+        if utils.state.menu then
             love.graphics.draw(backgroundImage, 0, 0)
 
             -- draw text buttons
@@ -157,7 +157,7 @@ function Menu(game: any, sfx: SFXType): MenuType
             end
 
             love.graphics.pop()
-        elseif utils.states.settings then
+        elseif utils.state.settings then
             settings:draw()
         end
     end

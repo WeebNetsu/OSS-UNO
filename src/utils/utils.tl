@@ -64,6 +64,7 @@ local utils: UtilsType = {
         local newState: UtilsType.AllowedGameStates = state or "menu"
         self.state.menu = newState == "menu"
         self.state.game = newState == "game"
+        self.state.settings = newState == "settings"
     end,
 
     getMouseBetween = function (x: number, y: number, width: number, height: number): boolean
