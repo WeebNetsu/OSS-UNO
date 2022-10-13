@@ -1,19 +1,21 @@
+require "src.game.deck"
+
 local love = require "love"
-local Card = require "src.game.Card"
+local Card = require "src.game.card"
 local utils = require "src.utils.utils"
 
-function Deck()
+local function Deck(): DeckType
     local xPos, yPos = 50, utils.cardHeight + 70
     local image = Card(xPos, yPos, nil, nil, "card_back_alt")
-    local settings = utils:readJSON("settings")
+    local settings = utils.readJSON("settings")
 
-    local deck = {}
+    local deck: DeckType = {}
 
     deck.deck = {}
     deck.x = xPos
     deck.y = yPos
 
-    deck.compareDeckToBlockedCards = function (self, card, blockedCards)
+    deck.compareDeckToBlockedCards = function (_self: DeckType, card: CardType, blockedCards: {string: CardType}): boolean
         if blockedCards == nil then
             return true
         end
@@ -31,10 +33,10 @@ function Deck()
         return createCard
     end
 
-    deck.shuffle = function (self)
+    deck.shuffle = function (self: DeckType)
         local shuffled = {}
 
-        for i, v in ipairs(self.deck) do
+        for _, v in ipairs(self.deck) do
             local pos = math.random(1, #shuffled+1)
             table.insert(shuffled, pos, v)
         end
@@ -48,10 +50,11 @@ function Deck()
 
         generateDeck(blockedCards: table[Card])
     ]]
-    deck.generateDeck = function (self, blockedCards)
-        local cards = {}
+    deck.generateDeck = function (self: DeckType, blockedCards: {string: CardType})
+        local cards: {CardType} = {}
 
-        for _, color in pairs({"blue", "red", "green", "yellow"}) do
+        -- todo just check here this used to be pairs not ipairs
+        for _, color in ipairs({"blue", "red", "green", "yellow"} as {CardType.AvailableCardColors}) do
             for i = 0, 9 do
                 local generatedCard = Card(self.x, self.y, color, i, nil)
 
@@ -60,7 +63,8 @@ function Deck()
                 end
             end
 
-            for _, card in pairs({"picker", "reverse", "skip"}) do
+            -- todo just check here this used to be pairs not ipairs
+            for _, card in ipairs({"picker", "reverse", "skip"}) do
                 local generatedCard = Card(self.x, self.y, color, nil, card)
 
                 if self:compareDeckToBlockedCards(generatedCard, blockedCards) then
@@ -68,7 +72,8 @@ function Deck()
                 end
             end
 
-            for _, specialCard in pairs(utils.powerCards) do
+            -- todo just check here this used to be pairs not ipairs
+            for _, specialCard in ipairs(utils.powerCards) do
                 local generatedCard = Card(self.x, self.y, nil, nil, specialCard)
 
                 if self:compareDeckToBlockedCards(generatedCard, blockedCards) then
@@ -81,14 +86,14 @@ function Deck()
         self:shuffle()
     end
 
-    deck.checkHover = function (self)
+    deck.checkHover = function (self: DeckType): boolean
         local mouse_x, mouse_y = love.mouse.getPosition()
 
         -- return true if cursor is inside deck on screen
         return mouse_x >= self.x and (mouse_x <= self.x + utils.cardWidth) and (mouse_y >= self.y) and (mouse_y <= (self.y + utils.cardHeight))
     end
 
-    deck.draw = function (self)
+    deck.draw = function (self: DeckType)
         image:draw()
 
         if self:checkHover() then
@@ -96,7 +101,7 @@ function Deck()
         end
     end
 
-    deck.drawCard = function (self, cardX, cardY, bot)
+    deck.drawCard = function (self: DeckType, cardX: number, cardY: number, bot: boolean): CardType
         local card = self.deck[1]
 
         if cardX == nil or cardY == nil then

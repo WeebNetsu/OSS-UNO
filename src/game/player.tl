@@ -1,15 +1,19 @@
+require "src.game.player"
+require "src.game.deck"
+require "src.game.played_deck"
+
 local love = require("love")
 local utils = require("src.utils.utils")
-local Com = require("src.game.Com")
+local Com = require("src.game.com")
 
-function Player(deck, playedDeck)
+local function Player(deck: DeckType, playedDeck: PlayedDeckType): PlayerType
     -- inheriting from Com
-    local player = Com(deck, playedDeck)
+    local player: PlayerType = Com(deck, playedDeck) as PlayerType
 
     player.playerTurn = false
     player.defaultYPos = love.graphics.getHeight() - 200
 
-    player.setPlayerTurn = function (self, playerTurn)
+    player.setPlayerTurn = function (self: PlayerType, playerTurn: boolean)
         if self.skipTurn and playerTurn then
             self.skipTurn = false
         else
@@ -17,14 +21,14 @@ function Player(deck, playedDeck)
         end
     end
 
-    player.updateCardPositions = function (self)
+    player.updateCardPositions = function (self: PlayerType)
         for i = 1, #self.cards do
             local card = self.cards[i]
             card:setPosition(self.defaultXPos * i, self.defaultYPos)
         end
     end
 
-    player.removeCard = function (self, index, com)
+    player.removeCard = function (self: PlayerType, index: integer, com: ComType)
         table.remove(self.cards, index)
         self:updateCardPositions()
         playedDeck.lastColor = nil
@@ -32,16 +36,17 @@ function Player(deck, playedDeck)
 
         if #self.cards == 1 and not self.saidUno then
             -- if the player did not say uno before reaching their last card
-            self:addCard(utils:drawCardOrGenerateDeck(self, com, deck, false))
-            self:addCard(utils:drawCardOrGenerateDeck(self, com, deck, false))
+            self:addCard(utils.drawCardOrGenerateDeck(self, com, deck, false))
+            self:addCard(utils.drawCardOrGenerateDeck(self, com, deck, false))
             if playedDeck.chainCount > 0 then
                 playedDeck.chainCount = 0
             end
         end
     end
 
-    player.draw = function (self)
-        for index, card in pairs(self.cards) do
+    player.draw = function (self: PlayerType)
+        -- todo just check here this used to be pairs not ipairs
+        for _, card in ipairs(self.cards) do
             card:draw()
         end
 
@@ -50,10 +55,11 @@ function Player(deck, playedDeck)
         end
     end
 
-    player.showPlayableCards = function (self)
+    player.showPlayableCards = function (self: PlayerType)
         local lastPlayedCard = playedDeck.cards[#playedDeck.cards]
 
-        for _, card in pairs(self.cards) do
+        -- todo just check here this used to be pairs not ipairs
+        for _, card in ipairs(self.cards) do
             card.playable = false
             
             if self.playerTurn then
@@ -76,7 +82,8 @@ function Player(deck, playedDeck)
                             card.playable = true
                         end
                     else
-                        for _, cardName in pairs(utils.powerCards) do
+                        -- todo just check here this used to be pairs not ipairs
+                        for _, cardName in ipairs(utils.powerCards) do
                             if cardName == card.specialName then
                                 card.playable = true
                                 break
@@ -89,10 +96,11 @@ function Player(deck, playedDeck)
     end
 
     -- to be used to see if a card is being hovered over, return true or false
-    player.checkHover = function (self)
+    player.checkHover = function (self: PlayerType): boolean
         local mouseX, mouseY = love.mouse.getPosition()
 
-        for _, card in pairs(self.cards) do
+        -- todo just check here this used to be pairs not ipairs
+        for _, card in ipairs(self.cards) do
             if  mouseX >= card.x and (mouseX <= card.x + utils.cardWidth) and (mouseY >= card.y - 20) and (mouseY <= (card.y + utils.cardHeight)) then
                 return true
             end
@@ -102,11 +110,12 @@ function Player(deck, playedDeck)
     end
 
     -- used to see which card is being hoved over, table of booleans is returned
-    player.checkHovering = function (self)
+    player.checkHovering = function (self: PlayerType): {boolean}
         local mouseX, mouseY = love.mouse.getPosition()
         local hovering = {}
 
-        for ind, card in pairs(self.cards) do
+        -- todo just check here this used to be pairs not ipairs
+        for ind, card in ipairs(self.cards) do
             if self.cards[ind+1] then
                 table.insert(hovering, mouseX >= card.x and (mouseX <= card.x + (utils.cardWidth / 1.5)) and (mouseY >= card.y - 20) and (mouseY <= (card.y + utils.cardHeight)))
             else

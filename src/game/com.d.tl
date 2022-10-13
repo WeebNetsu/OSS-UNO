@@ -1,4 +1,6 @@
 require "src.game.card"
+require "src.game.deck"
+require "src.game.played_deck"
 
 global record ComType
     difficulty: integer
@@ -20,6 +22,6 @@ global record ComType
     play: function (ComType, player: any)
 end
 
-global ComFunc: function(deck: any, playedDeck: any): ComType
+global ComFunc: function(deck: DeckType, playedDeck: PlayedDeckType): ComType
 
 return ComFunc

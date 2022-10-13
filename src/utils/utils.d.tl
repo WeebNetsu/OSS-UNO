@@ -1,4 +1,4 @@
-require "src.game.Card"
+require "src.game.card"
 require "src.menu.settings"
 
 local love = require "love"

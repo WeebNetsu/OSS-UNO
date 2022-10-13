@@ -1,7 +1,11 @@
-local love = require "love"
-local utils= require "src.utils.utils"
+require "src.game.played_deck"
+require "src.game.card"
+require "src.game.com"
 
-function PlayedDeck(deck)
+local love = require "love"
+local utils = require "src.utils.utils"
+
+local function PlayedDeck(): PlayedDeckType
     -- cp = color picker
     local cpWidth = 300
     local cpXPos, cpYPos = love.graphics.getWidth() / 2 - cpWidth, 50
@@ -9,7 +13,7 @@ function PlayedDeck(deck)
     local rightBlockXStart = cpWidth + cpXPos + cpBorderSpace
     local bottomBlockYStart = cpWidth + cpYPos + cpBorderSpace
 
-    local playedDeck = {}
+    local playedDeck: PlayedDeckType = {}
 
     playedDeck.cards = {}
     -- chaining is when a +2/+4 is thrown onto another +2/+4
@@ -19,7 +23,7 @@ function PlayedDeck(deck)
     playedDeck.lastColor = nil
     playedDeck.colorPicking = false
 
-    playedDeck.setColorPicking = function (self, colorPicking)
+    playedDeck.setColorPicking = function (self: PlayedDeckType, colorPicking: boolean)
         if colorPicking then
             love.graphics.setColor(0,0,0,0.5)
         else
@@ -29,7 +33,7 @@ function PlayedDeck(deck)
         self.colorPicking = colorPicking
     end
 
-    playedDeck.checkColorPickerHover = function (self)
+    playedDeck.checkColorPickerHover = function (_self: PlayedDeckType): boolean
         local mouseX, mouseY = love.mouse.getPosition()
 
         if (mouseX >= cpXPos) and (mouseX <= cpXPos + cpWidth) and (mouseY >= cpYPos) and (mouseY <= (cpYPos + cpWidth)) then
@@ -51,7 +55,7 @@ function PlayedDeck(deck)
         return false
     end
 
-    playedDeck.pickColor = function (self, isCom, com)
+    playedDeck.pickColor = function (self: PlayedDeckType, isCom: boolean, com: ComType): boolean
         local mouseX, mouseY = love.mouse.getPosition()
 
         if isCom then
@@ -60,8 +64,9 @@ function PlayedDeck(deck)
             end
 
             -- store all colors com has in hand
-            local containingColors = {}
-            for _, card in pairs(com.cards) do
+            local containingColors: {CardType.AvailableCardColors} = {}
+            -- todo just check here this used to be pairs not ipairs
+            for _, card in ipairs(com.cards) do
                 if card.color ~= nil then
                     table.insert(containingColors, card.color)
                 end
@@ -69,7 +74,7 @@ function PlayedDeck(deck)
 
             if #containingColors < 1 then
                 -- if com does not have any color cards in hand, pick a random color
-                local colors = {
+                local colors: {CardType.AvailableCardColors} = {
                     "blue",
                     "red",
                     "green",
@@ -83,7 +88,8 @@ function PlayedDeck(deck)
             -- make the bot choose the color that is most common in the hand
             local blue, red, green, yellow = 0, 0, 0, 0
 
-            for _, color in pairs(containingColors) do
+            -- todo just check here this used to be pairs not ipairs
+            for _, color in ipairs(containingColors) do
                 if color == "blue" then
                     blue = blue + 1
                 elseif color == "red" then
@@ -143,7 +149,7 @@ function PlayedDeck(deck)
         @param card: Card - the card to add to the played deck
         @param skipColorSet: boolean - if true, will not set the color of the card (used by com)
     ]]
-    playedDeck.addCard = function (self, card, skipColorSet, player, com)
+    playedDeck.addCard = function (self: PlayedDeckType, card: CardType, skipColorSet: boolean, player: any, com: ComType)
         card.rotation = math.random(-3, 10) / 10
         card.x = self.x
         card.y = self.y
@@ -168,8 +174,9 @@ function PlayedDeck(deck)
         table.insert(self.cards, card)
     end
 
-    playedDeck.draw = function (self)
-        for _, card in pairs(self.cards) do
+    playedDeck.draw = function (self: PlayedDeckType)
+        -- todo just check here this used to be pairs not ipairs
+        for _, card in ipairs(self.cards) do
             card:draw()
         end
 

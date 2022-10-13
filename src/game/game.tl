@@ -1,18 +1,24 @@
-local love = require "love"
-local Deck = require "src.game.Deck"
-local Player = require "src.game.Player"
-local PlayedDeck = require "src.game.PlayedDeck"
-local Com = require "src.game.Com"
-local utils = require "src.utils.utils"
-local Uno = require "src.game.Uno"
+require "src.game.game"
 
-function Game()
-    local deck, player, playedDeck, com, uno
-    local game = {}
+local love = require "love"
+local Deck = require "src.game.deck"
+local Player = require "src.game.player"
+local PlayedDeck = require "src.game.played_deck"
+local Com = require "src.game.com"
+local utils = require "src.utils.utils"
+local Uno = require "src.game.uno"
+
+local function Game(): GameType
+    local deck: DeckType
+    local player
+    local playedDeck
+    local com: ComType
+    local uno
+    local game: GameType = {}
     -- this is if we're busy picking a color, we can continue where we left off
     local selectedCardIndex = nil
 
-    game.load = function (self)
+    game.load = function (_self: GameType)
         local startCardCount = 8
 
         uno = Uno()
@@ -40,7 +46,7 @@ function Game()
         until allowedCard
     end
 
-    game.update = function (self, dt, clickedMouse)
+    game.update = function (_self: GameType, dt: number, clickedMouse: boolean)
         clickedMouse = clickedMouse or false
 
         if player.playerTurn then
@@ -76,7 +82,7 @@ function Game()
                         end
 
                         for _ = 1, drawCount do
-                            player:addCard(utils:drawCardOrGenerateDeck(player, com, deck, false))
+                            player:addCard(utils.drawCardOrGenerateDeck(player, com, deck, false))
                         end
 
                         player:setPlayerTurn(false)
@@ -86,7 +92,8 @@ function Game()
                                 local selectedCard = player:getCard(ind)
 
                                 if selectedCard.playable then
-                                    for _, powerCard in pairs(utils.powerCards)do
+                                    -- todo just check here this used to be pairs not ipairs
+                                    for _, powerCard in ipairs(utils.powerCards)do
                                         if selectedCard.specialName == powerCard then
                                             playedDeck:setColorPicking(true)
                                             selectedCardIndex = ind
@@ -126,7 +133,7 @@ function Game()
         end
     end
 
-    game.draw = function (self)
+    game.draw = function (_self: GameType)
         deck:draw()
         com:draw()
         player:draw()
