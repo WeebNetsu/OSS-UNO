@@ -10,11 +10,13 @@ local utils = require "src.utils.utils"
 local Game = require "src.game.game"
 local Menu = require "src.menu.menu"
 local SFX = require "src.utils.sfx"
+local Settings = require "src.menu.settings"
 
 math.randomseed(os.time())
 
 local game: GameType
 local menu: MenuType
+local settings: SettingsType
 local clickedMouse: boolean = false
 local cursorBorderRadius: integer = 5
 local mouseX, mouseY: number, number
@@ -44,10 +46,12 @@ function love.load()
     -- initialise game states
     game = Game()
     menu = Menu(game, sfx)
+    settings = Settings(sfx)
 
     -- load game states
     game:load()
     menu:load()
+    -- settings:load()
 end
 
 function love.mousepressed(_x: number, _y: number, button: integer, _istouch: boolean, _presses: integer)
@@ -64,6 +68,8 @@ function love.update(dt: number)
         menu:update(clickedMouse)
     elseif utils.state.game then
         game:update(dt, clickedMouse)
+    elseif utils.state.settings then
+        settings:update(clickedMouse)
     end
 
     if clickedMouse then
@@ -76,6 +82,8 @@ function love.draw()
         menu:draw()
     elseif utils.state.game then
         game:draw()
+    elseif utils.state.settings then
+        settings:draw()
     end
 
     if utils.debugging then
