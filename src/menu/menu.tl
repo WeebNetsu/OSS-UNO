@@ -113,7 +113,7 @@ local function Menu(game: GameType, sfx: SFXType): MenuType
     end
 
     menu.load = function (_self: MenuType)
-        utils.changeGameState()
+        utils:changeGameState()
 
         settings = Settings(sfx)
     end
