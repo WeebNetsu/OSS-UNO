@@ -1,6 +1,7 @@
 require "src.game.deck"
 require "src.game.card"
 require "src.game.com"
+require "src.game.played_deck"
 
 -- player has all the same types as Com
 -- Com inherits from the player type
@@ -29,11 +30,11 @@ global record PlayerType
 
     -- will set the initial 8 cards
     -- num - number of cards to draw
-    setCards: function (ComType, num: number)
-    addCard: function (ComType, card: CardType)
-    getCard: function (ComType, index: integer): CardType
-    drawCard: function (ComType): any
-    play: function (ComType, player: any)
+    setCards: function (PlayerType, num: number)
+    addCard: function (PlayerType, card: CardType)
+    getCard: function (PlayerType, index: integer): CardType
+    drawCard: function (PlayerType): CardType
+    -- play: function (PlayerType, player: PlayerType)
 end
 
 global PlayerDeckFunc: function(deck: DeckType, playedDeck: PlayedDeckType): PlayerType

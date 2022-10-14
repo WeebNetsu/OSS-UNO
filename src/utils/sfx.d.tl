@@ -25,4 +25,6 @@ global record SFXType
     playFX: function (SFXType, EffectsType.AvailableEffects, AvailableModes)
 end
 
-return SFXType
+global SfxFunc: function(): SFXType
+
+return SfxFunc

@@ -1,6 +1,7 @@
 require "src.game.deck"
 require "src.game.card"
 require "src.game.com"
+-- require "src.game.player"
 
 global record PlayedDeckType
     cards: {CardType}
@@ -13,7 +14,7 @@ global record PlayedDeckType
     setColorPicking: function (PlayedDeckType, colorPicking: boolean)
     checkColorPickerHover: function (PlayedDeckType): boolean
     pickColor: function (PlayedDeckType, isCom: boolean, com: ComType): boolean
-    addCard: function (PlayedDeckType, card: CardType, skipColorSet: boolean, player: any, com: ComType)
+    addCard: function (PlayedDeckType, card: CardType, skipColorSet: boolean, player: any--[[ PlayerType ]], com: ComType)
     draw: function (PlayedDeckType)
 end
 

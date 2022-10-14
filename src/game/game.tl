@@ -10,13 +10,13 @@ local Uno = require "src.game.uno"
 
 local function Game(): GameType
     local deck: DeckType
-    local player
-    local playedDeck
+    local player: PlayerType
+    local playedDeck: PlayedDeckType
     local com: ComType
-    local uno
+    local uno: UnoType
     local game: GameType = {}
     -- this is if we're busy picking a color, we can continue where we left off
-    local selectedCardIndex = nil
+    local selectedCardIndex: integer = nil
 
     game.load = function (_self: GameType)
         local startCardCount = 8
@@ -25,7 +25,7 @@ local function Game(): GameType
         deck = Deck()
         deck:generateDeck()
 
-        playedDeck = PlayedDeck(deck)
+        playedDeck = PlayedDeck(--[[ deck ]])
 
         player = Player(deck, playedDeck)
         player:setCards(startCardCount)
@@ -46,7 +46,7 @@ local function Game(): GameType
         until allowedCard
     end
 
-    game.update = function (_self: GameType, dt: number, clickedMouse: boolean)
+    game.update = function (_self: GameType, _dt: number, clickedMouse: boolean)
         clickedMouse = clickedMouse or false
 
         if player.playerTurn then
@@ -87,7 +87,8 @@ local function Game(): GameType
 
                         player:setPlayerTurn(false)
                     elseif player:checkHover() then
-                        for ind, val in pairs(player:checkHovering()) do
+                        -- todo just check here this used to be pairs not ipairs
+                        for ind, val in ipairs(player:checkHovering()) do
                             if val then
                                 local selectedCard = player:getCard(ind)
 

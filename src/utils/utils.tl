@@ -1,5 +1,6 @@
-require "src.game.Card"
-require "src.menu.Settings"
+require "src.game.card"
+require "src.game.com"
+require "src.menu.settings"
 require "src.utils.utils"
 
 local love = require "love"
@@ -88,8 +89,8 @@ local utils: UtilsType = {
         return love.graphics.newImage(textButtonPath .. name .. ".png")
     end,
 
-    drawCardOrGenerateDeck = function (player: any, com: any, deck: any, isCom: boolean): CardType
-        local card: CardType | nil
+    drawCardOrGenerateDeck = function (player: PlayerType, com: ComType, deck: DeckType, isCom: boolean): CardType
+        local card: CardType
 
         if isCom then
             card = com:drawCard()
@@ -100,14 +101,16 @@ local utils: UtilsType = {
         if card == nil then
             local blockedCards = {}
 
-            for _, xCard in pairs(player.cards) do
+            -- todo just check here this used to be pairs not ipairs
+            for _, xCard in ipairs(player.cards) do
                 table.insert(blockedCards, xCard)
             end
-            for _, xCard in pairs(com.cards) do
+            -- todo just check here this used to be pairs not ipairs
+            for _, xCard in ipairs(com.cards) do
                 table.insert(blockedCards, xCard)
             end
 
-            deck:generateDeck(blockedCards)
+            deck:generateDeck(blockedCards as {string: CardType})
 
             if isCom then
                 card = com:drawCard()

@@ -1,5 +1,8 @@
 require "src.game.card"
 require "src.menu.settings"
+require "src.game.com"
+require "src.game.player"
+require "src.game.deck"
 
 local love = require "love"
 
@@ -56,7 +59,7 @@ global record UtilsType
 
     getMouseBetween: function(x: number, y: number, width: number, height: number): boolean
     chooseButtonImage: function(name: string, iconButton: boolean, red: boolean): love.graphics.Image
-    drawCardOrGenerateDeck: function(player: any, com: any, deck: any, isCom: boolean): CardType
+    drawCardOrGenerateDeck: function(player: PlayerType, com: ComType, deck: DeckType, isCom: boolean): CardType
     changeGameState: function(UtilsType, AllowedGameStates)
     --[[ 
         DESCRIPTION

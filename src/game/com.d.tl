@@ -1,6 +1,7 @@
 require "src.game.card"
 require "src.game.deck"
-require "src.game.played_deck"
+-- require "src.game.player"
+-- require "src.game.played_deck"
 
 global record ComType
     difficulty: integer
@@ -17,11 +18,11 @@ global record ComType
     addCard: function (ComType, card: CardType)
     removeCard: function (ComType, index: number)
     getCard: function (ComType, index: integer): CardType
-    drawCard: function (ComType): any
+    drawCard: function (ComType): CardType
     draw: function (ComType)
-    play: function (ComType, player: any)
+    play: function (ComType, player: any --[[ PlayerType ]])
 end
 
-global ComFunc: function(deck: DeckType, playedDeck: PlayedDeckType): ComType
+global ComFunc: function(deck: DeckType, playedDeck: any --[[ playedDeckType ]]): ComType
 
 return ComFunc

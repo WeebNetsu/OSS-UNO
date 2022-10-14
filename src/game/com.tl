@@ -1,10 +1,12 @@
 require "src.game.com"
 require "src.game.card"
+require "src.game.player"
+require "src.game.played_deck"
 
 local love = require "love"
 local utils = require("src.utils.utils")
 
-local function Com(deck: any, playedDeck: any): ComType
+local function Com(deck: DeckType, playedDeck: PlayedDeckType): ComType
     local com: ComType = {}
     -- level 1 = easy, 2 = normal, 3 = hard
     local settings = utils.readJSON("settings")
@@ -27,7 +29,7 @@ local function Com(deck: any, playedDeck: any): ComType
             local card = deck:drawCard(self.defaultXPos * i, self.defaultYPos, true)
 
             if card == nil then
-                deck:generateDeck(self.cards)
+                deck:generateDeck(self.cards as {string: CardType})
                 i = i - 1
             else
                 table.insert(self.cards, card)
@@ -55,7 +57,7 @@ local function Com(deck: any, playedDeck: any): ComType
         return self.cards[index]
     end
 
-    com.drawCard = function (self: ComType): any
+    com.drawCard = function (self: ComType): CardType
         if self.saidUno then
             self.saidUno = false
         end
@@ -76,7 +78,7 @@ local function Com(deck: any, playedDeck: any): ComType
         end
     end
 
-    com.play = function (self: ComType, player: any)
+    com.play = function (self: ComType, player: PlayerType)
         if self.skipTurn then
             player:setPlayerTurn(true)
             self.skipTurn = false
@@ -86,7 +88,8 @@ local function Com(deck: any, playedDeck: any): ComType
         local lastPlayedCard = playedDeck.cards[#playedDeck.cards]
         local playableCards = {}
 
-        for ind, card in pairs(self.cards) do
+        -- todo just check below, it used to be "pairs" and not "ipairs"
+        for ind, card in ipairs(self.cards) do
             card.playable = false
 
             if not player.playerTurn then
@@ -107,7 +110,8 @@ local function Com(deck: any, playedDeck: any): ComType
                         table.insert(playableCards, {index = ind, card = card})
                     end
                 else
-                    for _, cardName in pairs(utils.powerCards) do
+                    -- todo just check below, it used to be "pairs" and not "ipairs"
+                    for _, cardName in ipairs(utils.powerCards) do
                         -- the bot is not allowed to play another +2 if they already played a +2
                         -- if the bot is on easy mode
                         -- if bot is not on easy and the last played card was not a +2/+4
@@ -130,7 +134,8 @@ local function Com(deck: any, playedDeck: any): ComType
                 -- if +4 or +2 card
                 -- picker = +2 card
                 if lastPlayedCard.specialName == "wild pick four" or lastPlayedCard.specialName == "picker" then
-                    for _, card in pairs(playableCards) do
+                    -- todo just check below, it used to be "pairs" and not "ipairs"
+                    for _, card in ipairs(playableCards) do
                         if card.card.specialName == lastPlayedCard.specialName then
                             playedDeck:addCard(card.card, true, player, self)
                             self:removeCard(card.index)
@@ -148,7 +153,7 @@ local function Com(deck: any, playedDeck: any): ComType
                     drawCount = drawCount * playedDeck.chainCount
 
                     for _ = 1, drawCount do
-                        self:addCard(utils:drawCardOrGenerateDeck(player, com, deck, true))
+                        self:addCard(utils.drawCardOrGenerateDeck(player, com, deck, true))
                     end
 
                     playedDeck.chainCount = 0
@@ -158,7 +163,8 @@ local function Com(deck: any, playedDeck: any): ComType
                 local randomIndex = math.random(1, #playableCards)
                 local card = playableCards[randomIndex]
     
-                for _, powerCard in pairs(utils.powerCards)do
+                -- todo just check below, it used to be "pairs" and not "ipairs"
+                for _, powerCard in ipairs(utils.powerCards)do
                     if card.card.specialName == powerCard then
                         playedDeck:pickColor(true, self)
                     end
@@ -181,7 +187,7 @@ local function Com(deck: any, playedDeck: any): ComType
             end
 
             for _ = 1, drawCount do
-                self:addCard(utils:drawCardOrGenerateDeck(player, self, deck, true))
+                self:addCard(utils.drawCardOrGenerateDeck(player, self, deck, true))
             end
         end
 
@@ -201,8 +207,8 @@ local function Com(deck: any, playedDeck: any): ComType
         end
 
         if #self.cards == 1 and not self.saidUno then
-            self:addCard(utils:drawCardOrGenerateDeck(player, self, deck, true))
-            self:addCard(utils:drawCardOrGenerateDeck(player, self, deck, true))
+            self:addCard(utils.drawCardOrGenerateDeck(player, self, deck, true))
+            self:addCard(utils.drawCardOrGenerateDeck(player, self, deck, true))
 
             if playedDeck.chainCount > 0 then
                 playedDeck.chainCount = 0

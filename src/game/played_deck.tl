@@ -149,7 +149,7 @@ local function PlayedDeck(): PlayedDeckType
         @param card: Card - the card to add to the played deck
         @param skipColorSet: boolean - if true, will not set the color of the card (used by com)
     ]]
-    playedDeck.addCard = function (self: PlayedDeckType, card: CardType, skipColorSet: boolean, player: any, com: ComType)
+    playedDeck.addCard = function (self: PlayedDeckType, card: CardType, skipColorSet: boolean, player: PlayerType, com: ComType)
         card.rotation = math.random(-3, 10) / 10
         card.x = self.x
         card.y = self.y

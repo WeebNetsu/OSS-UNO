@@ -1,11 +1,12 @@
 require "src.utils.sfx"
 require "src.menu.menu"
+require "src.game.game"
 
 local love = require "love"
 local utils = require "src.utils.utils"
 local Settings = require "src.menu.settings"
 
-local function Menu(game: any, sfx: SFXType): MenuType
+local function Menu(game: GameType, sfx: SFXType): MenuType
     local menu: MenuType = {}
     local textButtonScale, iconButtonScale = 0.7, 0.5
     local settings: SettingsType
