@@ -1,3 +1,6 @@
+local tl = require("tl")
+tl.loader()
+
 require "src.game.deck"
 
 local love = require "love"

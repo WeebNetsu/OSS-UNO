@@ -1,5 +1,7 @@
-require "src.game.card"
+local tl = require("tl")
+tl.loader()
 
+require "src.game.card"
 local love = require("love")
 
 local function Card(x: number, y: number, color: CardType.AvailableCardColors | nil, number: integer, specialName: string): CardType

@@ -1,3 +1,6 @@
+local tl = require("tl")
+tl.loader()
+
 local love = require "love"
 require "src.utils.sfx"
 
