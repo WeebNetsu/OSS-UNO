@@ -1,4 +1,5 @@
 .vscode/
+*.lua
 
 # Compiled Lua sources
 luac.out

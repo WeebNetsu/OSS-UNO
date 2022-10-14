@@ -1,6 +1,3 @@
-local tl = require("tl")
-tl.loader()
-
 require "src.game.card"
 require "src.game.com"
 require "src.menu.settings"

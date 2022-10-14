@@ -1,6 +1,3 @@
-local tl = require("tl")
-tl.loader()
-
 require "src.game.game"
 
 local love = require "love"

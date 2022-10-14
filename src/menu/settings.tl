@@ -1,6 +1,3 @@
-local tl = require("tl")
-tl.loader()
-
 require "src.utils.sfx"
 require "src.menu.settings"
 

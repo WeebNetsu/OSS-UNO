@@ -1,6 +1,3 @@
-local tl = require("tl")
-tl.loader()
-
 require "src.game.player"
 require "src.game.deck"
 require "src.game.played_deck"

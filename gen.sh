@@ -1,13 +1,19 @@
-tl gen *.tl
+generate() {
+    cd $1
 
-cd src/utils
+    tl gen *.tl
 
-tl gen *.tl
+    for files in `ls *.lua` #list of all .dat file
+    do
+        # cp $files $files.bck #make a backup of the file
+        sed '1d' -i $files #remove the first line of the file
+    done
+}
 
-cd ../menu
+generate .
 
-tl gen *.tl
+generate src/utils
 
-cd ../game
+generate ../menu
 
-tl gen *.tl
+generate ../game
