@@ -30,9 +30,21 @@ Why is this better than any other UNO game?
 ### Setup & Running
 
 1. Get the code on your PC (git clone or download)
-2. Go into the folder with main.lua
-3. `love .`
-4. Enjoy UNO
+1. Download all dependencies (Requirements & Modules)
+1. Go into the folder with `main.tl`
+1. `./run.sh` **(Linux/Mac)**
+1. Enjoy UNO
+
+#### Running on Windows
+
+If you're on Windows, then running `./run.sh` will not work (unless you use WSL - Windows Subsystem for Linux). You then need to:
+
+1. Generate Lua Code
+   - So just `tl gen` all the .tl (not the .d.tl) files in the code so you get the Lua code
+   - Then remove any standalone requires, aka `require "something.someting"` (don't remove any `local x = require.....`) in _all_ the .lua files
+   - Remove any lines that contains `local _tl_compat` (usually the first line in some .lua files)
+1. Run it!
+   - `love .` or whatever the Windows version of this is
 
 ## Game Info
 
