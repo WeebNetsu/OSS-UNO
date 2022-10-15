@@ -75,28 +75,27 @@ No limitations
 
 ## Files & Structures
 
-├── `assets` - All game assets (images/audio etc.)
-│   ├── `backgrounds` - Game background images
-│   │   └── `saves` - GIMP save files for images
-│   ├── `buttons` - Button images
-│   │   ├── `icon` - Button icons images
-│   │   └── `text` - Button text images
-│   ├── `cards` - All card images
-│   └── `ui-sounds` - Game BGM and SFX
-├── `check.sh` - Script to display `tl` checks
-├── `clean.sh` - Script to clean up the code after generating Lua files
-├── `data` - Any data the game should store, such as saves or configs
-│   └── `settings.json` - User settings/config for the game
-├── `gen.sh` - Generate Lua files
-├── `love.d.tl` - Any `.d.tl` files are just typing, can be ignored for the most part
-├── `main.tl` - Any `.tl` files is the game code (just Lua with static typing)
-├── `README.md` - Game docs
-├── `run.sh` - Compile, run and clean up script in one
-└── `src` - Game source code (excluding `main.tl`)
-
-- ├── `game` - Components in the game, such as cards and players
-- ├── `menu` - Viewable game menus/screens/views
-- └── `utils` - util files, usually for components that are not visible, such as `SFX`
+- `assets` - All game assets (images/audio etc.)
+  - `backgrounds` - Game background images
+    - `saves` - GIMP save files for images
+  - `buttons` - Button images
+    - `icon` - Button icons images
+    - `text` - Button text images
+  - `cards` - All card images
+  - `ui-sounds` - Game BGM and SFX
+- `check.sh` - Script to display `tl` checks
+- `clean.sh` - Script to clean up the code after generating Lua files
+- `data` - Any data the game should store, such as saves or configs
+  - `settings.json` - User settings/config for the game
+- `gen.sh` - Generate Lua files
+- `love.d.tl` - Any `.d.tl` files are just typing, can be ignored for the most part
+- `main.tl` - Any `.tl` files is the game code (just Lua with static typing)
+- `README.md` - Game docs
+- `run.sh` - Compile, run and clean up script in one
+- `src` - Game source code (excluding `main.tl`)
+  - `game` - Components in the game, such as cards and players
+  - `menu` - Viewable game menus/screens/views
+  - `utils` - util files, usually for components that are not visible, such as `SFX`
 
 ## VSCode Debugging
 
