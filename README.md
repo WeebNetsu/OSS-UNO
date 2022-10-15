@@ -10,17 +10,24 @@ Why is this better than any other UNO game?
 - Open source
   - If you don't like something, you can change it
   - If you want something, you can add it
+  - Written in Teal ([Lua but better](https://youtu.be/ooQ-_9YQVw0))
 - Looks good
 - Good performance
 - No tracking
 - No selling your data
+- Single player mode
 
 ## Contents
 
 - [Running the Game](#running-the-game)
+  - [Requirements](#requirements)
+  - [Setup and Running](#setup-and-running)
 - [Game Info](#game-info)
+  - [Levels](#levels)
 - [Files & Structures](#files-and-structures)
 - [VSCode Debugging](#vscode-debugging)
+  - [Requirements](#debugging-requirements)
+  - [Setup](#setup-debugging)
 
 ## Running The Game
 
@@ -40,7 +47,7 @@ You can use Luarocks to install these modules.
 - [tl](https://github.com/teal-language/tl)
   - To compile the code into regular Lua
 
-### Setup & Running
+### Setup and Running
 
 1. Get the code on your PC (git clone or download)
 1. Download all dependencies (Requirements & Modules)
@@ -106,11 +113,11 @@ No limitations
 
 ## VSCode Debugging
 
-### Requirements:
+### Debugging Requirements:
 
 - https://marketplace.visualstudio.com/items?itemName=tomblind.local-lua-debugger-vscode
 
-### Setup
+### Setup Debugging
 
 Add below to .vscode/launch.json:
 
