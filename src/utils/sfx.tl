@@ -22,6 +22,8 @@ local function SFX(): SFXType
         end,
 
         playFX = function (self: SFXType, effect: EffectsType.AvailableEffects, mode: SFXType.AvailableModes)
+            -- single - does not play the sound again if it's already busy playing
+            -- will also only play it if it has not been played yet (fx_played)
             if mode == "single" then
                 if not self.fx_played then
                     self:setFXPlayed(true)
@@ -30,6 +32,7 @@ local function SFX(): SFXType
                         effects[effect]:play()
                     end
                 end
+            -- slow - same as single, but will still play it if it has already been played
             elseif mode == "slow" then
                 if not effects[effect]:isPlaying() then
                     effects[effect]:play()

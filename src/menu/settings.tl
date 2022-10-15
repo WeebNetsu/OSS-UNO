@@ -59,6 +59,7 @@ local function Settings(sfx: SFXType): SettingsType
     local textButtonScale, iconButtonScale = 0.7, 0.4
     local settingsXPos, settingsYPos = love.graphics.getWidth() / 4, 50
     local settingsValueXPos, settingsValueYPos = settingsXPos * 2 + 100, settingsYPos + utils.fonts.h4 + 50
+    local isHoveringOverButton = false
 
     local scale = {
         textButton = {
@@ -128,13 +129,28 @@ local function Settings(sfx: SFXType): SettingsType
     }
 
     settings.update = function (_self: SettingsType, clickedMouse: boolean)
+        -- this will decide when isHoveringOverButton will be set to true/false
+        local isHovering = false
+        
         for _, button in pairs(iconButtons) do
             button.hovering = utils.getMouseBetween(button.x * iconButtonScale, button.y * iconButtonScale, scale.iconButton.width, scale.iconButton.height)
 
-            if button.hovering then
+            -- if isHovering is not already set to true (will always be false on the first loop, but
+            -- might be true on any of the following loops) and the current button is being hovered over
+            if not isHovering and button.hovering then
+                isHovering = true
+                isHoveringOverButton = true
+            end
+
+            -- if the isHoveringOverButton is true, play the sfx 
+            if isHoveringOverButton then
                 sfx:playFX("button_hover", "single")
                 
                 if clickedMouse then
+                    -- we need to set everything to false again here, otherwise all the buttons will
+                    -- be executed
+                    isHoveringOverButton = false
+                    button.hovering = false
                     button:onClick()
                 end
             else
@@ -142,11 +158,17 @@ local function Settings(sfx: SFXType): SettingsType
             end
         end
 
+        -- If after the loop no buttons triggered isHovering to be true 
+        if not isHovering then
+            isHoveringOverButton = false
+        end
+
         for _, setting in pairs(settingOptions as {string: SettingsType.CounterType}) do
             setting.hovering = utils.getMouseBetween(settingsValueXPos, settingsValueYPos * setting.displayIndex, settingsXPos, utils.fonts.h4)
-
+            
             if clickedMouse then
                 if setting.hovering then
+                    sfx:playFX("button_hover", "slow")
                     setting:onClick()
                 end
             end
