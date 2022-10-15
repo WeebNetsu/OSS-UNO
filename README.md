@@ -15,6 +15,13 @@ Why is this better than any other UNO game?
 - No tracking
 - No selling your data
 
+## Contents
+
+- [Running the Game](#running-the-game)
+- [Game Info](#game-info)
+- [Files & Structures](#files-and-structures)
+- [VSCode Debugging](#vscode-debugging)
+
 ## Running The Game
 
 ### Requirements
@@ -73,7 +80,7 @@ There are 3 levels to choose from, these are currently their limitations:
 
 No limitations
 
-## Files & Structures
+## Files and Structures
 
 - `assets` - All game assets (images/audio etc.)
   - `backgrounds` - Game background images
