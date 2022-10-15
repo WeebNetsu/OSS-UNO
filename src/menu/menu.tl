@@ -1,6 +1,6 @@
 require "src.utils.sfx"
 require "src.menu.menu"
-require "src.game.game"
+require "src.menu.game"
 
 local love = require "love"
 local utils = require "src.utils.utils"

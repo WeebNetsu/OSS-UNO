@@ -1,4 +1,4 @@
-require "src.game.game"
+require "src.menu.game"
 require "src.utils.sfx"
 
 global record MenuType

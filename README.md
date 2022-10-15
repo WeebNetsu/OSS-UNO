@@ -21,18 +21,24 @@ Why is this better than any other UNO game?
 
 - [Lua](https://www.lua.org) (v5.4+)
 - [Love2D](https://love2d.org) (v11.4)
+- [trash-cli](https://github.com/andreafrancia/trash-cli) (optional)
+  - This is so we can safely delete any files and easily restore it if we need to
 
 #### Modules
 
+You can use Luarocks to install these modules.
+
 - [lunajson](https://luarocks.org/modules/grafi/lunajson)
+  - So we can read and write `json`
 - [tl](https://github.com/teal-language/tl)
+  - To compile the code into regular Lua
 
 ### Setup & Running
 
 1. Get the code on your PC (git clone or download)
 1. Download all dependencies (Requirements & Modules)
 1. Go into the folder with `main.tl`
-1. `./run.sh` **(Linux/Mac)**
+1. `./run.sh` **(Linux/Mac)** (note that if you don't have trash-cli installed, you will need to modify `clean.sh` to use `rm` instead)
 1. Enjoy UNO
 
 #### Running on Windows
@@ -66,6 +72,31 @@ There are 3 levels to choose from, these are currently their limitations:
 #### Hard (3)
 
 No limitations
+
+## Files & Structures
+
+├── `assets` - All game assets (images/audio etc.)
+│   ├── `backgrounds` - Game background images
+│   │   └── `saves` - GIMP save files for images
+│   ├── `buttons` - Button images
+│   │   ├── `icon` - Button icons images
+│   │   └── `text` - Button text images
+│   ├── `cards` - All card images
+│   └── `ui-sounds` - Game BGM and SFX
+├── `check.sh` - Script to display `tl` checks
+├── `clean.sh` - Script to clean up the code after generating Lua files
+├── `data` - Any data the game should store, such as saves or configs
+│   └── `settings.json` - User settings/config for the game
+├── `gen.sh` - Generate Lua files
+├── `love.d.tl` - Any `.d.tl` files are just typing, can be ignored for the most part
+├── `main.tl` - Any `.tl` files is the game code (just Lua with static typing)
+├── `README.md` - Game docs
+├── `run.sh` - Compile, run and clean up script in one
+└── `src` - Game source code (excluding `main.tl`)
+
+- ├── `game` - Components in the game, such as cards and players
+- ├── `menu` - Viewable game menus/screens/views
+- └── `utils` - util files, usually for components that are not visible, such as `SFX`
 
 ## VSCode Debugging
 

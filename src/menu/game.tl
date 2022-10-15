@@ -1,4 +1,4 @@
-require "src.game.game"
+require "src.menu.game"
 
 local love = require "love"
 local Deck = require "src.game.deck"

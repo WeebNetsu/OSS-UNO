@@ -7,7 +7,7 @@ end ]]
 
 local love = require "love"
 local utils = require "src.utils.utils"
-local Game = require "src.game.game"
+local Game = require "src.menu.game"
 local Menu = require "src.menu.menu"
 local SFX = require "src.utils.sfx"
 local Settings = require "src.menu.settings"
