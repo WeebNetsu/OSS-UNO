@@ -8,7 +8,9 @@ generate() {
         # sed '1d' -i $files #remove the first line of the file
     done
 
+    # remove all lines starting with 'require'
     sed -i '/^require/d' *.lua
+    # remove all lines starting with 'local _tl_compat'
     sed -i '/^local _tl_compat/d' *.lua
 }
 

@@ -1,10 +1,11 @@
+require "src.utils.sfx"
 require "src.game.deck"
 
 local love = require "love"
 local Card = require "src.game.card"
 local utils = require "src/utils/utils"
 
-local function Deck(): DeckType
+local function Deck(sfx: SFXType): DeckType
     local xPos, yPos = 50, utils.cardHeight + 70
     local image = Card(xPos, yPos, nil, nil, "card_back_alt")
     local settings = utils.readJSON("settings")
@@ -133,6 +134,9 @@ local function Deck(): DeckType
             card.x = cardX
             card.y = cardY
         end
+
+        -- todo when player picks up more than 1 card, below should play more than 1 time
+        sfx:playFX("card_draw")
 
         return card
     end

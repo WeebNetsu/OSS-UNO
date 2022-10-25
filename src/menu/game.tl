@@ -1,3 +1,4 @@
+require "src.utils.sfx"
 require "src.menu.game"
 
 local love = require "love"
@@ -8,7 +9,7 @@ local Com = require "src.game.com"
 local utils = require "src.utils.utils"
 local Uno = require "src.game.uno"
 
-local function Game(): GameType
+local function Game(sfx: SFXType): GameType
     local deck: DeckType
     local player: PlayerType
     local playedDeck: PlayedDeckType
@@ -22,7 +23,7 @@ local function Game(): GameType
         local startCardCount = 8
 
         uno = Uno()
-        deck = Deck()
+        deck = Deck(sfx)
         deck:generateDeck()
 
         playedDeck = PlayedDeck(--[[ deck ]])

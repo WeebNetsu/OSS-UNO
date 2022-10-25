@@ -40,11 +40,11 @@ function love.load()
     -- set initial game state to menu
     utils:changeGameState("menu")
 
-    -- create the soundeffects
+    -- create the sound effects
     global sfx = SFX()
 
-    -- initialise game states
-    game = Game()
+    -- initialize game states
+    game = Game(sfx)
     menu = Menu(game, sfx)
     settings = Settings(sfx)
 

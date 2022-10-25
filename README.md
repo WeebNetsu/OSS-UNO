@@ -61,7 +61,7 @@ If you're on Windows, then running `./run.sh` will not work (unless you use WSL 
 
 1. Generate Lua Code
    - So just `tl gen` all the .tl (not the .d.tl) files in the code so you get the Lua code
-   - Then remove any standalone requires, aka `require "something.someting"` (don't remove any `local x = require.....`) in _all_ the .lua files
+   - Then remove any standalone requires, aka `require "something.something"` (don't remove any `local x = require.....`) in _all_ the .lua files
    - Remove any lines that contains `local _tl_compat` (usually the first line in some .lua files)
 1. Run it!
    - `love .` or whatever the Windows version of this is
