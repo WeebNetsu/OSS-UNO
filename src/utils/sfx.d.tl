@@ -5,11 +5,15 @@ global record EffectsType
         "button_hover"
         "card_draw"
         "card_shuffle"
+        "card_play"
+        "said_uno_male"
     end
 
     button_hover: love.audio.Source
     card_draw: love.audio.Source
     card_shuffle: love.audio.Source
+    card_play: love.audio.Source
+    said_uno_male: love.audio.Source
 end
 
 global record SFXType

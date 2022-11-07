@@ -1,14 +1,16 @@
 require "src.game.player"
 require "src.game.deck"
 require "src.game.played_deck"
+require "src.utils.sfx"
 
 local love = require("love")
 local utils = require("src.utils.utils")
 local Com = require("src.game.com")
 
-local function Player(deck: DeckType, playedDeck: PlayedDeckType): PlayerType
+local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): PlayerType
     -- inheriting from Com
     local player: PlayerType = Com(deck, playedDeck) as PlayerType
+    local played_uno_sfx = false
 
     player.playerTurn = false
     player.defaultYPos = love.graphics.getHeight() - 200
@@ -51,7 +53,15 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType): PlayerType
         end
 
         if self.saidUno then
+            -- todo change to uno sfx
+            if not played_uno_sfx then
+                sfx:setFXPlayed(false)
+                sfx:playFX("said_uno_male", "single")
+                played_uno_sfx = true
+            end
             love.graphics.print("PLAYER HAS UNO'D!", 10, love.graphics.getHeight() - 20)
+        else
+            played_uno_sfx = false
         end
     end
 

@@ -1,11 +1,12 @@
 require "src.game.played_deck"
 require "src.game.card"
 require "src.game.com"
+require "src.utils.sfx"
 
 local love = require "love"
 local utils = require "src.utils.utils"
 
-local function PlayedDeck(): PlayedDeckType
+local function PlayedDeck(sfx: SFXType): PlayedDeckType
     -- cp = color picker
     local cpWidth = 300
     local cpXPos, cpYPos = love.graphics.getWidth() / 2 - cpWidth, 50
@@ -170,6 +171,8 @@ local function PlayedDeck(): PlayedDeckType
                 com.skipTurn = true
             end
         end
+
+        sfx:playFX("card_play")
 
         table.insert(self.cards, card)
     end

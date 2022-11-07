@@ -2,15 +2,17 @@ require "src.game.com"
 require "src.game.card"
 require "src.game.player"
 require "src.game.played_deck"
+require "src.utils.sfx"
 
 local love = require "love"
 local utils = require("src.utils.utils")
 
-local function Com(deck: DeckType, playedDeck: PlayedDeckType): ComType
+local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): ComType
     local com: ComType = {}
     -- level 1 = easy, 2 = normal, 3 = hard
     local settings = utils.readJSON("settings")
     local level: integer = 2
+    local played_uno_sfx = false
 
     if settings.difficulty ~= nil then
         level = settings.difficulty
@@ -74,7 +76,15 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType): ComType
         end
 
         if self.saidUno then
+            if not played_uno_sfx then
+                -- todo change to uno sfx
+                sfx:setFXPlayed(false)
+                sfx:playFX("said_uno_male", "single")
+                played_uno_sfx = true
+            end
             love.graphics.print("COM HAS UNO'D!", 50, 10)
+        else
+            played_uno_sfx = false
         end
     end
 
@@ -191,7 +201,7 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType): ComType
             end
         end
 
-        if #self.cards == 2 then
+        if #self.cards == 2 and not player then
             if settings.difficulty == 1 then
                 -- if on easy mode
                 -- random 50% chance that saidUno is true

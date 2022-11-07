@@ -6,6 +6,8 @@ local function SFX(): SFXType
         button_hover = love.audio.newSource("assets/ui-sounds/button_hover.wav", "static"),
         card_draw = love.audio.newSource("assets/ui-sounds/card_draw.mp3", "static"),
         card_shuffle = love.audio.newSource("assets/ui-sounds/card_shuffle.wav", "static"),
+        card_play = love.audio.newSource("assets/ui-sounds/card_play.wav", "static"),
+        said_uno_male = love.audio.newSource("assets/ui-sounds/said_uno_male.wav", "static"),
     }
 
     return {

@@ -2,6 +2,7 @@ require "src.game.card"
 require "src.game.deck"
 -- require "src.game.player"
 -- require "src.game.played_deck"
+require "src.utils.sfx"
 
 global record ComType
     difficulty: integer
@@ -23,6 +24,6 @@ global record ComType
     play: function (ComType, player: any --[[ PlayerType ]])
 end
 
-global ComFunc: function(deck: DeckType, playedDeck: any --[[ playedDeckType ]]): ComType
+global ComFunc: function(deck: DeckType, playedDeck: any --[[ playedDeckType ]], sfx: SFXType): ComType
 
 return ComFunc

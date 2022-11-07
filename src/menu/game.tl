@@ -26,14 +26,14 @@ local function Game(sfx: SFXType): GameType
         deck = Deck(sfx)
         deck:generateDeck()
 
-        playedDeck = PlayedDeck(--[[ deck ]])
+        playedDeck = PlayedDeck(sfx)
 
-        player = Player(deck, playedDeck)
+        player = Player(deck, playedDeck, sfx)
         player:setCards(startCardCount)
         -- if player goes first
         player:setPlayerTurn(math.random(1, 10) > 5)
 
-        com = Com(deck, playedDeck)
+        com = Com(deck, playedDeck, sfx)
         com:setCards(startCardCount)
 
         local allowedCard = false

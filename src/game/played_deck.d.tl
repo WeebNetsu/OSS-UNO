@@ -1,6 +1,7 @@
 require "src.game.deck"
 require "src.game.card"
 require "src.game.com"
+require "src.utils.sfx"
 -- require "src.game.player"
 
 global record PlayedDeckType
@@ -18,6 +19,6 @@ global record PlayedDeckType
     draw: function (PlayedDeckType)
 end
 
-global PlayedDeckFunc: function(): PlayedDeckType
+global PlayedDeckFunc: function(sfx: SFXType): PlayedDeckType
 
 return PlayedDeckFunc
