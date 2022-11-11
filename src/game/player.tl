@@ -53,7 +53,6 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType):
         end
 
         if self.saidUno then
-            -- todo change to uno sfx
             if not played_uno_sfx then
                 sfx:setFXPlayed(false)
                 sfx:playFX("said_uno_male", "single")

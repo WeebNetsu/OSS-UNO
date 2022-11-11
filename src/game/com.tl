@@ -72,12 +72,11 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): Co
         for _index, card in ipairs(self.cards) do
             -- true -> card back is shown
             -- false -> actual card is shown
-            card:draw(nil, true)
+            card:draw(nil, false)
         end
 
         if self.saidUno then
             if not played_uno_sfx then
-                -- todo change to uno sfx
                 sfx:setFXPlayed(false)
                 sfx:playFX("said_uno_female", "single")
                 played_uno_sfx = true
@@ -139,7 +138,6 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): Co
         if #playableCards > 0 then
             -- if bot can throw a +2 or +4 as a chain, and is not on 'easy' mode
             if playedDeck.chainCount > 0 and level ~= 1 then
-                print(level)
                 local successfulChain = false
                 -- if +4 or +2 card
                 -- picker = +2 card
@@ -201,7 +199,7 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): Co
             end
         end
 
-        if #self.cards == 2 and not player then
+        if #self.cards == 2 and not player.playerTurn then
             if settings.difficulty == 1 then
                 -- if on easy mode
                 -- random 50% chance that saidUno is true
