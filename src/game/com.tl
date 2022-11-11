@@ -79,7 +79,7 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): Co
             if not played_uno_sfx then
                 -- todo change to uno sfx
                 sfx:setFXPlayed(false)
-                sfx:playFX("said_uno_male", "single")
+                sfx:playFX("said_uno_female", "single")
                 played_uno_sfx = true
             end
             love.graphics.print("COM HAS UNO'D!", 50, 10)

@@ -8,6 +8,7 @@ local function SFX(): SFXType
         card_shuffle = love.audio.newSource("assets/ui-sounds/card_shuffle.wav", "static"),
         card_play = love.audio.newSource("assets/ui-sounds/card_play.wav", "static"),
         said_uno_male = love.audio.newSource("assets/ui-sounds/said_uno_male.wav", "static"),
+        said_uno_female = love.audio.newSource("assets/ui-sounds/said_uno_female.wav", "static"),
     }
 
     return {
