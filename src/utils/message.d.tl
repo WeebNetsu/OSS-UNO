@@ -1,3 +1,5 @@
+require "src.utils.sfx"
+
 global record MessageType
     enum AvailableMessageTypes
         "error"
@@ -10,9 +12,10 @@ global record MessageType
     title: string
     text: string
     showMessage: function(MessageType, title: string, text: string, msgType: AvailableMessageTypes | nil)
+    update: function (MessageType, clickedMouse: boolean)
     draw: function (MessageType)
 end
 
-global MessageFunc: function() : MessageType
+global MessageFunc: function(sfx: SFXType) : MessageType
 
 return MessageFunc
