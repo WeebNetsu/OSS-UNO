@@ -1,13 +1,14 @@
 require "src.game.player"
 require "src.game.deck"
 require "src.game.played_deck"
+require "src.utils.message"
 require "src.utils.sfx"
 
 local love = require("love")
 local utils = require("src.utils.utils")
 local Com = require("src.game.com")
 
-local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): PlayerType
+local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, message: MessageType): PlayerType
     -- inheriting from Com
     local player: PlayerType = Com(deck, playedDeck) as PlayerType
     local played_uno_sfx = false
@@ -50,6 +51,8 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType):
         for _, card in ipairs(self.cards) do
             card:draw()
         end
+
+        -- message:showMessage("Drawing Card", "You are currently drawing a card! Well done, you did the impossible!", "error")
 
         if self.saidUno then
             if not played_uno_sfx then

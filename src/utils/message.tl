@@ -39,9 +39,11 @@ local function Message(sfx: SFXType): MessageType
         },
     }
 
-    message.showing = true
+    message.showing = false
+    -- should be very short, 3 words max
     message.title = "Invalid Action"
-    message.text = "Something went wrong"
+    -- the whole error/notification message
+    message.text = "Something went wrong, lorem ipsum , lorem ipsum , lorem ipsum , lorem ipsum , lorem ipsum , lorem ipsum , lorem ipsum , lorem ipsum "
     message.type = "info"
 
     message.showMessage = function(self: MessageType, title: string, text: string, msgType: MessageType.AvailableMessageTypes | nil)
@@ -101,12 +103,14 @@ local function Message(sfx: SFXType): MessageType
 
         love.graphics.rectangle("fill", width, height, boxXPos, boxYPos)
 
-        --[[ 
-        love.graphics.setFont(love.graphics.newFont(utils.fonts.h1))
-        love.graphics.printf("Settings", 0, 20, love.graphics.getWidth(), "center" )
-         ]]
         
         love.graphics.setColor(1, 1, 1)
+        
+        love.graphics.setFont(love.graphics.newFont(utils.fonts.h3))
+        love.graphics.printf(self.title, boxXPos / 1.8, boxYPos + 10, width * 1.4, "left")
+
+        love.graphics.setFont(love.graphics.newFont(utils.fonts.p))
+        love.graphics.printf(self.text, boxXPos / 1.8, boxYPos + utils.fonts.h3 + 20, width * 1.8, "left")
 
         love.graphics.push()
         love.graphics.scale(iconButtonScale)

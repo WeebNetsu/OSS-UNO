@@ -1,4 +1,5 @@
 require "src.utils.sfx"
+require "src.utils.message"
 
 global record GameType
     load: function (GameType)
@@ -6,6 +7,6 @@ global record GameType
     draw: function (GameType)
 end
 
-global GameFunc: function(sfx: SFXType): GameType
+global GameFunc: function(sfx: SFXType, message: MessageType): GameType
 
 return GameFunc

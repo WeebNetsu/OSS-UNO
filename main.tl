@@ -46,10 +46,10 @@ function love.load()
     global sfx = SFX()
 
     -- initialize game states
-    game = Game(sfx)
+    message = Message(sfx)
+    game = Game(sfx, message)
     menu = Menu(game, sfx)
     settings = Settings(sfx)
-    message = Message(sfx)
 
     -- load game states
     game:load()

@@ -1,5 +1,6 @@
 require "src.utils.sfx"
 require "src.menu.game"
+require "src.utils.message"
 
 local love = require "love"
 local Deck = require "src.game.deck"
@@ -9,7 +10,7 @@ local Com = require "src.game.com"
 local utils = require "src.utils.utils"
 local Uno = require "src.game.uno"
 
-local function Game(sfx: SFXType): GameType
+local function Game(sfx: SFXType, message: MessageType): GameType
     local deck: DeckType
     local player: PlayerType
     local playedDeck: PlayedDeckType
@@ -28,7 +29,7 @@ local function Game(sfx: SFXType): GameType
 
         playedDeck = PlayedDeck(sfx)
 
-        player = Player(deck, playedDeck, sfx)
+        player = Player(deck, playedDeck, sfx, message)
         player:setCards(startCardCount)
         -- if player goes first
         player:setPlayerTurn(math.random(1, 10) > 5)

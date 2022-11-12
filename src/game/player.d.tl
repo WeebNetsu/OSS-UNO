@@ -2,6 +2,7 @@ require "src.game.deck"
 require "src.game.card"
 require "src.game.com"
 require "src.utils.sfx"
+require "src.utils.message"
 require "src.game.played_deck"
 
 -- player has all the same types as Com
@@ -38,6 +39,6 @@ global record PlayerType
     -- play: function (PlayerType, player: PlayerType)
 end
 
-global PlayerDeckFunc: function(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): PlayerType
+global PlayerDeckFunc: function(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, message: MessageType): PlayerType
 
 return PlayerDeckFunc
