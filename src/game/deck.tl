@@ -54,7 +54,6 @@ local function Deck(sfx: SFXType): DeckType
     deck.generateDeck = function (self: DeckType, blockedCards: {string: CardType})
         local cards: {CardType} = {}
 
-        -- todo just check here this used to be pairs not ipairs
         for _, color in ipairs({"blue", "red", "green", "yellow"} as {CardType.AvailableCardColors}) do
             for i = 0, 9 do
                 local generatedCard = Card(self.x, self.y, color, i, nil)
@@ -64,7 +63,6 @@ local function Deck(sfx: SFXType): DeckType
                 end
             end
 
-            -- todo just check here this used to be pairs not ipairs
             for _, card in ipairs({"picker", "reverse", "skip"}) do
                 local generatedCard = Card(self.x, self.y, color, nil, card)
 
@@ -73,7 +71,6 @@ local function Deck(sfx: SFXType): DeckType
                 end
             end
 
-            -- todo just check here this used to be pairs not ipairs
             for _, specialCard in ipairs(utils.powerCards) do
                 local generatedCard = Card(self.x, self.y, nil, nil, specialCard)
 

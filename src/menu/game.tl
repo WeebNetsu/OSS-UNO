@@ -88,13 +88,11 @@ local function Game(sfx: SFXType): GameType
 
                         player:setPlayerTurn(false)
                     elseif player:checkHover() then
-                        -- todo just check here this used to be pairs not ipairs
                         for ind, val in ipairs(player:checkHovering()) do
                             if val then
                                 local selectedCard = player:getCard(ind)
 
                                 if selectedCard.playable then
-                                    -- todo just check here this used to be pairs not ipairs
                                     for _, powerCard in ipairs(utils.powerCards)do
                                         if selectedCard.specialName == powerCard then
                                             playedDeck:setColorPicking(true)

@@ -101,11 +101,9 @@ local utils: UtilsType = {
         if card == nil then
             local blockedCards = {}
 
-            -- todo just check here this used to be pairs not ipairs
             for _, xCard in ipairs(player.cards) do
                 table.insert(blockedCards, xCard)
             end
-            -- todo just check here this used to be pairs not ipairs
             for _, xCard in ipairs(com.cards) do
                 table.insert(blockedCards, xCard)
             end

@@ -68,11 +68,10 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): Co
     end
 
     com.draw = function (self: ComType)
-        -- todo just check below, it used to be "pairs" and not "ipairs"
         for _index, card in ipairs(self.cards) do
             -- true -> card back is shown
             -- false -> actual card is shown
-            card:draw(nil, false)
+            card:draw(nil, true)
         end
 
         if self.saidUno then
@@ -97,7 +96,6 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): Co
         local lastPlayedCard = playedDeck.cards[#playedDeck.cards]
         local playableCards = {}
 
-        -- todo just check below, it used to be "pairs" and not "ipairs"
         for ind, card in ipairs(self.cards) do
             card.playable = false
 
@@ -119,7 +117,6 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): Co
                         table.insert(playableCards, {index = ind, card = card})
                     end
                 else
-                    -- todo just check below, it used to be "pairs" and not "ipairs"
                     for _, cardName in ipairs(utils.powerCards) do
                         -- the bot is not allowed to play another +2 if they already played a +2
                         -- if the bot is on easy mode
@@ -142,7 +139,6 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): Co
                 -- if +4 or +2 card
                 -- picker = +2 card
                 if lastPlayedCard.specialName == "wild pick four" or lastPlayedCard.specialName == "picker" then
-                    -- todo just check below, it used to be "pairs" and not "ipairs"
                     for _, card in ipairs(playableCards) do
                         if card.card.specialName == lastPlayedCard.specialName then
                             playedDeck:addCard(card.card, true, player, self)
@@ -171,7 +167,6 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): Co
                 local randomIndex = math.random(1, #playableCards)
                 local card = playableCards[randomIndex]
     
-                -- todo just check below, it used to be "pairs" and not "ipairs"
                 for _, powerCard in ipairs(utils.powerCards)do
                     if card.card.specialName == powerCard then
                         playedDeck:pickColor(true, self)

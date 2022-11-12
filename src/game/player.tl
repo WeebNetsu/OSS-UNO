@@ -47,7 +47,6 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType):
     end
 
     player.draw = function (self: PlayerType)
-        -- todo just check here this used to be pairs not ipairs
         for _, card in ipairs(self.cards) do
             card:draw()
         end
@@ -67,7 +66,6 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType):
     player.showPlayableCards = function (self: PlayerType)
         local lastPlayedCard = playedDeck.cards[#playedDeck.cards]
 
-        -- todo just check here this used to be pairs not ipairs
         for _, card in ipairs(self.cards) do
             card.playable = false
             
@@ -91,7 +89,6 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType):
                             card.playable = true
                         end
                     else
-                        -- todo just check here this used to be pairs not ipairs
                         for _, cardName in ipairs(utils.powerCards) do
                             if cardName == card.specialName then
                                 card.playable = true
@@ -108,7 +105,6 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType):
     player.checkHover = function (self: PlayerType): boolean
         local mouseX, mouseY = love.mouse.getPosition()
 
-        -- todo just check here this used to be pairs not ipairs
         for _, card in ipairs(self.cards) do
             if  mouseX >= card.x and (mouseX <= card.x + utils.cardWidth) and (mouseY >= card.y - 20) and (mouseY <= (card.y + utils.cardHeight)) then
                 return true
@@ -118,12 +114,11 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType):
         return false
     end
 
-    -- used to see which card is being hoved over, table of booleans is returned
+    -- used to see which card is being hovered over, table of booleans is returned
     player.checkHovering = function (self: PlayerType): {boolean}
         local mouseX, mouseY = love.mouse.getPosition()
         local hovering = {}
 
-        -- todo just check here this used to be pairs not ipairs
         for ind, card in ipairs(self.cards) do
             if self.cards[ind+1] then
                 table.insert(hovering, mouseX >= card.x and (mouseX <= card.x + (utils.cardWidth / 1.5)) and (mouseY >= card.y - 20) and (mouseY <= (card.y + utils.cardHeight)))

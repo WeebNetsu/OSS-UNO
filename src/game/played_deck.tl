@@ -66,7 +66,6 @@ local function PlayedDeck(sfx: SFXType): PlayedDeckType
 
             -- store all colors com has in hand
             local containingColors: {CardType.AvailableCardColors} = {}
-            -- todo just check here this used to be pairs not ipairs
             for _, card in ipairs(com.cards) do
                 if card.color ~= nil then
                     table.insert(containingColors, card.color)
@@ -89,7 +88,6 @@ local function PlayedDeck(sfx: SFXType): PlayedDeckType
             -- make the bot choose the color that is most common in the hand
             local blue, red, green, yellow = 0, 0, 0, 0
 
-            -- todo just check here this used to be pairs not ipairs
             for _, color in ipairs(containingColors) do
                 if color == "blue" then
                     blue = blue + 1
@@ -178,7 +176,6 @@ local function PlayedDeck(sfx: SFXType): PlayedDeckType
     end
 
     playedDeck.draw = function (self: PlayedDeckType)
-        -- todo just check here this used to be pairs not ipairs
         for _, card in ipairs(self.cards) do
             card:draw()
         end

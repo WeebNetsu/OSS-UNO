@@ -11,11 +11,13 @@ local Game = require "src.menu.game"
 local Menu = require "src.menu.menu"
 local SFX = require "src.utils.sfx"
 local Settings = require "src.menu.settings"
+local Message = require "src.game.message"
 
 math.randomseed(os.time())
 
 local game: GameType
 local menu: MenuType
+local message: MessageType
 local settings: SettingsType
 local clickedMouse: boolean = false
 local cursorBorderRadius: integer = 5
@@ -47,6 +49,7 @@ function love.load()
     game = Game(sfx)
     menu = Menu(game, sfx)
     settings = Settings(sfx)
+    message = Message()
 
     -- load game states
     game:load()
@@ -100,5 +103,8 @@ function love.draw()
     love.graphics.setColor(utils.colors.yellow.r, utils.colors.yellow.g, utils.colors.yellow.b)
     love.graphics.rectangle("line", mouseX, mouseY, 15, 15, cursorBorderRadius)
     -- love.graphics.setBackgroundColor(utils.colors.background.r, utils.colors.background.g, utils.colors.background.b)
+    
+    message:draw()
+    
     love.graphics.setColor(1, 1, 1)
 end
