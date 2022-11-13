@@ -27,7 +27,7 @@ function love.load()
     love.mouse.setVisible(false)
     love.graphics.setBackgroundColor(utils.colors.background.r, utils.colors.background.g, utils.colors.background.b)
 
-    cursor = Cursor(utils)
+    cursor = Cursor()
 
     gameSettings = utils.readJSON("settings")
 
@@ -76,9 +76,17 @@ function love.update(dt: number)
             game:update(dt)
         elseif utils.state.settings then
             settings:update()
+
         end
     else
         message:update()
+    end
+    
+    if settings.updated then
+        game:load()
+        menu:load()
+        cursor:refresh()
+        settings.updated = false
     end
 
     -- this is not in cursor:update() since it needs to happen

@@ -52,9 +52,12 @@ local function Settings(sfx: SFXType, cursor: CursorType): SettingsType
         end
     end
 
+    settings.updated = false
+
     local settingOptions = {
         difficulty = SettingsOptions("Difficulty", newSettings.difficulty, {"Easy", "Normal", "Hard"}),
         windowSize = SettingsOptions("Window", winSize, {"1280x720", "1920x1080"}),
+        controller = SettingsOptions("Controller", winSize, {"Controller", "Keyboard"}),
     }
 
     local textButtonScale, iconButtonScale = 0.7, 0.4
@@ -102,17 +105,30 @@ local function Settings(sfx: SFXType, cursor: CursorType): SettingsType
 
             onClick = function (_self: SettingButtonType)
                 local width, height = string.match(settingOptions.windowSize.availableValues[settingOptions.windowSize.value], "(.*)x(.*)")
+
+                -- by default it will be keyboard controlled unless changed
+                local ctrl: SavedSettingsType.ControllerType
+
+                if settingOptions.controller.availableValues[settingOptions.controller.value] == "Controller" then
+                    ctrl = "controller"
+                else
+                    ctrl = "keyboard"
+                end
+                
                 local saveSettings: SavedSettingsType = {
                     difficulty = settingOptions.difficulty.value,
                     windowSize = {
                         width = tonumber(width),
                         height = tonumber(height)
-                    }
+                    },
+                    controller = ctrl
                 }
 
                 utils.writeJSON("settings", saveSettings)
 
-                love.window.setMode(tonumber(width), tonumber(height))
+                if love.graphics.getWidth() ~= tonumber(width) or love.graphics.getHeight() ~= tonumber(height) then
+                    love.window.setMode(tonumber(width), tonumber(height))
+                end
             end
         },
         undo = {
@@ -129,7 +145,7 @@ local function Settings(sfx: SFXType, cursor: CursorType): SettingsType
         },
     }
 
-    settings.update = function (_self: SettingsType)
+    settings.update = function (self: SettingsType)
         -- this will decide when isHoveringOverButton will be set to true/false
         local isHovering = false
         
@@ -152,6 +168,7 @@ local function Settings(sfx: SFXType, cursor: CursorType): SettingsType
                     -- be executed
                     isHoveringOverButton = false
                     button.hovering = false
+                    self.updated = true
                     button:onClick()
                 end
             else

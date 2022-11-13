@@ -12,6 +12,8 @@ global record SettingsType
         hovering: boolean
         onClick: function(CounterType)
     end
+
+    updated: boolean
     
     update: function (SettingsType)
     draw: function (SettingsType)
@@ -24,8 +26,14 @@ global record SavedSettingsType
         height: number
     end 
 
+    enum ControllerType
+        "keyboard"
+        "controller"
+    end 
+
     windowSize: WindowSizeType | nil
     difficulty: integer | nil
+    controller: ControllerType | nil
 end
 
 global record SettingButtonType

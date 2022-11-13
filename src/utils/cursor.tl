@@ -1,10 +1,17 @@
 require "src.utils.cursor"
-require "src.utils.utils"
 
 local love = require("love")
+local utils = require("src.utils.utils")
 
-local function Cursor(utils: UtilsType): CursorType
+local function Cursor(): CursorType
     local cursorBorderRadius: integer = 5
+
+    local settings = utils.readJSON("settings")
+    local control = "keyboard"
+
+    if love.joystick.getJoysticks()[1] ~= nil and settings.controller == "controller" then
+        control = "controller"
+    end
 
     local cursor: CursorType = {}
 
@@ -29,12 +36,20 @@ local function Cursor(utils: UtilsType): CursorType
         end
     end
 
+    cursor.refresh = function (_self: CursorType)
+        settings = utils.readJSON("settings")
+    end
+
     cursor.update = function (self: CursorType, dt: number)
-        self.pos.x = self.pos.x + dt * self.speed * self.joystick:getGamepadAxis("leftx")
-        self.pos.y = self.pos.y + dt * self.speed * self.joystick:getGamepadAxis("lefty")
-	
-        -- rightCircle.x = rightCircle.x + dt*speed*joystick:getGamepadAxis("rightx")
-        -- rightCircle.y = rightCircle.y + dt*speed*joystick:getGamepadAxis("righty")
+        if control == "keyboard" then
+            self.pos.x, self.pos.y = love.mouse.getPosition()
+        else
+            -- if using controller
+            self.pos.x = self.pos.x + dt * self.speed * self.joystick:getGamepadAxis("leftx")
+            self.pos.y = self.pos.y + dt * self.speed * self.joystick:getGamepadAxis("lefty")
+            self.pos.x = self.pos.x + dt * self.speed * self.joystick:getGamepadAxis("rightx")
+            self.pos.y = self.pos.y + dt * self.speed * self.joystick:getGamepadAxis("righty")
+        end
     end
 
     cursor.draw = function (self: CursorType)
