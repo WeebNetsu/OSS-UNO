@@ -1,4 +1,5 @@
 require "src.utils.sfx"
+require "src.utils.cursor"
 
 local love = require "love"
 
@@ -12,7 +13,7 @@ global record SettingsType
         onClick: function(CounterType)
     end
     
-    update: function (SettingsType, clickedMouse: boolean)
+    update: function (SettingsType)
     draw: function (SettingsType)
 end
 
@@ -38,6 +39,6 @@ global record SettingButtonType
     onClick: function(SettingButtonType)
 end
 
-global SettingsFunc: function(sfx: SFXType) : SettingsType
+global SettingsFunc: function(sfx: SFXType, cursor: CursorType) : SettingsType
 
 return SettingsFunc

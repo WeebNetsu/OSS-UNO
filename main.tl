@@ -12,21 +12,22 @@ local Menu = require "src.menu.menu"
 local SFX = require "src.utils.sfx"
 local Settings = require "src.menu.settings"
 local Message = require "src.utils.message"
+local Cursor = require "src.utils.cursor"
 
 math.randomseed(os.time())
 
+local cursor: CursorType
 local game: GameType
 local menu: MenuType
 local message: MessageType
 local settings: SettingsType
-local clickedMouse: boolean = false
-local cursorBorderRadius: integer = 5
-local mouseX, mouseY: number, number
 local gameSettings: SavedSettingsType = {}
 
 function love.load()
     love.mouse.setVisible(false)
     love.graphics.setBackgroundColor(utils.colors.background.r, utils.colors.background.g, utils.colors.background.b)
+
+    cursor = Cursor(utils)
 
     gameSettings = utils.readJSON("settings")
 
@@ -46,10 +47,10 @@ function love.load()
     global sfx = SFX()
 
     -- initialize game states
-    message = Message(sfx)
-    game = Game(sfx, message)
-    menu = Menu(game, sfx)
-    settings = Settings(sfx)
+    message = Message(sfx, cursor)
+    game = Game(sfx, cursor)
+    menu = Menu(game, sfx, cursor)
+    settings = Settings(sfx, cursor)
 
     -- load game states
     game:load()
@@ -57,30 +58,33 @@ function love.load()
     -- settings:load()
 end
 
-function love.mousepressed(_x: number, _y: number, button: integer, _istouch: boolean, _presses: integer)
-    if button == 1 then
-        clickedMouse = true
-    end
+function love.gamepadpressed(joystick: love.joystick.Joystick, button: love.joystick.GamepadButton)
+    cursor:gamepadPressed(joystick, button)
+end
+
+function love.mousepressed(x: number, y: number, button: integer, istouch: boolean, presses: integer)
+    cursor:mousePressed(x, y, button, istouch, presses)
 end
 
 function love.update(dt: number)
-    -- mouseX and y is used in draw
-    mouseX, mouseY = love.mouse.getPosition()
-
+    cursor:update(dt)
+    
     if not message.showing then
         if utils.state.menu then
-            menu:update(clickedMouse)
+            menu:update()
         elseif utils.state.game then
-            game:update(dt, clickedMouse)
+            game:update(dt)
         elseif utils.state.settings then
-            settings:update(clickedMouse)
+            settings:update()
         end
     else
-        message:update(clickedMouse)
+        message:update()
     end
 
-    if clickedMouse then
-        clickedMouse = false
+    -- this is not in cursor:update() since it needs to happen
+    -- at the end of an update cycle
+    if cursor.clicked then
+        cursor.clicked = false
     end
 end
 
@@ -109,16 +113,7 @@ function love.draw()
         love.graphics.print(love.timer.getFPS() as string, 10, 10)
     end
 
-    -- 15x15 square around cursor
-    love.graphics.setColor(utils.colors.blue.r, utils.colors.blue.g, utils.colors.blue.b)
-    love.graphics.rectangle("line", mouseX - 7, mouseY - 7, 15, 15, cursorBorderRadius)
-    love.graphics.setColor(utils.colors.red.r, utils.colors.red.g, utils.colors.red.b)
-    love.graphics.rectangle("line", mouseX, mouseY - 7, 15, 15, cursorBorderRadius)
-    love.graphics.setColor(utils.colors.green.r, utils.colors.green.g, utils.colors.green.b)
-    love.graphics.rectangle("line", mouseX - 7, mouseY, 15, 15, cursorBorderRadius)
-    love.graphics.setColor(utils.colors.yellow.r, utils.colors.yellow.g, utils.colors.yellow.b)
-    love.graphics.rectangle("line", mouseX, mouseY, 15, 15, cursorBorderRadius)
-    -- love.graphics.setBackgroundColor(utils.colors.background.r, utils.colors.background.g, utils.colors.background.b)
-        
+    cursor:draw()
+
     love.graphics.setColor(1, 1, 1)
 end

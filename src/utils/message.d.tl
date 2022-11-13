@@ -1,4 +1,5 @@
 require "src.utils.sfx"
+require "src.utils.cursor"
 
 global record MessageType
     enum AvailableMessageTypes
@@ -11,11 +12,12 @@ global record MessageType
     type: AvailableMessageTypes
     title: string
     text: string
-    showMessage: function(MessageType, title: string, text: string, msgType: AvailableMessageTypes | nil)
-    update: function (MessageType, clickedMouse: boolean)
+    onClose: function(MessageType)
+    showMessage: function(MessageType, title: string, text: string, msgType: AvailableMessageTypes | nil, onClose: function(MessageType) | nil)
+    update: function (MessageType)
     draw: function (MessageType)
 end
 
-global MessageFunc: function(sfx: SFXType) : MessageType
+global MessageFunc: function(sfx: SFXType, cursor: CursorType) : MessageType
 
 return MessageFunc

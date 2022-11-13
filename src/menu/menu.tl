@@ -1,12 +1,13 @@
 require "src.utils.sfx"
 require "src.menu.menu"
 require "src.menu.game"
+require "src.utils.cursor"
 
 local love = require "love"
 local utils = require "src.utils.utils"
 local Settings = require "src.menu.settings"
 
-local function Menu(game: GameType, sfx: SFXType): MenuType
+local function Menu(game: GameType, sfx: SFXType, cursor: CursorType): MenuType
     local menu: MenuType = {}
     local textButtonScale, iconButtonScale = 0.7, 0.5
     local settings: SettingsType
@@ -95,7 +96,7 @@ local function Menu(game: GameType, sfx: SFXType): MenuType
         end
 
         for _, button in pairs(buttons) do
-            button.hovering = utils.getMouseBetween(button.x * currentScale, button.y * currentScale, selectedScale.width, selectedScale.height)
+            button.hovering = utils.getMouseBetween(button.x * currentScale, button.y * currentScale, selectedScale.width, selectedScale.height, cursor.pos.x, cursor.pos.y)
 
             if button.hovering then
                 sfx:playFX("button_hover", "single")
@@ -118,12 +119,12 @@ local function Menu(game: GameType, sfx: SFXType): MenuType
         settings = Settings(sfx)
     end
 
-    menu.update = function (_self: MenuType, clickedMouse: boolean)
+    menu.update = function (_self: MenuType)
         if utils.state.menu then
-            runButtonChecks(clickedMouse, false)
-            runButtonChecks(clickedMouse, true)
+            runButtonChecks(cursor.clicked, false)
+            runButtonChecks(cursor.clicked, true)
         elseif utils.state.settings then
-            settings:update(clickedMouse)
+            settings:update()
         end
     end
 

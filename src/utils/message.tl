@@ -1,12 +1,13 @@
 require "src.utils.message"
 require "src.menu.settings"
 require "src.utils.sfx"
+require "src.utils.cursor"
 
 local utils = require "src.utils.utils"
 
 local love = require("love")
 
-local function Message(sfx: SFXType): MessageType
+local function Message(sfx: SFXType, cursor: CursorType): MessageType
     local message: MessageType = {}
 
     local boxXPos, boxYPos = love.graphics.getWidth() / 2, love.graphics.getHeight() / 3
@@ -32,10 +33,6 @@ local function Message(sfx: SFXType): MessageType
             -- don't know why we don't need a scaled button width/height, but it works lol
             x = (boxXPos + width - 50) / iconButtonScale,
             y = (boxYPos + 10) / iconButtonScale,
-
-            onClick = function (_self: SettingButtonType)
-                message.showing = false
-            end
         },
     }
 
@@ -45,19 +42,26 @@ local function Message(sfx: SFXType): MessageType
     -- the whole error/notification message
     message.text = "Something went wrong, lorem ipsum , lorem ipsum , lorem ipsum , lorem ipsum , lorem ipsum , lorem ipsum , lorem ipsum , lorem ipsum "
     message.type = "info"
+    -- when user clicks on close button
+    message.onClose = function(self: MessageType)
+        self.showing = false
+    end
 
-    message.showMessage = function(self: MessageType, title: string, text: string, msgType: MessageType.AvailableMessageTypes | nil)
+    message.showMessage = function(self: MessageType, title: string, text: string, msgType: MessageType.AvailableMessageTypes | nil, onClose: function(MessageType) | nil)
         self.showing = true
         self.title = title
         self.text = text
         self.type = msgType or "info"
+        self.onClose = onClose or function(self: MessageType)
+            self.showing = false
+        end
     end
 
-    message.update = function (_self: MessageType, clickedMouse: boolean)
+    message.update = function (_self: MessageType)
         local isHovering = false
         
         for _, button in pairs(iconButtons) do
-            button.hovering = utils.getMouseBetween(button.x * iconButtonScale, button.y * iconButtonScale, scale.iconButton.width, scale.iconButton.height)
+            button.hovering = utils.getMouseBetween(button.x * iconButtonScale, button.y * iconButtonScale, scale.iconButton.width, scale.iconButton.height, cursor.pos.x, cursor.pos.y)
 
             -- if isHovering is not already set to true (will always be false on the first loop, but
             -- might be true on any of the following loops) and the current button is being hovered over
@@ -70,7 +74,7 @@ local function Message(sfx: SFXType): MessageType
             if isHoveringOverButton then
                 sfx:playFX("button_hover", "single")
                 
-                if clickedMouse then
+                if cursor.clicked then
                     -- we need to set everything to false again here, otherwise all the buttons will
                     -- be executed
                     isHoveringOverButton = false

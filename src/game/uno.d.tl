@@ -1,5 +1,6 @@
 require "src.game.card"
 require "src.game.played_deck"
+require "src.utils.cursor"
 
 global record UnoType
     x: number
@@ -9,6 +10,6 @@ global record UnoType
     checkHover: function (UnoType): boolean
 end
 
-global UnoFunc: function(): UnoType
+global UnoFunc: function(cursor: CursorType): UnoType
 
 return UnoFunc

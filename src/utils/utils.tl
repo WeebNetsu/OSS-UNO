@@ -68,9 +68,7 @@ local utils: UtilsType = {
         self.state.settings = newState == "settings"
     end,
 
-    getMouseBetween = function (x: number, y: number, width: number, height: number): boolean
-        local mouseX, mouseY = love.mouse.getPosition()
-
+    getMouseBetween = function (x: number, y: number, width: number, height: number, mouseX: number, mouseY: number): boolean
         return mouseX >= x and (mouseX <= x + width) and (mouseY >= y) and (mouseY <= (y + height))
     end,
 

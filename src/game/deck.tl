@@ -1,11 +1,10 @@
 require "src.utils.sfx"
 require "src.game.deck"
 
-local love = require "love"
 local Card = require "src.game.card"
 local utils = require "src/utils/utils"
 
-local function Deck(sfx: SFXType): DeckType
+local function Deck(sfx: SFXType, cursor: CursorType): DeckType
     local xPos, yPos = 50, utils.cardHeight + 70
     local image = Card(xPos, yPos, nil, nil, "card_back_alt")
     local settings = utils.readJSON("settings")
@@ -85,10 +84,8 @@ local function Deck(sfx: SFXType): DeckType
     end
 
     deck.checkHover = function (self: DeckType): boolean
-        local mouse_x, mouse_y = love.mouse.getPosition()
-
         -- return true if cursor is inside deck on screen
-        return mouse_x >= self.x and (mouse_x <= self.x + utils.cardWidth) and (mouse_y >= self.y) and (mouse_y <= (self.y + utils.cardHeight))
+        return cursor.pos.x >= self.x and (cursor.pos.x <= self.x + utils.cardWidth) and (cursor.pos.y >= self.y) and (cursor.pos.y <= (self.y + utils.cardHeight))
     end
 
     deck.draw = function (self: DeckType)

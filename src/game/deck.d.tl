@@ -1,5 +1,6 @@
 require "src.game.card"
 require "src.utils.sfx"
+require "src.utils.cursor"
 
 global record DeckType
     x: number
@@ -14,6 +15,6 @@ global record DeckType
     drawCard: function (DeckType, cardX: number, cardY: number, bot: boolean): CardType
 end
 
-global DeckFunc: function(sfx: SFXType): DeckType
+global DeckFunc: function(sfx: SFXType, cursor: CursorType): DeckType
 
 return DeckFunc

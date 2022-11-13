@@ -1,6 +1,7 @@
 require "src.utils.sfx"
 require "src.menu.game"
 require "src.utils.message"
+require "src.utils.cursor"
 
 local love = require "love"
 local Deck = require "src.game.deck"
@@ -10,7 +11,7 @@ local Com = require "src.game.com"
 local utils = require "src.utils.utils"
 local Uno = require "src.game.uno"
 
-local function Game(sfx: SFXType, message: MessageType): GameType
+local function Game(sfx: SFXType, cursor: CursorType): GameType
     local deck: DeckType
     local player: PlayerType
     local playedDeck: PlayedDeckType
@@ -23,13 +24,13 @@ local function Game(sfx: SFXType, message: MessageType): GameType
     game.load = function (_self: GameType)
         local startCardCount = 8
 
-        uno = Uno()
-        deck = Deck(sfx)
+        uno = Uno(cursor)
+        deck = Deck(sfx, cursor)
         deck:generateDeck()
 
-        playedDeck = PlayedDeck(sfx)
+        playedDeck = PlayedDeck(sfx, cursor)
 
-        player = Player(deck, playedDeck, sfx, message)
+        player = Player(deck, playedDeck, sfx, cursor)
         player:setCards(startCardCount)
         -- if player goes first
         player:setPlayerTurn(math.random(1, 10) > 5)
@@ -48,11 +49,9 @@ local function Game(sfx: SFXType, message: MessageType): GameType
         until allowedCard
     end
 
-    game.update = function (_self: GameType, _dt: number, clickedMouse: boolean)
-        clickedMouse = clickedMouse or false
-
+    game.update = function (_self: GameType, _dt: number)
         if player.playerTurn then
-            if clickedMouse then
+            if cursor.clicked then
                 -- if currently picking a color
                 if playedDeck.colorPicking and selectedCardIndex ~= nil then
                     if playedDeck:checkColorPickerHover() then

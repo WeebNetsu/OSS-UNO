@@ -4,7 +4,7 @@ require "src.game.played_deck"
 local love = require "love"
 local utils = require "src.utils.utils"
 
-local function Uno(): UnoType
+local function Uno(cursor: CursorType): UnoType
     -- width and height are swapped, since it's horizontal and not vertical
     local width, height = utils.cardHeight, utils.cardWidth
     local image = love.graphics.newImage("assets/uno.png")
@@ -17,7 +17,7 @@ local function Uno(): UnoType
 
     uno.draw = function (self: UnoType, playedDeck: PlayedDeckType)
         love.graphics.push()
-        love.graphics.scale(scale) -- the sprite was a bit large, so I scaled it to a resonable size
+        love.graphics.scale(scale) -- the sprite was a bit large, so I scaled it to a reasonable size
 
         if playedDeck.lastColor == "blue" then
             love.graphics.setColor(utils.colors.blue.r, utils.colors.blue.g, utils.colors.blue.b)
@@ -48,10 +48,8 @@ local function Uno(): UnoType
     end
 
     uno.checkHover = function (self: UnoType): boolean
-        local mouse_x, mouse_y = love.mouse.getPosition()
-
         -- we * by scale, since the drawing was scaled
-        return mouse_x >= self.x * scale and (mouse_x <= (self.x + width) * scale) and (mouse_y >= self.y * scale) and (mouse_y <= (self.y + height) * scale)
+        return cursor.pos.x >= self.x * scale and (cursor.pos.x <= (self.x + width) * scale) and (cursor.pos.y >= self.y * scale) and (cursor.pos.y <= (self.y + height) * scale)
     end
 
     return uno

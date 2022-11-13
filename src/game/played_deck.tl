@@ -2,11 +2,12 @@ require "src.game.played_deck"
 require "src.game.card"
 require "src.game.com"
 require "src.utils.sfx"
+require "src.utils.cursor"
 
 local love = require "love"
 local utils = require "src.utils.utils"
 
-local function PlayedDeck(sfx: SFXType): PlayedDeckType
+local function PlayedDeck(sfx: SFXType, cursor: CursorType): PlayedDeckType
     -- cp = color picker
     local cpWidth = 300
     local cpXPos, cpYPos = love.graphics.getWidth() / 2 - cpWidth, 50
@@ -35,21 +36,19 @@ local function PlayedDeck(sfx: SFXType): PlayedDeckType
     end
 
     playedDeck.checkColorPickerHover = function (_self: PlayedDeckType): boolean
-        local mouseX, mouseY = love.mouse.getPosition()
-
-        if (mouseX >= cpXPos) and (mouseX <= cpXPos + cpWidth) and (mouseY >= cpYPos) and (mouseY <= (cpYPos + cpWidth)) then
+        if (cursor.pos.x >= cpXPos) and (cursor.pos.x <= cpXPos + cpWidth) and (cursor.pos.y >= cpYPos) and (cursor.pos.y <= (cpYPos + cpWidth)) then
             return true
         end
 
-        if (mouseX >= rightBlockXStart) and (mouseX <= rightBlockXStart + cpWidth) and (mouseY >= cpYPos) and (mouseY <= (cpYPos + cpWidth)) then
+        if (cursor.pos.x >= rightBlockXStart) and (cursor.pos.x <= rightBlockXStart + cpWidth) and (cursor.pos.y >= cpYPos) and (cursor.pos.y <= (cpYPos + cpWidth)) then
             return true
         end
 
-        if (mouseX >= cpXPos) and (mouseX <= cpXPos + cpWidth) and (mouseY >= bottomBlockYStart) and (mouseY <= (bottomBlockYStart + cpWidth)) then
+        if (cursor.pos.x >= cpXPos) and (cursor.pos.x <= cpXPos + cpWidth) and (cursor.pos.y >= bottomBlockYStart) and (cursor.pos.y <= (bottomBlockYStart + cpWidth)) then
             return true
         end
 
-        if (mouseX >= rightBlockXStart) and (mouseX <= rightBlockXStart + cpWidth) and (mouseY >= bottomBlockYStart) and (mouseY <= (bottomBlockYStart + cpWidth)) then
+        if (cursor.pos.x >= rightBlockXStart) and (cursor.pos.x <= rightBlockXStart + cpWidth) and (cursor.pos.y >= bottomBlockYStart) and (cursor.pos.y <= (bottomBlockYStart + cpWidth)) then
             return true
         end
 
@@ -57,8 +56,6 @@ local function PlayedDeck(sfx: SFXType): PlayedDeckType
     end
 
     playedDeck.pickColor = function (self: PlayedDeckType, isCom: boolean, com: ComType): boolean
-        local mouseX, mouseY = love.mouse.getPosition()
-
         if isCom then
             if com == nil then
                 error("Com was not provided for pickColor")
@@ -116,25 +113,25 @@ local function PlayedDeck(sfx: SFXType): PlayedDeckType
         end
 
         -- blue
-        if (mouseX >= cpXPos) and (mouseX <= cpXPos + cpWidth) and (mouseY >= cpYPos) and (mouseY <= (cpYPos + cpWidth)) then
+        if (cursor.pos.x >= cpXPos) and (cursor.pos.x <= cpXPos + cpWidth) and (cursor.pos.y >= cpYPos) and (cursor.pos.y <= (cpYPos + cpWidth)) then
             self.lastColor = "blue"
             return true
         end
 
         -- red
-        if (mouseX >= rightBlockXStart) and (mouseX <= rightBlockXStart + cpWidth) and (mouseY >= cpYPos) and (mouseY <= (cpYPos + cpWidth)) then
+        if (cursor.pos.x >= rightBlockXStart) and (cursor.pos.x <= rightBlockXStart + cpWidth) and (cursor.pos.y >= cpYPos) and (cursor.pos.y <= (cpYPos + cpWidth)) then
             self.lastColor = "red"
             return true
         end
 
         -- green
-        if (mouseX >= cpXPos) and (mouseX <= cpXPos + cpWidth) and (mouseY >= bottomBlockYStart) and (mouseY <= (bottomBlockYStart + cpWidth)) then
+        if (cursor.pos.x >= cpXPos) and (cursor.pos.x <= cpXPos + cpWidth) and (cursor.pos.y >= bottomBlockYStart) and (cursor.pos.y <= (bottomBlockYStart + cpWidth)) then
             self.lastColor = "green"
             return true
         end
 
         -- yellow
-        if (mouseX >= rightBlockXStart) and (mouseX <= rightBlockXStart + cpWidth) and (mouseY >= bottomBlockYStart) and (mouseY <= (bottomBlockYStart + cpWidth)) then
+        if (cursor.pos.x >= rightBlockXStart) and (cursor.pos.x <= rightBlockXStart + cpWidth) and (cursor.pos.y >= bottomBlockYStart) and (cursor.pos.y <= (bottomBlockYStart + cpWidth)) then
             self.lastColor = "yellow"
             return true
         end

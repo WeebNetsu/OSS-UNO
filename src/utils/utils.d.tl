@@ -57,7 +57,7 @@ global record UtilsType
     colors: ColorsType
     state: GameState
 
-    getMouseBetween: function(x: number, y: number, width: number, height: number): boolean
+    getMouseBetween: function(x: number, y: number, width: number, height: number, mouseX: number, mouseY: number): boolean
     chooseButtonImage: function(name: string, iconButton: boolean, red: boolean): love.graphics.Image
     drawCardOrGenerateDeck: function(player: PlayerType, com: ComType, deck: DeckType, isCom: boolean): CardType
     changeGameState: function(UtilsType, AllowedGameStates)

@@ -3,12 +3,13 @@ require "src.game.deck"
 require "src.game.played_deck"
 require "src.utils.message"
 require "src.utils.sfx"
+require "src.utils.cursor"
 
 local love = require("love")
 local utils = require("src.utils.utils")
 local Com = require("src.game.com")
 
-local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, message: MessageType): PlayerType
+local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, cursor: CursorType): PlayerType
     -- inheriting from Com
     local player: PlayerType = Com(deck, playedDeck) as PlayerType
     local played_uno_sfx = false
@@ -106,10 +107,8 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
 
     -- to be used to see if a card is being hovered over, return true or false
     player.checkHover = function (self: PlayerType): boolean
-        local mouseX, mouseY = love.mouse.getPosition()
-
         for _, card in ipairs(self.cards) do
-            if  mouseX >= card.x and (mouseX <= card.x + utils.cardWidth) and (mouseY >= card.y - 20) and (mouseY <= (card.y + utils.cardHeight)) then
+            if  cursor.pos.x >= card.x and (cursor.pos.x <= card.x + utils.cardWidth) and (cursor.pos.y >= card.y - 20) and (cursor.pos.y <= (card.y + utils.cardHeight)) then
                 return true
             end
         end
@@ -119,14 +118,13 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
 
     -- used to see which card is being hovered over, table of booleans is returned
     player.checkHovering = function (self: PlayerType): {boolean}
-        local mouseX, mouseY = love.mouse.getPosition()
         local hovering = {}
 
         for ind, card in ipairs(self.cards) do
             if self.cards[ind+1] then
-                table.insert(hovering, mouseX >= card.x and (mouseX <= card.x + (utils.cardWidth / 1.5)) and (mouseY >= card.y - 20) and (mouseY <= (card.y + utils.cardHeight)))
+                table.insert(hovering, cursor.pos.x >= card.x and (cursor.pos.x <= card.x + (utils.cardWidth / 1.5)) and (cursor.pos.y >= card.y - 20) and (cursor.pos.y <= (card.y + utils.cardHeight)))
             else
-                table.insert(hovering, mouseX >= card.x and (mouseX <= card.x + utils.cardWidth) and (mouseY >= card.y - 20) and (mouseY <= (card.y + utils.cardHeight)))
+                table.insert(hovering, cursor.pos.x >= card.x and (cursor.pos.x <= card.x + utils.cardWidth) and (cursor.pos.y >= card.y - 20) and (cursor.pos.y <= (card.y + utils.cardHeight)))
             end
         end
 

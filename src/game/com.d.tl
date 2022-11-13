@@ -1,8 +1,6 @@
-require "src.game.card"
-require "src.game.deck"
--- require "src.game.player"
--- require "src.game.played_deck"
-require "src.utils.sfx"
+global type CardType
+global type DeckType
+global type SFXType
 
 global record ComType
     difficulty: integer
