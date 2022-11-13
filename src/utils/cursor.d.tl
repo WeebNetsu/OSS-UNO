@@ -13,7 +13,7 @@ global record CursorType
     speed: number
     clicked: boolean
     
-    refresh: function (CursorType)
+    load: function (CursorType)
     update: function (CursorType, dt: number)
     draw: function (CursorType)
     mousePressed: function(CursorType, x: number, y: number, button: integer, istouch: boolean, presses: integer)

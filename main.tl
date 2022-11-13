@@ -53,6 +53,7 @@ function love.load()
     settings = Settings(sfx, cursor)
 
     -- load game states
+    cursor:load()
     game:load()
     menu:load()
     -- settings:load()
@@ -83,9 +84,9 @@ function love.update(dt: number)
     
     -- print(settings.updated)
     if settings.updated then
+        cursor:load()
         game:load()
         menu:load()
-        cursor:refresh()
         settings.updated = false
     end
 

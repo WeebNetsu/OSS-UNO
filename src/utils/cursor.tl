@@ -6,12 +6,8 @@ local utils = require("src.utils.utils")
 local function Cursor(): CursorType
     local cursorBorderRadius: integer = 5
 
-    local settings = utils.readJSON("settings")
-    local control = "keyboard"
-
-    if love.joystick.getJoysticks()[1] ~= nil and settings.controller == "controller" then
-        control = "controller"
-    end
+    local settings: SavedSettingsType
+    local control: SavedSettingsType.ControllerType
 
     local cursor: CursorType = {}
 
@@ -36,8 +32,13 @@ local function Cursor(): CursorType
         end
     end
 
-    cursor.refresh = function (_self: CursorType)
+    cursor.load = function (_self: CursorType)
         settings = utils.readJSON("settings")
+        control = "keyboard"
+
+        if love.joystick.getJoysticks()[1] ~= nil and settings.controller == "controller" then
+            control = "controller"
+        end
     end
 
     cursor.update = function (self: CursorType, dt: number)
@@ -48,6 +49,7 @@ local function Cursor(): CursorType
             local posX = self.pos.x + dt * self.speed * self.joystick:getGamepadAxis("leftx")
             local posY = self.pos.y + dt * self.speed * self.joystick:getGamepadAxis("lefty")
 
+            -- so you can use both right and left analog sticks
             if self.joystick:getGamepadAxis("rightx") ~= 0 then
                 posX = self.pos.x + dt * self.speed * self.joystick:getGamepadAxis("rightx")
             end
