@@ -45,10 +45,23 @@ local function Cursor(): CursorType
             self.pos.x, self.pos.y = love.mouse.getPosition()
         else
             -- if using controller
-            self.pos.x = self.pos.x + dt * self.speed * self.joystick:getGamepadAxis("leftx")
-            self.pos.y = self.pos.y + dt * self.speed * self.joystick:getGamepadAxis("lefty")
-            self.pos.x = self.pos.x + dt * self.speed * self.joystick:getGamepadAxis("rightx")
-            self.pos.y = self.pos.y + dt * self.speed * self.joystick:getGamepadAxis("righty")
+            local posX = self.pos.x + dt * self.speed * self.joystick:getGamepadAxis("leftx")
+            local posY = self.pos.y + dt * self.speed * self.joystick:getGamepadAxis("lefty")
+
+            if self.joystick:getGamepadAxis("rightx") ~= 0 then
+                posX = self.pos.x + dt * self.speed * self.joystick:getGamepadAxis("rightx")
+            end
+            if self.joystick:getGamepadAxis("righty") ~= 0 then
+                posY = self.pos.y + dt * self.speed * self.joystick:getGamepadAxis("righty")
+            end
+
+            if posX < (love.graphics.getWidth()) and posX > (0) then
+                self.pos.x = posX
+            end
+
+            if posY < (love.graphics.getHeight()) and posY > (0) then
+                self.pos.y = posY
+            end
         end
     end
 

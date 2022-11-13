@@ -76,12 +76,12 @@ function love.update(dt: number)
             game:update(dt)
         elseif utils.state.settings then
             settings:update()
-
         end
     else
         message:update()
     end
     
+    -- print(settings.updated)
     if settings.updated then
         game:load()
         menu:load()
