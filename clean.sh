@@ -1,6 +1,10 @@
 trash *.lua
 
-cd src/utils
+cd build
+
+trash squashfs-root
+
+cd ../src/utils
 
 trash *.lua
 
@@ -11,3 +15,4 @@ trash *.lua
 cd ../game
 
 trash *.lua
+
