@@ -29,13 +29,18 @@ local function Card(x: number, y: number, color: CardType.AvailableCardColors | 
     card.playable = false
     card.x = x
     card.y = y
+    card.hovering = false
 
     card.draw = function (self: CardType, rotation: number, isCom: boolean)
         local r = rotation or self.rotation
         local yPos = self.y
 
         if self.playable then
-            yPos = self.y - 20
+            if self.hovering then
+                yPos = self.y - 40
+            else
+                yPos = self.y - 20
+            end
         end
 
         if isCom then

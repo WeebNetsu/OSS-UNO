@@ -51,6 +51,8 @@ local function Game(sfx: SFXType, cursor: CursorType): GameType
 
     game.update = function (_self: GameType, _dt: number)
         if player.playerTurn then
+            player:setCardIsHovering()
+            
             if cursor.clicked then
                 -- if currently picking a color
                 if playedDeck.colorPicking and selectedCardIndex ~= nil then

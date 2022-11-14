@@ -1,6 +1,6 @@
-global type CardType
-global type DeckType
-global type SFXType
+require "src.game.card"
+require "src.game.deck"
+require "src.utils.sfx"
 
 global record ComType
     difficulty: integer

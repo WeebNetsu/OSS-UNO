@@ -17,6 +17,12 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
     player.playerTurn = false
     player.defaultYPos = love.graphics.getHeight() - 200
 
+    player.setCardIsHovering = function (self: PlayerType)
+        for ind, val in ipairs(self:checkHovering()) do
+            self.cards[ind].hovering = val
+        end
+    end
+
     player.setPlayerTurn = function (self: PlayerType, playerTurn: boolean)
         if self.skipTurn and playerTurn then
             self.skipTurn = false

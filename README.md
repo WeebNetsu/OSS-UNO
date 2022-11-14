@@ -12,10 +12,10 @@ Why is this better than any other UNO game?
   - If you want something, you can add it
   - Written in Teal ([Lua but better](https://youtu.be/ooQ-_9YQVw0))
 - Looks good
-- Good performance
 - No tracking
 - No selling your data
 - Single player mode
+- Has controller support
 
 ## Contents
 

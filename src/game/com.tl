@@ -87,6 +87,12 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): Co
     end
 
     com.play = function (self: ComType, player: PlayerType)
+        -- todo this function causes the entire thread to pause for the duration of the sleep. Graphics will not draw,
+        -- input events will not trigger, code will not run, and the window will be unresponsive if you use this as 
+        -- "wait()" in the main thread. Use love.update or a Timer library for that instead.
+        -- https://love2d.org/wiki/love.timer.sleep
+        love.timer.sleep(0.2)
+
         if self.skipTurn then
             player:setPlayerTurn(true)
             self.skipTurn = false

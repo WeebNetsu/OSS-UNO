@@ -21,6 +21,7 @@ global record PlayerType
     updateCardPositions: function (PlayerType)
     removeCard: function (PlayerType, index: integer, com: ComType)
     draw: function (PlayerType)
+    setCardIsHovering: function (PlayerType)
 
     -- com + player stuff
     difficulty: integer

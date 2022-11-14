@@ -11,6 +11,7 @@ global record CardType
     specialName: string
     imagePath: string
     rotation: number
+    hovering: boolean
     playable: boolean
     x: number
     y: number
