@@ -1,6 +1,7 @@
 #!/bin/sh
 
 # https://love2d.org/wiki/Game_Distribution
+trash OSSUNO.AppImage
 
 ./gen.sh
 
@@ -9,11 +10,12 @@ zip -9 -r ossuno.love .
 
 mv ossuno.love build
 
-cd build
-chmod +x appimagetool-x86_64.AppImage
-chmod +x love-11.4-x86_64.AppImage
+chmod +x ../appimagetool-x86_64.AppImage
+chmod +x ../love-11.4-x86_64.AppImage
 
-./love-11.4-x86_64.AppImage --appimage-extract
+cd build
+
+../../love-11.4-x86_64.AppImage --appimage-extract
 
 cat squashfs-root/bin/love ossuno.love > squashfs-root/bin/ossuno
 
@@ -33,7 +35,7 @@ sed -i 's/\[Desktop Entry\]/\[Desktop Entry\]\nName=OSS UNO/' love.desktop
 
 cd ..
 
-./appimagetool-x86_64.AppImage squashfs-root OSSUNO.AppImage
+../../appimagetool-x86_64.AppImage squashfs-root OSSUNO.AppImage
 
 trash ossuno.love
 
