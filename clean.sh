@@ -5,6 +5,9 @@ trash *.lua
 
 mv lunajson.tl lunajson.lua
 
+# make sure build exists before trying to clean it
+mkdir -p build
+
 cd build
 
 trash squashfs-root

@@ -35,17 +35,29 @@ Why is this better than any other UNO game?
 
 - [Lua](https://www.lua.org) (v5.4+)
 - [Love2D](https://love2d.org) (v11.4)
+- [LuaRocks](https://luarocks.org)
 - [trash-cli](https://github.com/andreafrancia/trash-cli) (optional)
   - This is so we can safely delete any files and easily restore it if we need to
+
+##### Install Requirements:
+
+Ubuntu: `sudo apt install lua5.4 love luarocks trash-cli`
 
 #### Modules
 
 You can use Luarocks to install these modules.
 
 - [lunajson](https://luarocks.org/modules/grafi/lunajson)
-  - So we can read and write `json`
+
+  - So we can read and write `json`. It is included in the project, but is only used for compiling the code into an executable, not running it.
+
 - [tl](https://github.com/teal-language/tl)
   - To compile the code into regular Lua
+
+##### Install Modules:
+
+1. `alias luai="luarocks install --local"`
+2. `luai tl && luai lunajson`
 
 ### Setup and Running
 
