@@ -18,6 +18,8 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
     -- this is after how many cards a 2nd row should appear
     local start_second_card_row = 13
     local start_third_card_row = start_second_card_row * 2
+    local two_row_scaling = 0.8
+    local three_row_scaling = 0.7
 
     player.playerTurn = false
     player.defaultYPos = love.graphics.getHeight() - 200
@@ -42,13 +44,13 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
             
             if i > start_third_card_row then
                 if third_card_row_height == 0 then
-                    third_card_row_height = second_card_row_height + (utils.cardHeight / 1.5)
+                    third_card_row_height = second_card_row_height + (utils.cardHeight)
                 end
 
                 card:setPosition(self.cards[i - start_third_card_row].x, third_card_row_height)
             elseif i > start_second_card_row then
                 if second_card_row_height == 0 then
-                    second_card_row_height = card.y + (utils.cardHeight / 1.5)
+                    second_card_row_height = card.y + (utils.cardHeight)
                 end
 
                 card:setPosition(self.cards[i-start_second_card_row].x, second_card_row_height)
@@ -75,17 +77,21 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
     end
 
     player.draw = function (self: PlayerType)
+        -- to keep scaling contained to this function and not the rest of the game
+        love.graphics.push()
+        
         if #self.cards > start_third_card_row then
-            love.graphics.scale(0.8, 0.8)
+            love.graphics.scale(three_row_scaling, three_row_scaling)
         elseif #self.cards > start_second_card_row then
-            love.graphics.scale(0.9, 0.9)
+            love.graphics.scale(two_row_scaling, two_row_scaling)
         end
         
         for _, card in ipairs(self.cards) do
             card:draw()
         end
 
-        love.graphics.scale(1, 1)
+        -- to keep scaling contained to this function and not the rest of the game
+        love.graphics.pop()
 
         -- message:showMessage("Drawing Card", "You are currently drawing a card! Well done, you did the impossible!", "error")
 
@@ -143,26 +149,64 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
 
     -- to be used to see if a card is being hovered over, return true or false
     player.checkHover = function (self: PlayerType): boolean
+        -- to keep scaling contained to this function and not the rest of the game
+        love.graphics.push()
+        local current_scale = 1.0;
+
+        if #self.cards > start_third_card_row then
+            love.graphics.scale(three_row_scaling, three_row_scaling)
+            current_scale = three_row_scaling;
+        elseif #self.cards > start_second_card_row then
+            love.graphics.scale(two_row_scaling, two_row_scaling)
+            current_scale = two_row_scaling;
+        end
+        
         for _, card in ipairs(self.cards) do
-            if  cursor.pos.x >= card.x and (cursor.pos.x <= card.x + utils.cardWidth) and (cursor.pos.y >= card.y - 20) and (cursor.pos.y <= (card.y + utils.cardHeight)) then
+            local scaledCardX = card.x * current_scale
+            local scaledCardY = card.y * current_scale
+            local scaledCardWidth = utils.cardWidth * current_scale
+            local scaledCardHeight = utils.cardHeight * current_scale
+    
+            if cursor.pos.x >= scaledCardX and (cursor.pos.x <= scaledCardX + scaledCardWidth) and (cursor.pos.y >= scaledCardY - 20) and (cursor.pos.y <= (scaledCardY + scaledCardHeight)) then
                 return true
             end
         end
+        love.graphics.pop()
 
         return false
     end
 
     -- used to see which card is being hovered over, table of booleans is returned
     player.checkHovering = function (self: PlayerType): {boolean}
+        -- to keep scaling contained to this function and not the rest of the game
+        love.graphics.push()
+        local current_scale = 1.0;
+
+        if #self.cards > start_third_card_row then
+            love.graphics.scale(three_row_scaling, three_row_scaling)
+            current_scale = three_row_scaling;
+        elseif #self.cards > start_second_card_row then
+            love.graphics.scale(two_row_scaling, two_row_scaling)
+            current_scale = two_row_scaling;
+        end
+
         local hovering = {}
 
         for ind, card in ipairs(self.cards) do
-            if self.cards[ind+1] then
-                table.insert(hovering, cursor.pos.x >= card.x and (cursor.pos.x <= card.x + (utils.cardWidth / 1.5)) and (cursor.pos.y >= card.y - 20) and (cursor.pos.y <= (card.y + utils.cardHeight)))
+            local scaledCardX = card.x * current_scale
+            local scaledCardY = card.y * current_scale
+            local scaledCardWidth = utils.cardWidth * current_scale
+            local scaledCardHeight = utils.cardHeight * current_scale
+
+            if self.cards[ind + 1] then
+                table.insert(hovering, cursor.pos.x >= scaledCardX and (cursor.pos.x <= scaledCardX + (scaledCardWidth / 1.5)) and (cursor.pos.y >= scaledCardY - 20) and (cursor.pos.y <= (scaledCardY + scaledCardHeight)))
             else
-                table.insert(hovering, cursor.pos.x >= card.x and (cursor.pos.x <= card.x + utils.cardWidth) and (cursor.pos.y >= card.y - 20) and (cursor.pos.y <= (card.y + utils.cardHeight)))
+                table.insert(hovering, cursor.pos.x >= scaledCardX and (cursor.pos.x <= scaledCardX + scaledCardWidth) and (cursor.pos.y >= scaledCardY - 20) and (cursor.pos.y <= (scaledCardY + scaledCardHeight)))
             end
         end
+
+        -- to keep scaling contained to this function and not the rest of the game
+        love.graphics.pop()
 
         return hovering
     end
