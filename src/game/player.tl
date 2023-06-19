@@ -13,6 +13,11 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
     -- inheriting from Com
     local player: PlayerType = Com(deck, playedDeck) as PlayerType
     local played_uno_sfx = false
+    local second_card_row_height = 0.0
+    local third_card_row_height = 0.0
+    -- this is after how many cards a 2nd row should appear
+    local start_second_card_row = 13
+    local start_third_card_row = start_second_card_row * 2
 
     player.playerTurn = false
     player.defaultYPos = love.graphics.getHeight() - 200
@@ -34,7 +39,22 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
     player.updateCardPositions = function (self: PlayerType)
         for i = 1, #self.cards do
             local card = self.cards[i]
-            card:setPosition(self.defaultXPos * i, self.defaultYPos)
+            
+            if i > start_third_card_row then
+                if third_card_row_height == 0 then
+                    third_card_row_height = second_card_row_height + (utils.cardHeight / 1.5)
+                end
+
+                card:setPosition(self.cards[i - start_third_card_row].x, third_card_row_height)
+            elseif i > start_second_card_row then
+                if second_card_row_height == 0 then
+                    second_card_row_height = card.y + (utils.cardHeight / 1.5)
+                end
+
+                card:setPosition(self.cards[i-start_second_card_row].x, second_card_row_height)
+            else
+                card:setPosition(self.defaultXPos * i, self.defaultYPos)
+            end
         end
     end
 
@@ -55,9 +75,17 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
     end
 
     player.draw = function (self: PlayerType)
+        if #self.cards > start_third_card_row then
+            love.graphics.scale(0.8, 0.8)
+        elseif #self.cards > start_second_card_row then
+            love.graphics.scale(0.9, 0.9)
+        end
+        
         for _, card in ipairs(self.cards) do
             card:draw()
         end
+
+        love.graphics.scale(1, 1)
 
         -- message:showMessage("Drawing Card", "You are currently drawing a card! Well done, you did the impossible!", "error")
 
@@ -71,6 +99,8 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
         else
             played_uno_sfx = false
         end
+
+        self:updateCardPositions()
     end
 
     player.showPlayableCards = function (self: PlayerType)
