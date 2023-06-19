@@ -23,7 +23,7 @@ local message: MessageType
 local settings: SettingsType
 local gameSettings: SavedSettingsType = {}
 
-function love.load()
+function love.load(_arg: {string}, _unfilteredArg: {string})
     love.mouse.setVisible(false)
     love.graphics.setBackgroundColor(utils.colors.background.r, utils.colors.background.g, utils.colors.background.b)
 
@@ -63,7 +63,7 @@ function love.gamepadpressed(joystick: love.joystick.Joystick, button: love.joys
     cursor:gamepadPressed(joystick, button)
 end
 
-function love.mousepressed(x: number, y: number, button: integer, istouch: boolean, presses: integer)
+function love.mousepressed(x: number, y: number, button: number, istouch: boolean, presses: number)
     cursor:mousePressed(x, y, button, istouch, presses)
 end
 

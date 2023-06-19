@@ -20,7 +20,7 @@ local function Cursor(): CursorType
 
     cursor.speed = 900
 
-    cursor.mousePressed = function(self: CursorType, _x: number, _y: number, button: integer, _istouch: boolean, _presses: integer)
+    cursor.mousePressed = function(self: CursorType, _x: number, _y: number, button: number, _istouch: boolean, _presses: number)
         if button == 1 then
             self.clicked = true
         end

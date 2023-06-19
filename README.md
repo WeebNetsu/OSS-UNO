@@ -42,10 +42,13 @@ Why is this better than any other UNO game?
 ##### Install Requirements:
 
 Ubuntu: `sudo apt install lua5.4 love luarocks trash-cli`
+Arch Linux: `sudo pacman -S install lua love luarocks trash-cli`
 
 #### Modules
 
-You can use Luarocks to install these modules.
+You can use Luarocks to install these modules - note that some of them are provided in the project source code.
+
+Install: `luarocks install tl --local`
 
 - [lunajson](https://luarocks.org/modules/grafi/lunajson)
 
@@ -54,10 +57,10 @@ You can use Luarocks to install these modules.
 - [tl](https://github.com/teal-language/tl)
   - To compile the code into regular Lua
 
-##### Install Modules:
+<!-- ##### Install Modules:
 
 1. `alias luai="luarocks install --local"`
-2. `luai tl && luai lunajson`
+2. `luai tl && luai lunajson` -->
 
 ### Setup and Running
 
