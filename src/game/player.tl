@@ -18,8 +18,6 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
     -- this is after how many cards a 2nd row should appear
     local start_second_card_row = 13
     local start_third_card_row = start_second_card_row * 2
-    local two_row_scaling = 0.8
-    local three_row_scaling = 0.7
 
     player.playerTurn = false
     player.defaultYPos = love.graphics.getHeight() - 200
@@ -44,13 +42,13 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
             
             if i > start_third_card_row then
                 if third_card_row_height == 0 then
-                    third_card_row_height = second_card_row_height + (utils.cardHeight)
+                    third_card_row_height = second_card_row_height + (utils.cardHeight / 1.5)
                 end
 
                 card:setPosition(self.cards[i - start_third_card_row].x, third_card_row_height)
             elseif i > start_second_card_row then
                 if second_card_row_height == 0 then
-                    second_card_row_height = card.y + (utils.cardHeight)
+                    second_card_row_height = card.y + (utils.cardHeight / 1.5)
                 end
 
                 card:setPosition(self.cards[i-start_second_card_row].x, second_card_row_height)
@@ -79,15 +77,24 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
     player.draw = function (self: PlayerType)
         -- to keep scaling contained to this function and not the rest of the game
         love.graphics.push()
+
+        local threeRowScaling = #self.cards > start_third_card_row
+        local twoRowScaling = #self.cards > start_second_card_row
         
-        if #self.cards > start_third_card_row then
-            love.graphics.scale(three_row_scaling, three_row_scaling)
-        elseif #self.cards > start_second_card_row then
-            love.graphics.scale(two_row_scaling, two_row_scaling)
+        if threeRowScaling then
+            love.graphics.scale(utils.threeRowScaling, utils.threeRowScaling)
+        elseif twoRowScaling then
+            love.graphics.scale(utils.twoRowScaling, utils.twoRowScaling)
         end
         
         for _, card in ipairs(self.cards) do
-            card:draw()
+            if twoRowScaling then
+                card:draw(0, false, "twoRows")
+            elseif threeRowScaling then
+                card:draw(0, false, "threeRows")
+            else
+                card:draw()
+            end
         end
 
         -- to keep scaling contained to this function and not the rest of the game
@@ -154,11 +161,11 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
         local current_scale = 1.0;
 
         if #self.cards > start_third_card_row then
-            love.graphics.scale(three_row_scaling, three_row_scaling)
-            current_scale = three_row_scaling;
+            love.graphics.scale(utils.threeRowScaling, utils.threeRowScaling)
+            current_scale = utils.threeRowScaling;
         elseif #self.cards > start_second_card_row then
-            love.graphics.scale(two_row_scaling, two_row_scaling)
-            current_scale = two_row_scaling;
+            love.graphics.scale(utils.twoRowScaling, utils.twoRowScaling)
+            current_scale = utils.twoRowScaling;
         end
         
         for _, card in ipairs(self.cards) do
@@ -183,11 +190,11 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
         local current_scale = 1.0;
 
         if #self.cards > start_third_card_row then
-            love.graphics.scale(three_row_scaling, three_row_scaling)
-            current_scale = three_row_scaling;
+            love.graphics.scale(utils.threeRowScaling, utils.threeRowScaling)
+            current_scale = utils.threeRowScaling;
         elseif #self.cards > start_second_card_row then
-            love.graphics.scale(two_row_scaling, two_row_scaling)
-            current_scale = two_row_scaling;
+            love.graphics.scale(utils.twoRowScaling, utils.twoRowScaling)
+            current_scale = utils.twoRowScaling;
         end
 
         local hovering = {}

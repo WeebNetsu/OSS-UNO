@@ -13,7 +13,7 @@ local function Uno(cursor: CursorType): UnoType
     local uno: UnoType = {}
     
     uno.x = love.graphics.getWidth() + 300
-    uno.y = love.graphics.getHeight() / 2 + 100
+    uno.y = love.graphics.getHeight() / 2
 
     uno.draw = function (self: UnoType, playedDeck: PlayedDeckType)
         love.graphics.push()

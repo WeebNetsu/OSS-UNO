@@ -31,15 +31,21 @@ local function Card(x: number, y: number, color: CardType.AvailableCardColors | 
     card.y = y
     card.hovering = false
 
-    card.draw = function (self: CardType, rotation: number, isCom: boolean)
+    card.draw = function (self: CardType, rotation: number, isCom: boolean, scale: CardType.CardScales)
         local r = rotation or self.rotation
-        local yPos = self.y
+        local yPos = self.y 
+
+        if scale == "twoRows" then
+            yPos = yPos + 100
+        elseif scale == "threeRows" then
+            yPos = yPos + 500
+        end
 
         if self.playable then
             if self.hovering then
-                yPos = self.y - 40
+                yPos = yPos - 40
             else
-                yPos = self.y - 20
+                yPos = yPos - 20
             end
         end
 
@@ -54,10 +60,6 @@ local function Card(x: number, y: number, color: CardType.AvailableCardColors | 
         self.x = posX
         self.y = posY
     end
-
-    -- card.__eq = function (self, other)
-    --     return self.color == other.color and self.number == other.number and self.specialName == other.specialName
-    -- end
 
     return card
 end

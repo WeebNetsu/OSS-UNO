@@ -5,7 +5,7 @@ local Card = require "src.game.card"
 local utils = require "src/utils/utils"
 
 local function Deck(sfx: SFXType, cursor: CursorType): DeckType
-    local xPos, yPos = 50, utils.cardHeight + 70
+    local xPos, yPos = 50, utils.cardHeight
     local image = Card(xPos, yPos, nil, nil, "card_back_alt")
     local settings = utils.readJSON("settings")
 

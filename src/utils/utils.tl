@@ -14,6 +14,8 @@ local utils: UtilsType = {
     iconButtonWidth = 200,
     iconButtonHeight = 200,
     debugging = false,
+    twoRowScaling = 0.8,
+    threeRowScaling = 0.7,
 
     fonts = {
         h1 = 60,

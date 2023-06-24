@@ -56,6 +56,9 @@ global record UtilsType
     powerCards: {string}
     colors: ColorsType
     state: GameState
+    -- the scale of cards being drawn to the if scaled down
+    twoRowScaling: number
+    threeRowScaling: number
 
     getMouseBetween: function(x: number, y: number, width: number, height: number, mouseX: number, mouseY: number): boolean
     chooseButtonImage: function(name: string, iconButton: boolean, red: boolean): love.graphics.Image

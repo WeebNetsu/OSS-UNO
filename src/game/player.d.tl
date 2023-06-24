@@ -14,7 +14,7 @@ global record PlayerType
     showPlayableCards: function (PlayerType)
     -- to be used to see if a card is being hovered over, return true or false
     checkHover: function (PlayerType): boolean
-    -- used to see which card is being hoved over, table of booleans is returned
+    -- used to see which card is being hovered over, table of booleans is returned
     checkHovering: function (self: PlayerType): {boolean}
 
     -- com also has one of these functions, don't also put them into this file

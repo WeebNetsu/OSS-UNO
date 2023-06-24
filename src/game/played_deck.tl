@@ -21,7 +21,7 @@ local function PlayedDeck(sfx: SFXType, cursor: CursorType): PlayedDeckType
     -- chaining is when a +2/+4 is thrown onto another +2/+4
     playedDeck.chainCount = 0
     playedDeck.x = love.graphics.getWidth() / 2.5
-    playedDeck.y = utils.cardHeight + 80
+    playedDeck.y = utils.cardHeight
     playedDeck.lastColor = nil
     playedDeck.colorPicking = false
 

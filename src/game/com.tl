@@ -68,11 +68,17 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): Co
     end
 
     com.draw = function (self: ComType)
+        love.graphics.push()
+
+        love.graphics.scale(utils.threeRowScaling, utils.threeRowScaling)
+
         for _index, card in ipairs(self.cards) do
             -- true -> card back is shown
             -- false -> actual card is shown
             card:draw(nil, true)
         end
+
+        love.graphics.pop()
 
         if self.saidUno then
             if not played_uno_sfx then

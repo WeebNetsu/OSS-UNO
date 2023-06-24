@@ -6,6 +6,12 @@ global record CardType
         "yellow"
     end
 
+    enum CardScales
+        "oneRow"
+        "twoRows"
+        "threeRows"
+    end
+
     color: CardType.AvailableCardColors | nil
     number: integer
     specialName: string
@@ -15,7 +21,7 @@ global record CardType
     playable: boolean
     x: number
     y: number
-    draw: function (CardType, rotation: number, isCom: boolean)
+    draw: function (CardType, rotation: number, isCom: boolean, scale: CardType.CardScales)
     setPosition: function (CardType, x: number, y: number)
 end
 
