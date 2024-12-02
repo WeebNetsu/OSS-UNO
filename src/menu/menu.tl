@@ -33,7 +33,7 @@ local function Menu(game: GameType, sfx: SFXType, cursor: CursorType): MenuType
 
     local textButtons: {string: SettingButtonType} = {
         play = {
-            src = utils.chooseButtonImage("play"),
+            src = utils.chooseButtonImage("play", false, false),
             hoverSrc = utils.chooseButtonImage("play", false, true),
             hovering = false,
             x = scale.textButton.windowWidth / 2 - utils.textButtonWidth / 2,
@@ -48,7 +48,7 @@ local function Menu(game: GameType, sfx: SFXType, cursor: CursorType): MenuType
 
     local iconButtons: {string: SettingButtonType} = {
         settings = {
-            src = utils.chooseButtonImage("settings", true),
+            src = utils.chooseButtonImage("settings", true, false),
             hoverSrc = utils.chooseButtonImage("settings", true, true),
             hovering = false,
             -- don't know why we don't need a scaled button width/height, but it works lol
@@ -60,7 +60,7 @@ local function Menu(game: GameType, sfx: SFXType, cursor: CursorType): MenuType
             end
         },
         quit = {
-            src = utils.chooseButtonImage("quit", true),
+            src = utils.chooseButtonImage("quit", true, false),
             hoverSrc = utils.chooseButtonImage("quit", true, true),
             hovering = false,
             -- don't know why we don't need a scaled button width/height, but it works lol
@@ -114,9 +114,9 @@ local function Menu(game: GameType, sfx: SFXType, cursor: CursorType): MenuType
     end
 
     menu.load = function (_self: MenuType)
-        utils:changeGameState()
+        utils:changeGameState(nil)
 
-        settings = Settings(sfx)
+        settings = Settings(sfx, nil)
     end
 
     menu.update = function (_self: MenuType)

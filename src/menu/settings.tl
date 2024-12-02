@@ -31,7 +31,7 @@ local function SettingsCounter(): function(title: string, valueIndex: integer, a
     end
 end
 
-local function Settings(sfx: SFXType, cursor: CursorType): SettingsType
+local function Settings(sfx: SFXType, cursor: CursorType | nil): SettingsType
     local settings: SettingsType = {}
     local newSettings: SavedSettingsType = utils.readJSON("settings", nil)
 
@@ -84,7 +84,7 @@ local function Settings(sfx: SFXType, cursor: CursorType): SettingsType
 
     local iconButtons: {string: SettingButtonType} = {
         back = {
-            src = utils.chooseButtonImage("back", true),
+            src = utils.chooseButtonImage("back", true, false),
             hoverSrc = utils.chooseButtonImage("back", true, true),
             hovering = false,
             -- don't know why we don't need a scaled button width/height, but it works lol
@@ -96,7 +96,7 @@ local function Settings(sfx: SFXType, cursor: CursorType): SettingsType
             end
         },
         save = {
-            src = utils.chooseButtonImage("v", true),
+            src = utils.chooseButtonImage("v", true, false),
             hoverSrc = utils.chooseButtonImage("v", true, true),
             hovering = false,
             -- don't know why we don't need a scaled button width/height, but it works lol
@@ -124,7 +124,7 @@ local function Settings(sfx: SFXType, cursor: CursorType): SettingsType
                     controller = ctrl
                 }
 
-                utils.writeJSON("settings", saveSettings)
+                utils.writeJSON("settings", saveSettings, nil)
 
                 if love.graphics.getWidth() ~= tonumber(width) or love.graphics.getHeight() ~= tonumber(height) then
                     love.window.setMode(tonumber(width), tonumber(height))
@@ -132,7 +132,7 @@ local function Settings(sfx: SFXType, cursor: CursorType): SettingsType
             end
         },
         undo = {
-            src = utils.chooseButtonImage("return", true),
+            src = utils.chooseButtonImage("return", true, false),
             hoverSrc = utils.chooseButtonImage("return", true, true),
             hovering = false,
             -- don't know why we don't need a scaled button width/height, but it works lol
@@ -146,6 +146,14 @@ local function Settings(sfx: SFXType, cursor: CursorType): SettingsType
     }
 
     settings.update = function (self: SettingsType)
+        -- if cursor is not provided, then we don't care about running any updates, since there is nothing to run
+        -- past this point that is not related to the player cursor
+        if cursor == nil then 
+            return
+        end 
+
+        cursor = cursor as CursorType
+        
         -- this will decide when isHoveringOverButton will be set to true/false
         local isHovering = false
         

@@ -322,6 +322,7 @@ global type love2d = record
 		pump: function()
 		push: function(n: string, ...: any)
 		quit: function(exitstatus: number|string)
+		quit: function()
 		wait: function(): string, any...
 
 	end
@@ -943,7 +944,8 @@ global type love2d = record
 		discard: function(discardcolors: {boolean}, discardstencil: boolean)
 		draw: function(drawable: Drawable, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
 		draw: function(drawable: Image, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
-		draw: function(drawable: Image, x: number, y: number, r: number)
+		draw: function(drawable: Image, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
+		draw: function(drawable: Image, x: number, y: number)
 		draw: function(texture: Texture, quad: Quad, x: number, y: number, r: number, sx: number, sy: number, ox: number, oy: number, kx: number, ky: number)
 		draw: function(drawable: Drawable, transform: math.Transform)
 		draw: function(drawable: Image, transform: math.Transform)
@@ -1008,6 +1010,7 @@ global type love2d = record
 		newFont: function(filename: string, size: number, hinting: font.HintingMode, dpiscale: number): Font
 		newFont: function(filename: string, imagefilename: string): Font
 		newFont: function(size: number, hinting: font.HintingMode, dpiscale: number): Font
+		newFont: function(size: number): Font
 		newImage: function(filename: string): Image
 		newImage: function(imageData: image.ImageData): Image
 		newImage: function(compressedImageData: image.CompressedImageData): Image
@@ -1069,8 +1072,9 @@ global type love2d = record
 		reset: function()
 		rotate: function(angle: number)
 		scale: function(sx: number, sy: number)
+		scale: function(sx: number)
 		setBackgroundColor: function(red: number, green: number, blue: number, alpha: number)
-		setBackgroundColor: function()
+		setBackgroundColor: function(red: number, green: number, blue: number)
 		setBackgroundColor: function()
 		setBlendMode: function(mode: BlendMode)
 		setBlendMode: function(mode: BlendMode, alphamode: BlendAlphaMode)
@@ -1087,6 +1091,7 @@ global type love2d = record
 		setDepthMode: function(comparemode: CompareMode, write: boolean)
 		setDepthMode: function()
 		setFont: function(font: Font)
+		-- setFont: function(font: integer)
 		setFrontFaceWinding: function(winding: VertexWinding)
 		setLineJoin: function(join: LineJoin)
 		setLineStyle: function(style: LineStyle)
@@ -2382,6 +2387,7 @@ global type love2d = record
 		setFullscreen: function(fullscreen: boolean, fstype: FullscreenType): boolean
 		setIcon: function(imagedata: image.ImageData): boolean
 		setMode: function(width: number, height: number, flags: WindowSetting): boolean
+		setMode: function(width: number, height: number): boolean
 		setPosition: function(x: number, y: number, display: number)
 		setTitle: function(title: string)
 		setVSync: function(vsync: number)

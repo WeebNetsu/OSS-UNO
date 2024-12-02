@@ -27,7 +27,7 @@ local function Message(sfx: SFXType, cursor: CursorType): MessageType
     
     local iconButtons: {string: SettingButtonType} = {
         close = {
-            src = utils.chooseButtonImage("clear_x", true),
+            src = utils.chooseButtonImage("clear_x", true, false),
             hoverSrc = utils.chooseButtonImage("clear_x", true, true),
             hovering = false,
             -- don't know why we don't need a scaled button width/height, but it works lol

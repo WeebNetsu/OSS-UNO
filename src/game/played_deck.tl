@@ -55,7 +55,7 @@ local function PlayedDeck(sfx: SFXType, cursor: CursorType): PlayedDeckType
         return false
     end
 
-    playedDeck.pickColor = function (self: PlayedDeckType, isCom: boolean, com: ComType): boolean
+    playedDeck.pickColor = function (self: PlayedDeckType, isCom: boolean, com: ComType | nil): boolean
         if isCom then
             if com == nil then
                 error("Com was not provided for pickColor")
@@ -63,7 +63,7 @@ local function PlayedDeck(sfx: SFXType, cursor: CursorType): PlayedDeckType
 
             -- store all colors com has in hand
             local containingColors: {CardType.AvailableCardColors} = {}
-            for _, card in ipairs(com.cards) do
+            for _, card in ipairs((com as ComType).cards) do
                 if card.color ~= nil then
                     table.insert(containingColors, card.color)
                 end

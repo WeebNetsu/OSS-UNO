@@ -50,7 +50,7 @@ local function Deck(sfx: SFXType, cursor: CursorType): DeckType
 
         generateDeck(blockedCards: table[Card])
     ]]
-    deck.generateDeck = function (self: DeckType, blockedCards: {string: CardType})
+    deck.generateDeck = function (self: DeckType, blockedCards: {string: CardType} | nil)
         local cards: {CardType} = {}
 
         for _, color in ipairs({"blue", "red", "green", "yellow"} as {CardType.AvailableCardColors}) do

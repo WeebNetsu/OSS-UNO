@@ -81,9 +81,9 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType | ni
         love.graphics.pop()
 
         if self.saidUno then
-            if not played_uno_sfx then
-                sfx:setFXPlayed(false)
-                sfx:playFX("said_uno_female", "single")
+            if not played_uno_sfx and sfx ~= nil then
+                (sfx as SFXType):setFXPlayed(false)
+                (sfx as SFXType):playFX("said_uno_female", "single")
                 played_uno_sfx = true
             end
             love.graphics.print("COM HAS UNO'D!", 50, 10)
