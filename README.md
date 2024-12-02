@@ -42,7 +42,7 @@ Why is this better than any other UNO game?
 ##### Install Requirements:
 
 Ubuntu: `sudo apt install lua5.4 love luarocks trash-cli`
-Arch Linux: `sudo pacman -S install lua love luarocks trash-cli`
+Arch Linux: `sudo pacman -S lua love luarocks trash-cli`
 
 #### Modules
 
