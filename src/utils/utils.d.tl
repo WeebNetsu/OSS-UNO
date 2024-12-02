@@ -88,7 +88,7 @@ global record UtilsType
         -> path: string - path to save file (from project root)
             example: "src/data/"
     ]]
-    writeJSON: function(fileName: string, data: SavedSettingsType, path: string)
+    writeJSON: function(fileName: string, data: SavedSettingsType, path: string | nil)
     --[[
         Will check if the user is hovering over one of the buttons
 

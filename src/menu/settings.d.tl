@@ -47,6 +47,6 @@ global record SettingButtonType
     onClick: function(SettingButtonType)
 end
 
-global SettingsFunc: function(sfx: SFXType, cursor: CursorType) : SettingsType
+global SettingsFunc: function(sfx: SFXType, cursor: CursorType | nil) : SettingsType
 
 return SettingsFunc

@@ -26,7 +26,7 @@ local function Game(sfx: SFXType, cursor: CursorType): GameType
 
         uno = Uno(cursor)
         deck = Deck(sfx, cursor)
-        deck:generateDeck()
+        deck:generateDeck(nil)
 
         playedDeck = PlayedDeck(sfx, cursor)
 
@@ -41,7 +41,7 @@ local function Game(sfx: SFXType, cursor: CursorType): GameType
         local allowedCard = false
         repeat
             -- make sure the first card on the field is not a power card
-            local drawnCard = deck:drawCard(love.graphics.getWidth() / 2.5, utils.cardHeight + 50)
+            local drawnCard = deck:drawCard(love.graphics.getWidth() / 2.5, utils.cardHeight + 50, false)
             if drawnCard ~= nil and drawnCard.number ~= nil then
                 allowedCard = true
                 playedDeck:addCard(drawnCard, false, player, com)
@@ -57,7 +57,7 @@ local function Game(sfx: SFXType, cursor: CursorType): GameType
                 -- if currently picking a color
                 if playedDeck.colorPicking and selectedCardIndex ~= nil then
                     if playedDeck:checkColorPickerHover() then
-                        if playedDeck:pickColor() then
+                        if playedDeck:pickColor(false, nil) then
                             local lastCardColor = playedDeck.lastColor
                             playedDeck:addCard(player:getCard(selectedCardIndex), false, player, com)
                             -- since removeCard will remove the last selected color as well

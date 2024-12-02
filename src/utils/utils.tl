@@ -143,7 +143,7 @@ local utils: UtilsType = {
         return lunajson.decode(data) as SavedSettingsType
     end,
 
-    writeJSON = function(fileName: string, data: SavedSettingsType, path: string)
+    writeJSON = function(fileName: string, data: SavedSettingsType, path: string | nil)
         path = path or "data/"
 
         -- print(lunajson.encode(data))

@@ -28,7 +28,7 @@ global record SFXType
     fx_played: boolean
     setFXPlayed: function (SFXType, boolean)
     stopFX: function (SFXType, EffectsType.AvailableEffects)
-    playFX: function (SFXType, EffectsType.AvailableEffects, AvailableModes)
+    playFX: function (SFXType, EffectsType.AvailableEffects, AvailableModes | nil)
 end
 
 global SfxFunc: function(): SFXType

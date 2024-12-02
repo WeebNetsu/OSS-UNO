@@ -7,10 +7,10 @@ require "src.utils.sfx"
 local love = require "love"
 local utils = require("src.utils.utils")
 
-local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): ComType
+local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType | nil): ComType
     local com: ComType = {}
     -- level 1 = easy, 2 = normal, 3 = hard
-    local settings = utils.readJSON("settings")
+    local settings = utils.readJSON("settings", nil)
     local level: integer = 2
     local played_uno_sfx = false
 
@@ -50,7 +50,7 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): Co
         table.insert(self.cards, card)
     end
 
-    com.removeCard = function (self: ComType, index: number)
+    com.removeCard = function (self: ComType, index: integer)
         table.remove(self.cards, index)
         self:updateCardPositions()
     end
@@ -75,15 +75,15 @@ local function Com(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType): Co
         for _index, card in ipairs(self.cards) do
             -- true -> card back is shown
             -- false -> actual card is shown
-            card:draw(nil, true)
+            card:draw(nil, true, nil)
         end
 
         love.graphics.pop()
 
         if self.saidUno then
-            if not played_uno_sfx then
-                sfx:setFXPlayed(false)
-                sfx:playFX("said_uno_female", "single")
+            if not played_uno_sfx and sfx ~= nil then
+                (sfx as SFXType):setFXPlayed(false)
+                (sfx as SFXType):playFX("said_uno_female", "single")
                 played_uno_sfx = true
             end
             love.graphics.print("COM HAS UNO'D!", 50, 10)

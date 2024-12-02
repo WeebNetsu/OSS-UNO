@@ -9,7 +9,7 @@ global record DeckType
 
     compareDeckToBlockedCards: function (DeckType, card: CardType, blockedCards: {string: CardType}): boolean
     shuffle: function (DeckType)
-    generateDeck: function (DeckType, blockedCards: {string: CardType})
+    generateDeck: function (DeckType, blockedCards: {string: CardType} | nil)
     checkHover: function (DeckType): boolean
     draw: function (DeckType)
     drawCard: function (DeckType, cardX: number, cardY: number, bot: boolean): CardType
