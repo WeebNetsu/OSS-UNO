@@ -29,7 +29,7 @@ function love.load(_arg: {string}, _unfilteredArg: {string})
 
     cursor = Cursor()
 
-    gameSettings = utils.readJSON("settings")
+    gameSettings = utils.readJSON("settings", nil)
 
     -- the settings set here are the ones that will overwrite the defaults in conf.lua on startup
     if gameSettings.windowSize then

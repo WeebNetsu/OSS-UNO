@@ -11,7 +11,7 @@ local Com = require("src.game.com")
 
 local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, cursor: CursorType): PlayerType
     -- inheriting from Com
-    local player: PlayerType = Com(deck, playedDeck) as PlayerType
+    local player: PlayerType = Com(deck, playedDeck, nil) as PlayerType
     local played_uno_sfx = false
     local second_card_row_height = 0.0
     local third_card_row_height = 0.0
@@ -93,7 +93,7 @@ local function Player(deck: DeckType, playedDeck: PlayedDeckType, sfx: SFXType, 
             elseif threeRowScaling then
                 card:draw(0, false, "threeRows")
             else
-                card:draw()
+                card:draw(nil, nil, nil)
             end
         end
 

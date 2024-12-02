@@ -167,14 +167,14 @@ local function PlayedDeck(sfx: SFXType, cursor: CursorType): PlayedDeckType
             end
         end
 
-        sfx:playFX("card_play")
+        sfx:playFX("card_play", nil)
 
         table.insert(self.cards, card)
     end
 
     playedDeck.draw = function (self: PlayedDeckType)
         for _, card in ipairs(self.cards) do
-            card:draw()
+            card:draw(nil, nil, nil)
         end
 
         if self.colorPicking then

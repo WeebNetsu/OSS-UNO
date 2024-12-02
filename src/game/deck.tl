@@ -7,7 +7,7 @@ local utils = require "src/utils/utils"
 local function Deck(sfx: SFXType, cursor: CursorType): DeckType
     local xPos, yPos = 50, utils.cardHeight
     local image = Card(xPos, yPos, nil, nil, "card_back_alt")
-    local settings = utils.readJSON("settings")
+    local settings = utils.readJSON("settings", nil)
 
     local deck: DeckType = {}
 
@@ -89,10 +89,10 @@ local function Deck(sfx: SFXType, cursor: CursorType): DeckType
     end
 
     deck.draw = function (self: DeckType)
-        image:draw()
+        image:draw(nil, nil, nil)
 
         if self:checkHover() then
-            image:draw(-0.3)
+            image:draw(-0.3, nil, nil)
         end
     end
 
@@ -130,7 +130,7 @@ local function Deck(sfx: SFXType, cursor: CursorType): DeckType
         end
 
         -- todo when player picks up more than 1 card, below should play more than 1 time
-        sfx:playFX("card_draw")
+        sfx:playFX("card_draw", nil)
 
         return card
     end

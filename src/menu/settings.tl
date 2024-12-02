@@ -33,7 +33,7 @@ end
 
 local function Settings(sfx: SFXType, cursor: CursorType): SettingsType
     local settings: SettingsType = {}
-    local newSettings: SavedSettingsType = utils.readJSON("settings")
+    local newSettings: SavedSettingsType = utils.readJSON("settings", nil)
 
     -- create a mini object to generate tables for us
     local SettingsOptions = SettingsCounter()

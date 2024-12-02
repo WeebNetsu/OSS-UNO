@@ -24,7 +24,7 @@ local function SFX(): SFXType
             end
         end,
 
-        playFX = function (self: SFXType, effect: EffectsType.AvailableEffects, mode: SFXType.AvailableModes)
+        playFX = function (self: SFXType, effect: EffectsType.AvailableEffects, mode: SFXType.AvailableModes | nil)
             -- single - does not play the sound again if it's already busy playing
             -- will also only play it if it has not been played yet (fx_played)
             if mode == "single" then

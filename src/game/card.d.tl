@@ -21,7 +21,7 @@ global record CardType
     playable: boolean
     x: number
     y: number
-    draw: function (CardType, rotation: number, isCom: boolean, scale: CardType.CardScales)
+    draw: function (CardType, rotation: number | nil, isCom: boolean | nil, scale: CardType.CardScales | nil)
     setPosition: function (CardType, x: number, y: number)
 end
 

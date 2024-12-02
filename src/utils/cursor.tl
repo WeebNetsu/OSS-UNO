@@ -33,7 +33,7 @@ local function Cursor(): CursorType
     end
 
     cursor.load = function (_self: CursorType)
-        settings = utils.readJSON("settings")
+        settings = utils.readJSON("settings", nil)
         control = "keyboard"
 
         if love.joystick.getJoysticks()[1] ~= nil and settings.controller == "controller" then

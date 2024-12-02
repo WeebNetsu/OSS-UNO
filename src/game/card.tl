@@ -31,7 +31,7 @@ local function Card(x: number, y: number, color: CardType.AvailableCardColors | 
     card.y = y
     card.hovering = false
 
-    card.draw = function (self: CardType, rotation: number, isCom: boolean, scale: CardType.CardScales)
+    card.draw = function (self: CardType, rotation: number | nil, isCom: boolean | nil, scale: CardType.CardScales | nil)
         local r = rotation or self.rotation
         local yPos = self.y 
 

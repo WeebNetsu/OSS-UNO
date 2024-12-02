@@ -22,6 +22,6 @@ global record ComType
     play: function (ComType, player: any --[[ PlayerType ]])
 end
 
-global ComFunc: function(deck: DeckType, playedDeck: any --[[ playedDeckType ]], sfx: SFXType): ComType
+global ComFunc: function(deck: DeckType, playedDeck: any --[[ playedDeckType ]], sfx: SFXType | nil): ComType
 
 return ComFunc
